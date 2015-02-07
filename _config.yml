@@ -27,9 +27,9 @@ kramdown:
 # Site owner
 owner:
   name: ReputationVIP
-  avatar: bio-photo.jpg
+  avatar: avatars/reputationvip.png
   bio: "Reputation VIP is the online reputation management specialist, using exclusive technology to improve, protect and monitor your online reputation over the long term."
-  email: 
+  email:
   disqus-shortname: 
   twitter: reputationvip
   facebook: reputationvip

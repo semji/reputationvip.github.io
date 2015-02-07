@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Author Override"
-author: billy_rick
+author: olivier_balais
 modified:
 excerpt: "A post to test author overrides using a data file."
 tags: []
