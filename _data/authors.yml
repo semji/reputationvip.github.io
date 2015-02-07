@@ -10,24 +10,30 @@ olivier_balais:
 
 alban_pommeret:
   name: Alban Pommeret
+  avatar: avatars/no-name.jpg
   github: Neverdane
 
 amine_bsila:
   name: Amine Bsila
+  avatar: avatars/no-name.jpg
   github: absila
 
 guilhem_bourgoin:
   name: Guilhem Bourgoin
+  avatar: avatars/no-name.jpg
   github: guilhemVB
 
 laurent_aubertin:
   name: Laurent Aubertin
+  avatar: avatars/no-name.jpg
   github: LaurentAubertin
 
 thomas_lelievre:
   name: Thomas Lelievre
+  avatar: avatars/no-name.jpg
   github: tomlelievre
 
 cyril_perraud:
   name: Cyril Perraud
+  avatar: avatars/no-name.jpg
   github: pCyril
