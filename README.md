@@ -12,9 +12,14 @@ In order to ease development and article draft writing locally,
 we provide a basic Vagrantfile to get you started in just a few commands:
 
 ```
+# on your host
 git clone https://github.com/ReputationVIP/reputationvip.github.io.git
 cd reputationvip.github.io.git
 vagrant up
+vagrant ssh
+
+# inside your VM
+cd ~/reputationvip.github.io
 bundle exec jekyll serve --host 0.0.0.0
 ```
 

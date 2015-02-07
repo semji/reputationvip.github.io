@@ -14,5 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      vb.customize ["modifyvm", :id, "--memory", "512"]
   end
 
-  config.vm.provision "shell", path: "scripts/provisionning.sh"
+  config.vm.synced_folder ".", "/home/vagrant/reputationvip.github.io"
+
+  config.vm.provision "shell", path: "vagrant/provisionning.sh"
 end

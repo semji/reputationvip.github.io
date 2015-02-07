@@ -12,5 +12,5 @@ sudo apt-get -y install build-essential git ruby1.9.3
 sudo gem install bundler github-pages --no-ri --no-rdoc
 
 # Jekyll dependencies
-cd /vagrant
+cd ~/reputationvip.github.io
 bundle install
