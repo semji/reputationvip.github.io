@@ -4,6 +4,7 @@
 sudo add-apt-repository ppa:chris-lea/node.js
 sudo apt-get update
 sudo apt-get install nodejs -y
+sudo npm install npm grunt-cli -g
 
 # Ruby / Jekyll
 sudo apt-get update
