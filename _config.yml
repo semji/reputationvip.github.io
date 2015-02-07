@@ -29,8 +29,9 @@ owner:
   name: ReputationVIP
   avatar: avatars/reputationvip.png
   bio: "Reputation VIP is the online reputation management specialist, using exclusive technology to improve, protect and monitor your online reputation over the long term."
-  email:
-  disqus-shortname: 
+  email: #email
+  web: http://www.reputationvip.com
+  disqus-shortname:
   twitter: reputationvip
   facebook: reputationvip
   google:
