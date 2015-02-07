@@ -15,7 +15,7 @@ we provide a basic Vagrantfile to get you started in just a few commands:
 git clone https://github.com/ReputationVIP/reputationvip.github.io.git
 cd reputationvip.github.io.git
 vagrant up
-bundle exec jekyll serve
+bundle exec jekyll serve --host 0.0.0.0
 ```
 
 Then, you can access the blog with your browser at: [http://localhost:4000](http://localhost:4000).

@@ -1,6 +1,6 @@
-title:            Site Title
-description:      Describe your website here.
-disqus_shortname: hpstrtheme
+title:            ReputationVIP R&D
+description:      At ReputationVIP, we aren't just online reputation experts, we are developpers too!
+disqus_shortname: reputationvip
 reading_time:     true
 words_per_minute: 200
 # Your site's domain goes here (eg: //mmistakes.github.io, http://mademistakes.com, etc)
@@ -9,21 +9,21 @@ url:
 
 # Owner/author information
 owner:
-  name:           Your Name
+  name:           ReputationVIP
   avatar:         avatar.jpg
-  bio:            "Your bio goes here. It shouldn't be super long but a good two sentences or two should suffice."
-  email:          you@email.com
+  bio:            "Reputation VIP is the online reputation management specialist, using exclusive technology to improve, protect and monitor your online reputation over the long term."
+  email:
   # Social networking links used in footer. Update and remove as you like.
-  twitter:        
-  facebook:       
-  github:         
+  twitter:        reputationvip
+  facebook:       reputationvip
+  github:         ReputationVIP
   stackexchange:  
-  linkedin:       
+  linkedin:       https://www.linkedin.com/company/reputation-vip
   instagram:      
   flickr:         
   tumblr:         
   # google plus id, include the '+', eg +mmistakes
-  google_plus:    +yourid
+  google_plus:    +Reputationvip
 
 # Background image to be tiled on all pages
 background: 
@@ -35,7 +35,7 @@ google_verify:
 bing_verify:         
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone:    America/New_York
+timezone:    Europe/Paris
 future:      true
 highlighter: pygments
 markdown:    kramdown
