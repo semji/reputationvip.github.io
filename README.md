@@ -24,3 +24,6 @@ bundle exec jekyll serve --host 0.0.0.0
 ```
 
 Then, you can access the blog with your browser at: [http://localhost:4000](http://localhost:4000).
+
+If you need some help to customize our blog or to post new articles, get a quick look to
+[theme author instructions](http://mmistakes.github.io/minimal-mistakes/theme-setup).
