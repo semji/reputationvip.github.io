@@ -1,69 +1,59 @@
+# Site wide configuration
+
 title:            ReputationVIP R&D
-description:      At ReputationVIP, we aren't just online reputation experts, we are developpers too!
-disqus_shortname: reputationvip
-reading_time:     true
-words_per_minute: 200
-# Your site's domain goes here (eg: //mmistakes.github.io, http://mademistakes.com, etc)
-# When testing locally leave blank or use http://localhost:4000
-url:
+locale:           en_US
+url:              
 
-# Owner/author information
-owner:
-  name:           ReputationVIP
-  avatar:         avatar.jpg
-  bio:            "Reputation VIP is the online reputation management specialist, using exclusive technology to improve, protect and monitor your online reputation over the long term."
-  email:
-  # Social networking links used in footer. Update and remove as you like.
-  twitter:        reputationvip
-  facebook:       reputationvip
-  github:         ReputationVIP
-  stackexchange:  
-  linkedin:       https://www.linkedin.com/company/reputation-vip
-  instagram:      
-  flickr:         
-  tumblr:         
-  # google plus id, include the '+', eg +mmistakes
-  google_plus:    +Reputationvip
 
-# Background image to be tiled on all pages
-background: 
+# Jekyll configuration
 
-# Analytics and webmaster tools stuff goes here
-google_analytics:   
-google_verify:      
-# https://ssl.bing.com/webmaster/configure/verify/ownership Option 2 content= goes here
-bing_verify:         
-
-# http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone:    Europe/Paris
-future:      true
-highlighter: pygments
+permalink:   /:categories/:title/
 markdown:    kramdown
-gems:
-  - jekyll-sitemap
+highlighter: pygments
 sass:
   sass_dir: _sass
   style: compressed
-
-# https://github.com/mojombo/jekyll/wiki/Permalinks
-permalink:   /:categories/:title/
-
-# Amount of post to show on home page
-paginate: 5
+gems:
+  - jekyll-sitemap
 
 kramdown:
   auto_ids: true
   footnote_nr: 1
   entity_output: as_char
   toc_levels: 1..6
-  use_coderay: true
+  use_coderay: false
 
-  coderay:
-    coderay_line_numbers: nil
-    coderay_line_numbers_start: 1
-    coderay_tab_width: 4
-    coderay_bold_every: 10
-    coderay_css: class
+
+# Site owner
+owner:
+  name: ReputationVIP
+  avatar: bio-photo.jpg
+  bio: "Reputation VIP is the online reputation management specialist, using exclusive technology to improve, protect and monitor your online reputation over the long term."
+  email: 
+  disqus-shortname: 
+  twitter: reputationvip
+  facebook: reputationvip
+  google:
+    plus: reputationvip
+    analytics: 
+    verify: 
+    ad-client: 
+    ad-slot: 
+  bing-verify: 
+  github: ReputationVIP
+  stackoverflow: #http://stackoverflow.com/users/123456/username
+  linkedin: reputation-vip
+  instagram: #username
+  lastfm: #username
+  tumblr: #username
+  pinterest: #username
+  foursquare: #username
+  steam: #username
+  dribbble: #username
+  youtube: #username
+  soundcloud: #username
+  weibo: #username
+  flickr: #username
 
 include: [".htaccess"]
-exclude: ["lib", "config.rb", "Capfile", "config", "Gemfile", "Gemfile.lock", "README.md", "LICENSE", "log", "Rakefile", "Rakefile.rb", "tmp", "less", "*.sublime-project", "*.sublime-workspace", "test", "spec", "Gruntfile.js", "package.json", "node_modules"]
+exclude: ["lib", "config.rb", "Capfile", "config", "log", "Rakefile", "Rakefile.rb", "tmp", "less", "*.sublime-project", "*.sublime-workspace", "test", "spec", "Gruntfile.js", "package.json", "node_modules", "Gemfile", "Gemfile.lock", "LICENSE", "README.md"]

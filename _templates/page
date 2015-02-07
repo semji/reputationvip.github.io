@@ -3,10 +3,8 @@ layout: {{ layout }}
 title: {{ title }}
 date: {{ date }}
 modified:
-description:
+excerpt:
+tags: []
 image:
-  feature:
-  credit:
-  creditlink:
-share:
+  feature: 
 ---

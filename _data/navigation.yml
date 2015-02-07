@@ -1,3 +1,7 @@
-# Menu navigation links
-- title: ReputationVIP.com
-  url: http://www.reputationvip.com
+# Site navigation links
+
+#- title: About
+#  url: /about/
+
+- title: Archives
+  url: /posts/

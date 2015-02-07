@@ -9,7 +9,7 @@ module.exports = function(grunt) {
       all: [
         'Gruntfile.js',
         'assets/js/*.js',
-        'assets/js/plugins/*.js',
+        '!assets/js/plugins/*.js',
         '!assets/js/scripts.min.js'
       ]
     },
@@ -79,6 +79,10 @@ module.exports = function(grunt) {
   ]);
   grunt.registerTask('dev', [
     'watch'
+  ]);
+  grunt.registerTask('images', [
+    'imagemin',
+    'svgmin'
   ]);
 
 };
