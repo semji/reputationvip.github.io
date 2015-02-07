@@ -4,7 +4,7 @@
 
 This repository contains the source code and articles which run [http://reputationvip.io](http://reputationvip.io).
 This blog is powered by Jekyll and hosted on Github pages. Our current theme is based on the work of
-[Michael Rose](https://mademistakes.com/) and its [hpstr theme](https://github.com/mmistakes/hpstr-jekyll-theme).
+[Michael Rose](https://mademistakes.com/) and its [Minimal Mistakes theme](https://github.com/mmistakes/minimal-mistakes).
 
 ## Development
 
