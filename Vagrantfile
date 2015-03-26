@@ -16,5 +16,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.synced_folder ".", "/home/vagrant/reputationvip.github.io"
 
-  config.vm.provision "shell", path: "vagrant/provisionning.sh"
+  config.vm.provision "shell", path: "vagrant/provisionning.sh", privileged: false
 end

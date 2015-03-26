@@ -4,12 +4,12 @@
 sudo add-apt-repository ppa:chris-lea/node.js
 sudo apt-get update
 sudo apt-get install nodejs -y
-sudo npm install npm grunt-cli -g
+sudo npm install npm -g
+sudo npm install grunt-cli -g
 
 # Ruby / Jekyll
-sudo apt-get update
 sudo apt-get -y install build-essential git ruby1.9.3
-sudo gem install bundler github-pages --no-ri --no-rdoc
+sudo gem install bundler
 
 # Jekyll dependencies
 cd ~/reputationvip.github.io
