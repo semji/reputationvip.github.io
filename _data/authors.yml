@@ -10,7 +10,8 @@ olivier_balais:
 
 alban_pommeret:
   name: Alban Pommeret
-  avatar: avatars/no-name.jpg
+  bio: 'Alban Pommeret is Lead developper in our team, specialized in PHP and Javascript, he like painting and cats'
+  avatar: avatars/alban-pommeret.jpg
   github: Neverdane
 
 amine_bsila:
