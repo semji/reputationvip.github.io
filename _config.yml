@@ -28,9 +28,7 @@ kramdown:
 owner:
   name: ReputationVIP
   avatar: avatars/reputationvip.png
-  bio: "Bonjour et bienvenue sur le blog de l’équipe R&D de Reputation VIP.<br/>
-		Vous trouverez ici des articles techniques, des exemples de code, des présentations pour débuter ou se perfectionner sur des technos et des méthodologies actuelles. Nous vous ferons part aussi de nos ressentis sur notre manière de nous organiser pour travailler le mieux possible ensemble.
-		N’hésitez pas à nous faire part de vos commentaires."
+  bio: Welcome on ReputationVIP's tech place.<br />You will find on this blog technical articles, code samples, tutorials for beginners or advanced users about current methodologies and technologies. We will also share with you our feelings about how we organize ourselves to work in the best possible way as a team. Feel free to comment.
   email: #email
   web: http://www.reputationvip.com
   disqus-shortname: reputationvipio
