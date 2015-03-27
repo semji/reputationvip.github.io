@@ -11,20 +11,6 @@ This blog is powered by Jekyll and hosted on Github pages. Our current theme is 
 In order to ease development and article draft writing locally,
 we provide a basic Vagrantfile to get you started in just a few commands:
 
-### Beloved Windows users
-
-First of all, you need to start your Vagrant with admin privileges for Virtualbox to authorize symlinks inside your VM.
-
-You could think that's enough... Not at all! Windows seems to have problems handling long file paths and NPM nested
-folders exceed quite often that limit. One option is to symlink your `node_modules` folder. Inside your VM, execute the
-following commands:
-
-```
-cd ~/reputationvip.github.io
-mkdir -p ~/node_modules
-ln -s ~/node_modules node_modules
-```
-
 ```
 # on your host
 git clone https://github.com/ReputationVIP/reputationvip.github.io.git
@@ -42,3 +28,17 @@ Then, you can access the blog with your browser at: [http://localhost:4000](http
 
 If you need some help to customize our blog or to post new articles, get a quick look to
 [theme author instructions](http://mmistakes.github.io/minimal-mistakes/theme-setup).
+
+### Beloved Windows users
+
+First of all, you need to start your Vagrant with admin privileges for Virtualbox to authorize symlinks inside your VM.
+
+You could think that's enough... Not at all! Windows seems to have problems handling long file paths and NPM nested
+folders exceed quite often that limit. One option is to symlink your `node_modules` folder. Inside your VM, execute the
+following commands:
+
+```
+cd ~/reputationvip.github.io
+mkdir -p ~/node_modules
+ln -s ~/node_modules node_modules
+```
