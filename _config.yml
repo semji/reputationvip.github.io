@@ -7,7 +7,7 @@ url:              #http://reputationvip.io
 
 # Jekyll configuration
 
-permalink:   /:categories/:year/:month/:day/:title/
+permalink:   /:categories/:title/
 markdown:    kramdown
 highlighter: pygments
 sass:
