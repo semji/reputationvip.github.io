@@ -20,8 +20,8 @@ vagrant ssh
 
 # inside your VM
 cd ~/reputationvip.github.io
-bundle exec jekyll serve --host 0.0.0.0
 npm install
+bundle exec jekyll serve --host 0.0.0.0
 ```
 
 Then, you can access the blog with your browser at: [http://localhost:4000](http://localhost:4000).
