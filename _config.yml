@@ -37,10 +37,10 @@ owner:
   google:
     plus: reputationvip
     analytics: UA-26693719-5
-    verify: 
-    ad-client: 
-    ad-slot: 
-  bing-verify: 
+    verify:
+    ad-client:
+    ad-slot:
+  bing-verify:
   github: ReputationVIP
   stackoverflow: #http://stackoverflow.com/users/123456/username
   linkedin: reputation-vip

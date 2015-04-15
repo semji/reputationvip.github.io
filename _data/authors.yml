@@ -21,7 +21,9 @@ amine_bsila:
 
 guilhem_bourgoin:
   name: Guilhem Bourgoin
-  avatar: avatars/no-name.jpg
+  avatar: avatars/guilhem-bourgoin.jpg
+  web: http://www.guilhembourgoin.com
+  bio: Windows lover!
   github: guilhemVB
 
 laurent_aubertin:
