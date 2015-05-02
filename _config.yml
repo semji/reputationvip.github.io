@@ -56,5 +56,13 @@ owner:
   weibo: #username
   flickr: #username
 
+# Fork me on Github ribbon
+forkme:
+  active: true
+  title: Fork me on Github
+  url: https://github.com/ReputationVIP/reputationvip.github.io/fork
+  # [ top-left, top-right, bottom-left, bottom-right ]
+  position: top-right
+
 include: [".htaccess"]
 exclude: ["lib", "config.rb", "Capfile", "config", "log", "Rakefile", "Rakefile.rb", "tmp", "less", "*.sublime-project", "*.sublime-workspace", "test", "spec", "Gruntfile.js", "package.json", "node_modules", "Gemfile", "Gemfile.lock", "LICENSE", "README.md"]
