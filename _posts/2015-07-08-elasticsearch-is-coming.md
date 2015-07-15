@@ -173,6 +173,18 @@ The **optimistic concurrency control (OCC)** assumes that frequently, multiple t
 transaction, the data resources aren't locked. Before committing the transactions, it verifies that the data hasn't been modified by another transaction (using the version number). If so,
 the transaction rolls back, and restarts.
 
+### Scoring & Relevance
+
+When Elasticsearch retrieve documents, it uses a formula, known as the **pratical scoring function** to calculate the relevance of each results. This formula (you can find
+it here : [https://www.elastic.co/guide/en/elasticsearch/guide/current/practical-scoring-function.html](https://www.elastic.co/guide/en/elasticsearch/guide/current/practical-scoring-function.html))
+depends on several KPIs. I won't detail them here, because it is not really relevant to know them right now. You should just know that this formula is based on a concept named
+**TF/IDF (Term Frequency / Inverse Document Frequency)**. Basically, the final rank given to a document by Elasticsearch depends on the weight of each **term** in the document.
+
+This weight is calculated with the **term frequency** (how often does it appear in the document), the **inverse document frequency** (how often does it appear **in every** document in the collection),
+and the **field-length norm** (the field's length).
+
+Scoring is a really interesting theoretical subject, but too long to be explained here. If you want to know more, I suggest you to take a look here : [https://www.elastic.co/guide/en/elasticsearch/guide/current/scoring-theory.html](https://www.elastic.co/guide/en/elasticsearch/guide/current/scoring-theory.html).
+
 ### Architecture : Nodes & Clusters
 
 Elasticsearch is organized in **clusters**, composed of **nodes**.
