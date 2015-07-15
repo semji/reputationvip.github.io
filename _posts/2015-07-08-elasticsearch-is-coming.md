@@ -51,6 +51,8 @@ Beside being a big fan of Game of Thrones, I also am a big fan of Docker. For th
 So, I decided to create an Elasticsearch **cluster** with Docker containers.
 Each **node** of this **cluster** takes the name of a member of the Stark family.
 
+In deed, I know how difficult it can be to read and run examples of other people. With this Docker container, you will have the same environment I used to write this article.
+
 To launch the docker cluster, first clone the repository in the folder of your choice, and go into it.
 
 I also ask you to install [https://docs.docker.com/compose/]( *docker compose*), which is a good solution to build and run multi-container applications with Docker.
