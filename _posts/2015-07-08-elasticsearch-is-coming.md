@@ -1,9 +1,9 @@
 ---
 layout: post
 author: quentin_fayet
-title: "Elasticsearch"
-excerpt: "Elasticsearch is a full-text search engine based on Apache Lucene"
-modified: 2015-07-08
+title: "Elasticsearch Is Coming"
+excerpt: "The first article about Elasticsearch, the full-text search engine based on Apache Lucene"
+modified: 2015-07-15
 tags: [gitlab, git]
 comments: true
 image:
@@ -12,7 +12,7 @@ image:
   creditlink: http://reputationvip.io
 ---
 
-# ELASTICSEARCH OF THRONES
+# ELASTICSEARCH IS COMING
 
 ## ROADMAP
 
