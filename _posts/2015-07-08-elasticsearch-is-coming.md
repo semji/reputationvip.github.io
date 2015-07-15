@@ -18,7 +18,7 @@ image:
 
 This article is the first of many to come about Elasticsearch. Elasticsearch is a vast and amazing technology, and I could write thousands of lines about it.
 
-So first, let me introduce the roadmap we'll follow all along these articles :
+So first, let me introduce the summary of very this first article :
 
 1. A smooth introduction to Elasticsearch
 2. Theorical approach : What's under the armor of Elasticsearch ?
