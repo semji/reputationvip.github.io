@@ -658,7 +658,8 @@ Our JSON will be the following (you can find it in `simple_cluster/queries/basic
 {
     "doc" : {
         "age" : 20
-    }
+    },
+    "detect_noop" : true
 }
 {% endhighlight %}
 
