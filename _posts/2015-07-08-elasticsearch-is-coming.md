@@ -58,7 +58,7 @@ To launch the docker cluster, first clone the repository in the folder of your c
 I also ask you to install [https://docs.docker.com/compose/]( *docker compose*), which is a good solution to build and run multi-container applications with Docker.
 The installation takes 2 minutes, and is really easy. Go here to install it : [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
 
-Once *docker compose* installed on your system, go into the `elasticsearch/docker` repository folder ; then, launch this command :
+Once installed *docker compose* on your system, go into the `elasticsearch/docker` repository folder ; then, launch this command :
 
 `docker-compose build`
 
