@@ -37,6 +37,7 @@ First of all, all along these articles, I will guide you through the understandi
 Each part of the articles will provide you theorical explanations, as well as examples.
 
 At ReputationVIP, we are big fans of Game of Thrones. So, the guideline I chose for these articles is Game of Thrones.
+All along these articles (though I don't know how many of them will follow this one), we will build a database filled with the Game of Thrones characters.
 
 #### The Github Repository
 
@@ -102,7 +103,7 @@ The **Token** is **an occurence of a Term in a text field**. It is composed of *
 
 ***
 
-## Theorical approach : What's under the hood of Elasticsearch ?
+## Theorical approach : What's under the armor of Elasticsearch ?
 
 In this part, I will talk about the main concepts that run Elasticsearch, about Apache Lucene and the full-text research. I will also give you an overview of data analysis, and how it is performed
 by Elasticsearch and Apache Lucene. Finally, I will talk a bit about the architecture Elasticsearch is based on.
@@ -383,10 +384,10 @@ The cluster should responds like this :
 
 #### Full Example
 
-Now, let's say that we'd like to created the *"blog"* index. By convention, **all indices should be written in the singular form**.
+Now, let's say that we'd like to created the *"game_of_throne"* index. By convention, **all indices should be written in the singular form**.
 
 {% highlight sh %}
-$> curl -XPUT "http://localhost:9200/blog?pretty"
+$> curl -XPUT "http://localhost:9200/game_of_throne?pretty"
 {% endhighlight %}
 
 And the response from the cluster is :
@@ -425,7 +426,7 @@ The table shows data about indices, such as name, health, number of documents, s
 
 #### Full Example
 
-Let's say we'd like to take a look at the *"blog"* index we just created.
+Let's say we'd like to take a look at the *"game_of_throne"* index we just created.
 
 {% highlight sh %}
 $> curl -XPUT "http://localhost:9200/_cat/indices?v"
@@ -434,13 +435,13 @@ $> curl -XPUT "http://localhost:9200/_cat/indices?v"
 And the response is :
 
 {% highlight sh %}
-health   status   index   pri   rep   docs.count   docs.deleted   store.size   pri.store.size
-green    open     blog     5     1            0              0        970b              575b
+health   status   index          pri   rep   docs.count   docs.deleted   store.size   pri.store.size
+green    open     game_of_throne  5     1            0              0        970b              575b
 {% endhighlight %}
 
 ### Create documents
 
-Here the real fun begins. Now that our cluster is properly set, and contains an index (*"blog"*), we can take a look at the standards **CRUD** operations.
+Here the real fun begins. Now that our cluster is properly set, and contains an index (*"game_of_throne"*), we can take a look at the standards **CRUD** operations.
 
 The first operation is the **creation**. Elasticsearch will stores documents into the shards by this operation. The format is the following :
 
@@ -476,7 +477,8 @@ The Elasticsearch cluster will answer, with the following response :
 
 #### Full Example
 
-Let's say now we want to add a **Document** of type *"article"* in the *"blog"* index.
+Let's say now we want to add a **Document** which represents Jon Snow.
+Its type would be *"character"* and it will stands in the *"game_of_throne"* index.
 
 To perform this operation, we need to use a JSON data file. I provided it in the Vagrant environment, under the `simple_cluster/queries/basics/add_document.json` file.
 
@@ -484,31 +486,38 @@ Its content is the following :
 
 {% highlight json %}
 {
-    "title": "My great article",
-    "content": "Here's my great article's content. So many interesting things are said here.",
-    "tags": ["great", "article", "interesting"]
+  "name": "Jon Snow",
+  "age": 14,
+  "house": "Stark",
+  "gender": "male",
+  "biography": "Jon Snow is the bastard son of Eddard Stark, the lord of Winterfell. He is the half-brother of Arya, Sansa, Bran, Rickon and Robb.",
+  "tags": [
+    "stark",
+    "night's watch",
+    "you know nothing"
+  ]
 }
 {% endhighlight %}
 
 Given that, the CURL request is the following :
 
 {% highlight sh %}
-$>curl –XPOST http://localhost:9200/blog/article/ -d {"title": "My great article","content": "Here's my great article's content. So many interesting things are said there.","tags": ["great", "article", "interesting"]}
+$>curl –XPOST http://localhost:9200/game_of_throne/character/ -d {"name": "Jon Snow","age": 14,"house": "Stark","gender": "male","biography": "Jon Snow is the bastard son of Eddard Stark, the lord of Winterfell. He is the half-brother of Arya, Sansa, Bran, Rickon and Robb.","tags": ["stark","night's watch","you know nothing"]}
 {% endhighlight %}
 
 The response given by the cluster :
 
 {% highlight json %}
 {
-    "_index" : "blog",
-    "_type" : "article",
+    "_index" : "game_of_throne",
+    "_type" : "character",
     "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
     "_version" : 1,
     "created" : true
 }
 {% endhighlight %}
 
-You can see here that our document has been inserted in the *"blog"* index, with the type *"article"*. You can also see that Elasticsearch gave our document an ID which id *AU0QJ2sJ1MYCa_CVGtD5*.
+You can see here that our document has been inserted in the *"game_of_throne"* index, with the type *"character"*. You can also see that Elasticsearch gave our document an ID which id *AU0QJ2sJ1MYCa_CVGtD5*.
 Also, the version of the document has been set to 1 (the first version). Finally, Elasticsearch informed us that he performed the creation.
 
 ### Retrieve documents
@@ -553,25 +562,32 @@ Compared to the previous answer, there is two more fields here : *\_exists* and 
 
 #### Full Example
 
-Let's say that we want to retrieve the previous document (the blog article) we stored in the type *article* of the *blog* index. As a reminder, the ID Elasticsearch gave us is *AU0QJ2sJ1MYCa_CVGtD5*.
+Let's say that we want to retrieve the previous document ( *Jon Snow*) we stored in the *game_of_throne* index, and which has the *character* type. As a reminder, the ID Elasticsearch gave us is *AU0QJ2sJ1MYCa_CVGtD5*.
 
 {% highlight sh %}
-$>curl –XPOST http://localhost:9200/blog/article/AU0QJ2sJ1MYCa_CVGtD5
+$>curl –XPOST http://localhost:9200/game_of_throne/character/AU0QJ2sJ1MYCa_CVGtD5
 {% endhighlight %}
 
 The answer from the cluster is :
 
 {% highlight json %}
 {
-    "_index" : "blog",
-    "_type" : "article",
+    "_index" : "game_of_throne",
+    "_type" : "character",
     "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
     "_version" : 1,
     "_exists" : true,
     "_source" : {
-            "title": "My great article",
-            "content": "Here's my great article's content. So many interesting things are said here.",
-            "tags": ["great", "article", "interesting"]
+          "name": "Jon Snow",
+          "age": 14,
+          "house": "Stark",
+          "gender": "male",
+          "biography": "Jon Snow is the bastard son of Eddard Stark, the lord of Winterfell. He is the half-brother of Arya, Sansa, Bran, Rickon and Robb.",
+          "tags": [
+            "stark",
+            "night's watch",
+            "you know nothing"
+          ]
         }
 }
 {% endhighlight %}
@@ -634,14 +650,14 @@ Here, the important change is in the *\_version* field. You can notice that it h
 
 #### Full Example
 
-Let's say that we want to update the previous document (the blog article) we stored, and change its title. As a reminder, its ID is *AU0QJ2sJ1MYCa_CVGtD5*.
+Let's say that we want to update the previous document ( *Jon Snow*) we stored, and change his age. As a reminder, its ID is *AU0QJ2sJ1MYCa_CVGtD5*.
 
 Our JSON will be the following (you can find it in `simple_cluster/queries/basics/update_document.json`).
 
 {% highlight json %}
 {
     "doc" : {
-        "title" : "New title !"
+        "age" : 20
     }
 }
 {% endhighlight %}
@@ -649,15 +665,15 @@ Our JSON will be the following (you can find it in `simple_cluster/queries/basic
 Then, we can make our request to the cluster :
 
 {% highlight sh %}
-$>curl –XPOST http://localhost:9200/blog/article/AU0QJ2sJ1MYCa_CVGtD5/_update -d {THE JSON HERE}
+$>curl –XPOST http://localhost:9200/game_of_throne/character/AU0QJ2sJ1MYCa_CVGtD5/_update -d {"doc" : {"age" : 20} }
 {% endhighlight %}
 
 The response from the Elasticsearch cluster is the following :
 
 {% highlight json %}
 {
-    "_index" : "blog",
-    "_type" : "article",
+    "_index" : "game_of_throne",
+    "_type" : "character",
     "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
     "_version" : 2
 }
@@ -698,18 +714,18 @@ is not really removed from it, unless a **segment merge** is processed ; instead
 
 #### Full Example
 
-Let's say that we want to delete the previous document (article blog) we stored. As a reminder, the **ID** Elasticsearch gave us is *AU0QJ2sJ1MYCa_CVGtD5*
+Let's say that we want to delete the previous document ( *Jon Snow*) we stored. As a reminder, the **ID** Elasticsearch gave us is *AU0QJ2sJ1MYCa_CVGtD5*
 
 {% highlight sh %}
-$>curl –XDELETE http://localhost:9200/blog/article/AU0QJ2sJ1MYCa_CVGtD5
+$>curl –XDELETE http://localhost:9200/game_of_throne/character/AU0QJ2sJ1MYCa_CVGtD5
 {% endhighlight %}
 
 The answer from the server is :
 
 {% highlight json %}
 {
-    "_index" : "blog",
-    "_type" : "article",
+    "_index" : "game_of_throne",
+    "_type" : "character",
     "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
     "_version" : 3,
     "found", true
