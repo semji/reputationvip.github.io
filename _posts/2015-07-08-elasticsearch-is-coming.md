@@ -475,7 +475,7 @@ The Elasticsearch cluster will answer, with the following response :
 
 *\_version* is the **version of your document**. This is the famous **versioning** I talked about earlier.
 
-#### Full Example
+#### Full Example : Create Jon Snow
 
 Let's say now we want to add a **Document** which represents Jon Snow.
 Its type would be *"character"* and it will stands in the *"game_of_throne"* index.
@@ -560,7 +560,7 @@ Compared to the previous answer, there is two more fields here : *\_exists* and 
 
 *\_source* contains the JSON document you requested.
 
-#### Full Example
+#### Full Example : Retrieve Jon Snow
 
 Let's say that we want to retrieve the previous document ( *Jon Snow*) we stored in the *game_of_throne* index, and which has the *character* type. As a reminder, the ID Elasticsearch gave us is *AU0QJ2sJ1MYCa_CVGtD5*.
 
@@ -648,7 +648,7 @@ The Elasticsearch cluster will answer with the following response :
 
 Here, the important change is in the *\_version* field. You can notice that it has been incremented.
 
-#### Full Example
+#### Full Example : Update Jon Snow
 
 Let's say that we want to update the previous document ( *Jon Snow*) we stored, and change his age. As a reminder, its ID is *AU0QJ2sJ1MYCa_CVGtD5*.
 
@@ -713,7 +713,7 @@ The Elasticsearch server will answer with the following response :
 You can notice here that **the version of the document has been incremented !** That's because the segment thing. Remember : segments are **not updated**, so that the document
 is not really removed from it, unless a **segment merge** is processed ; instead, a new version is created.
 
-#### Full Example
+#### Full Example : Delete Jon Snow
 
 Let's say that we want to delete the previous document ( *Jon Snow*) we stored. As a reminder, the **ID** Elasticsearch gave us is *AU0QJ2sJ1MYCa_CVGtD5*
 
