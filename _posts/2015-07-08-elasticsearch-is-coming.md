@@ -624,7 +624,7 @@ To update a part of a document, the format of the JSON data you will provide is 
 {% highlight json %}
 {
     "doc" : {
-        "THE UPDATED FIELDS"
+        "field_name" : "new_value"
     },
     "detect_noop" : true
 }
