@@ -18,10 +18,10 @@ image:
 
 This article is the first of many to come about Elasticsearch. Elasticsearch is a vast and amazing technology, and I could write thousands of lines about it.
 
-So first, let me introduce the summary of very this first article :
+So first, let me introduce the summary of this very first article :
 
 1. A smooth introduction to Elasticsearch
-2. Theorical approach : What's under the armor of Elasticsearch ?
+2. Theoretical approach : What's under the armor of Elasticsearch ?
 3. Installation and configuration of Elasticsearch
 4. Querying : Basic CRUD
 5. Introduction to plugins
@@ -32,23 +32,28 @@ So first, let me introduce the summary of very this first article :
 
 Before we dive in Elasticsearch head first, let me tell you how I organized these articles.
 
-#### The articles 
-First of all, all along these articles, I will guide you through the understanding of Elasticsearch. 
-Each part of the articles will provide you theorical explanations, as well as examples.
+First of all, this first article is about the very basics of Elasticsearch, and I will not really talk about full-text research right now. The main reason is that I consider
+that you need to take a look at the basic operations first.
 
-At ReputationVIP, we are big fans of Game of Thrones. So, the guideline I chose for these articles is Game of Thrones.
+**But don't be afraid, I will talk about the full-text research in the next article**.
+
+#### The articles
+
+First of all, all along these articles, I will guide you through the understanding of Elasticsearch. 
+Each part of the articles will provide you theoretical explanations, as well as examples.
+
+At ReputationVIP, we are big fans of Game of Thrones. So, the guideline I chose for this set of articles is Game of Thrones.
 All along these articles (though I don't know how many of them will follow this one), we will build a database filled with the Game of Thrones characters.
 
 #### The Github Repository
 
 Available here : [https://github.com/quentinfayet/elasticsearch](https://github.com/quentinfayet/elasticsearch)
 
-It contains everything you need to run this article's examples : A ready-to-run Elasticsearch cluster under Docker containers, and, also, for those of you who
-are not working with an UNIX based system, a Vagrant virtual machine.
+It contains everything you need to run the articles' examples : A ready-to-run Elasticsearch cluster under Docker containers, available to run with Docker-Compose.
 
-#### The Docker container
+#### The Docker containers
 
-Beside being a big fan of Game of Thrones, I also am a big fan of Docker. For those whom don't know about Docker, you can take a look here : [https://www.docker.com/](https://www.docker.com/)
+Beside being a big fan of Game of Thrones, I also am a big fan of Docker. For those whom don't know about Docker, you can take a look here : [https://www.docker.com/](https://www.docker.com/).
 So, I decided to create an Elasticsearch **cluster** with Docker containers.
 Each **node** of this **cluster** takes the name of a member of the Stark family.
 
@@ -56,7 +61,7 @@ In deed, I know how difficult it can be to read and run examples of other people
 
 To launch the docker cluster, first clone the repository in the folder of your choice, and go into it.
 
-I also ask you to install [https://docs.docker.com/compose/]( *docker compose*), which is a good solution to build and run multi-container applications with Docker.
+I also require you to install [https://docs.docker.com/compose/]( *docker compose*), which is a good solution to build and run multi-container applications with Docker.
 The installation takes 2 minutes, and is really easy. Go here to install it : [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
 
 Once installed *docker compose* on your system, go into the `elasticsearch/docker` repository folder ; then, launch this command :
@@ -87,7 +92,7 @@ Also, Elasticsearch is distributed, which means that **it can be divided into sh
 
 ### Specific Vocabulary
 
-In order for you to understand the rest of these articles, we'll need to speak the same language. That's why I give you here the basic vocabulary used when talking about Elasticsearch :
+In order for you to understand the rest of these articles, we will need to speak the same language. That's why I give you here the basic vocabulary used when talking about Elasticsearch :
 
 #### Document
 The **Document** is the main data carrier of Elasticsearch, used for indexing and searching. It is composed of **fields, containing data**, retrieved by Apache Lucene.
@@ -103,7 +108,7 @@ The **Token** is **an occurence of a Term in a text field**. It is composed of *
 
 ***
 
-## Theorical approach : What's under the armor of Elasticsearch ?
+## Theoretical approach : What's under the armor of Elasticsearch ?
 
 In this part, I will talk about the main concepts that run Elasticsearch, about Apache Lucene and the full-text research. I will also give you an overview of data analysis, and how it is performed
 by Elasticsearch and Apache Lucene. Finally, I will talk a bit about the architecture Elasticsearch is based on.
@@ -119,16 +124,17 @@ Given these 3 documents (simple text lines) :
 
 - Document <1> : ReputationVIP digital fortress
 - Document <2> : ReputationVIP likes Elasticsearch
-- Document <3> : Elasticsearch Cookbook
+- Document <3> : Elasticsearch Article
 
 The resulting **inverted index mapping** would be :
 
-Terms         | Occurences | Documents |
---------------|:----------:|---------- |
-ReputationVIP | 2          | <1>, <2>  |
-digital       | 1          | <1>       |
-fortress      | 1          | <1>       |
-Elasticsearch | 2          | <1>, <2>  |
+Terms         | Occurrences | Documents |
+--------------|:----------: |---------- |
+ReputationVIP | 2           | <1>, <2>  |
+digital       | 1           | <1>       |
+fortress      | 1           | <1>       |
+Elasticsearch | 2           | <1>, <2>  |
+...           | ...         | ...       |
 
 ### Segment
 
@@ -159,7 +165,6 @@ Example of filters :
 
 - **Lowercase filter** (all tokens are lowercased)
 - **Synonyms filter** (applies basic synonym rules to tokens), ...
--
 
 The list of Elasticsearch's filters stands here : [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/analysis-tokenfilters.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/analysis-tokenfilters.html)
 
@@ -172,21 +177,21 @@ The list of Elasticsearch's filters stands here : [https://www.elastic.co/guide/
 An important feature of Elasticsearch is the **versioning**. When a document is added, updated or deleted, the version number is incremented. This process is known as **versioning**.
 It allows Elasticsearch to perform **optimistic concurrency control**
 
-The **optimistic concurrency control (OCC)** assumes that frequently, multiple transactions car be performed. Each of them need to not to interfer with each other. When executing the
-transaction, the data resources aren't locked. Before committing the transactions, it verifies that the data hasn't been modified by another transaction (using the version number). If so,
+The **optimistic concurrency control (OCC)** assumes that frequently, multiple transactions car be performed. Each of them need to not to interfere with each other. When executing the
+transaction, the data resources aren't locked. Before committing the transactions, it verifies that the data haven't been modified by another transaction (using the version number). If so,
 the transaction rolls back, and restarts.
 
 ### Scoring & Relevance
 
 When Elasticsearch retrieve documents, it uses a formula, known as the **pratical scoring function** to calculate the relevance of each results. This formula (you can find
-it here : [https://www.elastic.co/guide/en/elasticsearch/guide/current/practical-scoring-function.html](https://www.elastic.co/guide/en/elasticsearch/guide/current/practical-scoring-function.html))
+it here : [https://www.elastic.co/guide/en/elasticsearch/guide/current/practical-scoring-function.html](https://www.elastic.co/guide/en/elasticsearch/guide/current/practical-scoring-function.html)),
 depends on several KPIs. I won't detail them here, because it is not really relevant to know them right now. You should just know that this formula is based on a concept named
 **TF/IDF (Term Frequency / Inverse Document Frequency)**. Basically, the final rank given to a document by Elasticsearch depends on the weight of each **term** in the document.
 
 This weight is calculated with the **term frequency** (how often does it appear in the document), the **inverse document frequency** (how often does it appear **in every** document in the collection),
 and the **field-length norm** (the field's length).
 
-Scoring is a really interesting theoretical subject, but too long to be explained here. If you want to know more, I suggest you to take a look here : [https://www.elastic.co/guide/en/elasticsearch/guide/current/scoring-theory.html](https://www.elastic.co/guide/en/elasticsearch/guide/current/scoring-theory.html).
+Scoring is a really interesting theoretical subject, but too long to be explained here. If you want to know more about it, I suggest you to take a look here : [https://www.elastic.co/guide/en/elasticsearch/guide/current/scoring-theory.html](https://www.elastic.co/guide/en/elasticsearch/guide/current/scoring-theory.html).
 
 ### Architecture : Nodes & Clusters
 
@@ -234,9 +239,9 @@ With a sharded architecture, querying also becomes a tricky operation. **Master 
 
 ## Installation
 
-**If you just want to try Elasticsearch, you can get rid of the installation, since I already installed it on the Vagrant virtual machine, provided with this article.**
+**If you just want to try Elasticsearch, you can get rid of the installation, since I already installed it on the Docker cluster, provided with this article.**
 
-First of all, please take a look at the prerequisites to install Elasticsearch (at the time I wrote this article, Elasticsearch version is 1.6.0).
+First of all, please take a look at the prerequisites to install Elasticsearch (at the time I wrote this article, Elasticsearch version is *1.6.0*).
 
 - Java 6 or more installed on each server of the cluster. **(Java 7 is highly recommended)**
 - OpenJDK is highly recommended.
@@ -266,18 +271,23 @@ Directory
     |- *work* : The temporary files used by Elasticsearch when running
 {% endhighlight %}
 
+You can notice that the *bin* directory is probably the most important for us, as it holds the Elasticsearch binaries. We will also need to take a look at the *config* folder,
+which stores all the config files needed by the cluster.
+
 ### Configuring Nodes & Cluster
+
+*Note that if you are using the Docker cluster I provided, you don't need to perform all these configuration steps.*
 
 According to the previous directory layout, the configurations files are stored in the `config` folder.
 
-The main configuration file is located in `config/elasticsearch.yml`. It is a YAML file. If you're not comfortable with YAML, take a look at [http://yaml.org/](http://yaml.org/).
+The main configuration file is located in `config/elasticsearch.yml`. It is a YAML file. If you are not comfortable with YAML, take a look at [http://yaml.org/](http://yaml.org/).
 The syntax is really simple though. This file **handles the default configuration values** for the node.
 
 Note that if you really don't like YAML, you can use a `config/elasticsearch.json` file, using the common JSON format. **I'll use the YAML format**, as it is the default format.
 
 #### Important values
 
-There is a bunch of values in this file, but 3 of them are really important, and represent the basic configuration values :
+There is a bunch of values in this file, but 3 of them are really important right now, and represent the basic configuration values :
 
 - `cluster.name` : It is the name of the cluster. **It is used to identify nodes belonging to the same cluster**
 - `node.name` : It is the name of the node. If it is not provided, then Elasticsearch will performs a random-pick among a list of defined names.
@@ -291,10 +301,12 @@ There is **several ways for a new node to discover other nodes** of the same clu
 
 ##### Multicast Discovery
 
-The **multicast discovery** is the **simpliest discovery mode**. Using the port 54328, the node will **ping** every other node with the multicast IP address on the network.
+The **multicast discovery** is the **simplest discovery mode**. Using the port 54328, the node will **ping** every other node with the multicast IP address on the network.
 To enable the multicast discovery, set the following line in your configuration file :
 
 `discovery.zen.ping.multicast.enabled: true`
+
+**Multicast is the mode is used in the Docker cluster.**
 
 ##### Unicast Discovery
 
@@ -307,7 +319,8 @@ The point is on `[]`. It is an array of IP addresses, optionally defined with a 
 
 ##### EC2 AWS
 
-This **special mode** is made for the Elasticsearch cluster to work with **AWS EC2** instances. You can read more about it on [https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-ec2.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-ec2.html)
+This **special mode** is made for the Elasticsearch cluster to work with **AWS EC2** instances. You can read more about it on [https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-ec2.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-ec2.html).
+Basically, it allows Elasticsearch to use AWS EC2's API to discover the other nodes.
 
 ## Querying
 
@@ -315,11 +328,11 @@ That's it ! Our Elasticsearch cluster is now ready to use, and we will be able t
 
 ### Basics of Querying
 
-To **query** means that you will ask your Elasticsearch cluster to perform CRUD operations on its database. For that, you'll need to learn **how to use Elasticsearch's REST API**.
+To **query** means that you will ask your Elasticsearch cluster to perform operations on its database. It could be basics CRUD operations (as we will see right after), or more complexes operations. For that, you'll need to learn **how to use Elasticsearch's REST API**.
 
 #### The REST API
 
-All of the queries you'll make will go through **Elasticsearch's REST API**. If you don't know what a REST API is, you can have a look at [https://fr.wikipedia.org/wiki/Representational_State_Transfer](https://fr.wikipedia.org/wiki/Representational_State_Transfer).
+All of the queries you will make will go through **Elasticsearch's REST API**. If you don't know what a REST API is, you can have a look at [https://fr.wikipedia.org/wiki/Representational_State_Transfer](https://fr.wikipedia.org/wiki/Representational_State_Transfer).
 Also, if you are not aware of the commons **HTTP Verbs**, take a look at [https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol)
 
 #### The JSON format
@@ -328,17 +341,17 @@ To give Elasticsearch your criteria, you will have to pass them through data in 
 
 #### CURL
 
-If you don't have **curl** installed on your local machine (the machine with which you will query the cluster), I strongly recommend you to install it.
+If you don't have *CURL* installed on your local machine (the machine with which you will query the cluster), I strongly recommend you to install it. In deed, we will use
+*CURL* to make our calls to the REST API.
 
 ### Before Querying
 
 All the examples above are available in the Github repository I created for this article, under the JSON format.
 
-CURL gives you two ways of using the JSON data for your queries :
+*CURL* gives you two ways of using the JSON data for your queries :
 
-- The first one, by including it directly into your CURL call, using the `-d` parameter.
-- The second one, by including data from the files I gave you in your CURL call, using the `--data-binary` parameter, indicating the path to the JSON file preceded with an @. (Example
-: `--data-binary @path/to/file.json`)
+- The first one, by including it directly into your *CURL* call, using the `-d` parameter.
+- The second one, by including data from the files I gave you in your *CURL* call, using the `--data-binary` parameter, indicating the path to the JSON file preceded with an @. (Example : `--data-binary @path/to/file.json`)
 
 ### Understanding the REST API
 
@@ -346,17 +359,17 @@ To query Elasticsearch, we make calls to its **REST API**. The format of the URL
 
 <div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">[/index[/type]]</span><span style="color: chartreuse">[/_action[?parameters]]</span></code></pre></div>
 
-The first part is the **URL on which your Elasticsearch server is available**
+The first part is the **URL on which your Elasticsearch cluster API is available**
 
-<span style="color: orange">The second part indicates on which index (an index could be compared to an SQL database) your
-query will be performed, and what is the type (a type could be compared to an SQL table) of the document. **From now, I will write indices and types in orange**</span>
+<span style="color: orange">The second part indicates on which index (an index could be compared to an SQL database, though I don't like this comparison) your
+query will be performed, and what is the type (a type could be compared to an SQL table, though I don't like this comparison either) of the document. **From now, I will write indices and types in orange**</span>
 
-<span style="color: ForestGreen">The last part might be used to indicate which operation we want to do, and parameters can be set here. Note the uderscore (`_`) before the
-action name). **From now, I will write actions and parameters in green.**</span>
+<span style="color: ForestGreen">The last part is used to indicate which operation we want to perform ; parameters can be set here. Note the underscore (`_`) before the
+action name. **From now, I will write actions and parameters in green.**</span>
 
 ### Create an Index
 
-In Elasticsearch, an index might be compared to an SQL database. It will store a collection of documents, classified by type (SQL table).
+In Elasticsearch, documents are separated into indices. Each indices may store several types of documents.
 
 #### The Query
 
@@ -384,7 +397,8 @@ The cluster should responds like this :
 
 #### Full Example
 
-Now, let's say that we'd like to created the *"game_of_throne"* index. By convention, **all indices should be written in the singular form**.
+Now, let's say that we'd like to created the *"game_of_throne"* index. By convention, **all indices should be written in the singular form**. Also, you should always take care of
+your indices' names to be semantic. 
 
 {% highlight sh %}
 $> curl -XPUT "http://localhost:9200/game_of_throne?pretty"
@@ -404,7 +418,7 @@ More options can be passed to the index API. More about it here : [https://www.e
 
 #### The Query
 
-You can list all Indices on your cluster this way :
+Elasticsearch API allows us to get the list of all indices which are present on our cluster.
 
 The query type is `GET`
 
@@ -443,7 +457,7 @@ green    open     game_of_throne  5     1            0              0        970
 
 Here the real fun begins. Now that our cluster is properly set, and contains an index (*"game_of_throne"*), we can take a look at the standards **CRUD** operations.
 
-The first operation is the **creation**. Elasticsearch will stores documents into the shards by this operation. The format is the following :
+The first operation is the **creation**. By this operation, Elasticsearch will stores documents into shards. The format is the following :
 
 #### The Query
 
@@ -454,6 +468,9 @@ The query type is `POST`
 The first part is the **URL on which your Elasticsearch cluster API is available**.
 
 <span style="color: orange">The second part indicates on which index your document will be stored, and what its type is.</span>
+
+You may have noticed that the HTTP verb used for this query is `POST`. That means you will put data into your HTTP request. These data will be read by the Elasticsearch API,
+and stored into the cluster.
 
 #### The Response
 
@@ -471,16 +488,17 @@ The Elasticsearch cluster will answer, with the following response :
 
 *\_index* and *\_type* are the ones you specified in the query.
 
-*\_id* is an **ID** automatically set by Elasticsearch. **You can also specify it** if you wish. We'll talk about it deeper later in this article.
+*\_id* is an **ID**, automatically set by Elasticsearch. **You can also specify it** if you wish. We'll talk about it deeper later.
 
 *\_version* is the **version of your document**. This is the famous **versioning** I talked about earlier.
 
 #### Full Example : Create Jon Snow
 
-Let's say now we want to add a **Document** which represents Jon Snow.
+Let's say now we want to add a **Document** which represents *Jon Snow*.
+If you don't know who *Jon Snow* is, ... *Erf*, I am really disappointed. Here's the answer : [https://fr.wikipedia.org/wiki/Jon_Snow](https://fr.wikipedia.org/wiki/Jon_Snow).
 Its type would be *"character"* and it will stands in the *"game_of_throne"* index.
 
-To perform this operation, we need to use a JSON data file. I provided it in the Vagrant environment, under the `simple_cluster/queries/basics/add_document.json` file.
+To perform this operation, we need to use a JSON data file. I provided it in the Github repository, under the `queries/basics/add_document.json` file.
 
 Its content is the following :
 
@@ -499,7 +517,7 @@ Its content is the following :
 }
 {% endhighlight %}
 
-Given that, the CURL request is the following :
+Given that, the *CURL* request is the following :
 
 {% highlight sh %}
 $>curl –XPOST http://localhost:9200/game_of_throne/character/ -d {"name": "Jon Snow","age": 14,"house": "Stark","gender": "male","biography": "Jon Snow is the bastard son of Eddard Stark, the lord of Winterfell. He is the half-brother of Arya, Sansa, Bran, Rickon and Robb.","tags": ["stark","night's watch","you know nothing"]}
@@ -556,9 +574,8 @@ The Elasticsearch cluster will answer with a response similar to the following:
 
 Compared to the previous answer, there is two more fields here : *\_exists* and *\_source*.
 
-*\_exists* is a **boolean** value that informs you if the document defined by the **ID** you gave exists in the given index and type. If so, then the value will be **true**, otherwise it will be **false**.
-
-*\_source* contains the JSON document you requested.
+- *\_exists* is a **boolean** value that informs you if the document defined by the **ID** you gave exists in the given index and type. If so, then the value will be **true**, otherwise it will be **false**.
+- *\_source* contains the JSON document you requested.
 
 #### Full Example : Retrieve Jon Snow
 
@@ -600,7 +617,7 @@ Well. We know how to insert documents, and retrieve them according to their **ID
 
 Now, we will see the third **CRUD** operation, the **Update**.
 
-In Elasticsearch, update can be kind of a difficult operation. In deed, there is several "kind" of updates, I would say. The one we're going to see now is the simpliest
+In Elasticsearch, update can be kind of a difficult operation. In deed, there is several "kind" of updates, I would say. The one we are going to see now is the simplest
 one, it is about doing a **partial update**.
 
 If your document contains counters, or fields on which you want to perform some operations, the update operation is a bit more touchy, and we will talk about it later.
@@ -617,7 +634,7 @@ The first part is the **URL on which your Elasticsearch cluster API is available
 
 <span style="color: orange">The second part indicates on which index your document is stored, what its type is, and its ID</span>
 
-<span style="color: ForestGreen">The second part is the name of the action. Here, *\_update* notifies Elasticsearch that we are willing to update an existing document.</span>
+<span style="color: ForestGreen">The last part is the name of the action. Here, *\_update* notifies Elasticsearch that we are willing to update an existing document.</span>
 
 To update a part of a document, the format of the JSON data you will provide is the following :
 
@@ -629,6 +646,8 @@ To update a part of a document, the format of the JSON data you will provide is 
     "detect_noop" : true
 }
 {% endhighlight %}
+
+The *"doc"* field contains the updated fields of the document.
 
 Here, I purposely included an option called *detect_noop*. This options, if it is set to **true**, will make a diff between the actual version of your document, stored by
 Elasticsearch, and the one you're sending. If the diff in null, then Elasticsearch will just drop the request.
@@ -652,7 +671,7 @@ Here, the important change is in the *\_version* field. You can notice that it h
 
 Let's say that we want to update the previous document ( *Jon Snow*) we stored, and change his age. As a reminder, its ID is *AU0QJ2sJ1MYCa_CVGtD5*.
 
-Our JSON will be the following (you can find it in `simple_cluster/queries/basics/update_document.json`).
+Our JSON will be the following (you can find it in `queries/basics/update_document.json`).
 
 {% highlight json %}
 {
@@ -684,7 +703,7 @@ Note that the version has been incremented to **2**.
 
 ### Delete documents
 
-The last **CRUD** operation is the **deletion**. Elasticsearch is able to retrieve a document, according to its **ID**, and delete id.
+The last **CRUD** operation is the **deletion**. Elasticsearch is able to retrieve a document, according to its **ID**, and delete it.
 
 #### The Query
 
@@ -706,7 +725,7 @@ The Elasticsearch server will answer with the following response :
     "_type" : "type",
     "_id" : "id",
     "_version" : 3,
-    "found", true
+    "found" : true
 }
 {% endhighlight %}
 
@@ -729,13 +748,13 @@ The answer from the server is :
     "_type" : "character",
     "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
     "_version" : 3,
-    "found", true
+    "found" : true
 }
 {% endhighlight %}
 
 ## Introduction to plugins
 
-The last point I want to talk about in this first article is about the plugins, available with Elasticsearch.
+The last point I want to talk about in this first article is the plugins available on Elasticsearch.
 As Elasticsearch provides a REST API interface to communicate with the cluster, it is really easy to develop a bunch of helpful tools.
 
 Today, I will talk about two of the most known and used plugins : Marvel & Head (already installed in the Docker I provided)
@@ -753,11 +772,11 @@ Then, read the documentation of your plugin to learn the usage.
 
 #### Cluster managing : *Head*
 
-*Head* official documentation here : [http://mobz.github.io/elasticsearch-head/](http://mobz.github.io/elasticsearch-head/)
+*Head*'s official documentation here : [http://mobz.github.io/elasticsearch-head/](http://mobz.github.io/elasticsearch-head/).
 *Head* is a tool designed to help you manage your Elasticsearch cluster, using a web-based interface.
 To connect **Head** on our cluster, open your favorite browser, and go `http://127.0.0.1:9200/_plugin/head/`.
 On the main page, you can see our three Elasticsearch nodes : *Arya Stark*, *Catelyn Stark*, and *Eddard Stark*.
-For each node, you can access related information, and actions (such as poweroff).
+For each node, you can access related information, and actions (such as power off).
 On the top of the page, the health of your cluster is displayed. This value is based on several KPIs such as the number of shards, replicas, ...
 The top tabs give you access to indices management, and also a graphical way to perform requests.
 
@@ -767,8 +786,12 @@ The top tabs give you access to indices management, and also a graphical way to 
 This plugin is free only for development purpose.
 I did not install it on the cluster, but you can do it yourself, by following the instructions I gave you above.
 It is based on the ELK (Elasticsearch - Logstach - Kibana) stack, each of these products are from Elastic.co.
-*Marvel* provides you statistics about your cluster, KPIs monitoring, and a very powerfull log parser ; moreover, it has a nice interface !
+*Marvel* provides you statistics about your cluster, KPIs monitoring, and a very powerful log parser ; moreover, it has a nice interface !
 
 ## What's coming next ?
 
-Well, I think that's enough for today. I let you have fun with Elasticsearch, and i'll release the second article in a few weeks.
+Well, I think that's enough for today. I let you have fun with Elasticsearch, and I will release the second article in a few weeks.
+
+This second article, on which I already started to work, will be about more complex and interesting operations with Elasticsearch :
+- Indexing operations : Mappings config, Batch indexing, Segment merging and Routing.
+- Searching operations : Querying, Filtering the results, Compound queries, Highlighting, Sorting.
