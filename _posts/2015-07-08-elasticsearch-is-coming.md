@@ -351,7 +351,7 @@ The first part is the **URL on which your Elasticsearch server is available**
 <span style="color: orange">The second part indicates on which index (an index could be compared to an SQL database) your
 query will be performed, and what is the type (a type could be compared to an SQL table) of the document. **From now, I will write indices and types in orange**</span>
 
-<span style="color: chartreuse">The last part might be used to indicate which operation we want to do, and parameters can be set here. Note the uderscore (`_`) before the
+<span style="color: ForestGreen">The last part might be used to indicate which operation we want to do, and parameters can be set here. Note the uderscore (`_`) before the
 action name). **From now, I will write actions and parameters in green.**</span>
 
 ### Create an Index
@@ -368,7 +368,7 @@ The first part is the **URL on which your Elasticsearch cluster API is available
 
 <span style="color: orange">The **indexName** part indicates the name of the index you want to create.</span>
 
-<span style="color: chartreuse">The **pretty** parameter stands to pretty-print the JSON response</span>
+<span style="color: ForestGreen">The **pretty** parameter stands to pretty-print the JSON response</span>
 
 #### The response
 
@@ -412,7 +412,7 @@ The query type is `GET`
 
 The first part is the **URL on which your Elasticsearch cluster API is available**.
 
-<span style="color: chartreuse">The **\_cat** action is used to print data about the cluster. Here, we cat the **indices** (data about indices)</span>
+<span style="color: ForestGreen">The **\_cat** action is used to print data about the cluster. Here, we cat the **indices** (data about indices)</span>
 
 #### The Response
 
@@ -617,7 +617,7 @@ The first part is the **URL on which your Elasticsearch cluster API is available
 
 <span style="color: orange">The second part indicates on which index your document is stored, what its type is, and its ID</span>
 
-<span style="color: chartreuse">The second part is the name of the action. Here, *\_update* notifies Elasticsearch that we are willing to update an existing document.</span>
+<span style="color: ForestGreen">The second part is the name of the action. Here, *\_update* notifies Elasticsearch that we are willing to update an existing document.</span>
 
 To update a part of a document, the format of the JSON data you will provide is the following :
 
