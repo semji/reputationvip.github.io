@@ -397,11 +397,11 @@ The cluster should responds like this :
 
 #### Full Example
 
-Now, let's say that we'd like to created the *"game_of_throne"* index. By convention, **all indices should be written in the singular form**. Also, you should always take care of
+Now, let's say that we'd like to created the *"game_of_thrones"* index. By convention, **all indices should be written in the singular form**. Also, you should always take care of
 your indices' names to be semantic. 
 
 {% highlight sh %}
-$> curl -XPUT "http://localhost:9200/game_of_throne?pretty"
+$> curl -XPUT "http://localhost:9200/game_of_thrones?pretty"
 {% endhighlight %}
 
 And the response from the cluster is :
@@ -440,7 +440,7 @@ The table shows data about indices, such as name, health, number of documents, s
 
 #### Full Example
 
-Let's say we'd like to take a look at the *"game_of_throne"* index we just created.
+Let's say we'd like to take a look at the *"game_of_thrones"* index we just created.
 
 {% highlight sh %}
 $> curl -XGET "http://localhost:9200/_cat/indices?v"
@@ -450,12 +450,12 @@ And the response is :
 
 {% highlight sh %}
 health   status   index          pri   rep   docs.count   docs.deleted   store.size   pri.store.size
-green    open     game_of_throne  5     1            0              0        970b              575b
+green    open     game_of_thrones  5     1            0              0        970b              575b
 {% endhighlight %}
 
 ### Create documents
 
-Here the real fun begins. Now that our cluster is properly set, and contains an index (*"game_of_throne"*), we can take a look at the standards **CRUD** operations.
+Here the real fun begins. Now that our cluster is properly set, and contains an index (*"game_of_thrones"*), we can take a look at the standards **CRUD** operations.
 
 The first operation is the **creation**. By this operation, Elasticsearch will stores documents into shards. The format is the following :
 
@@ -496,7 +496,7 @@ The Elasticsearch cluster will answer, with the following response :
 
 Let's say now we want to add a **Document** which represents *Jon Snow*.
 If you don't know who *Jon Snow* is, ... *Erf*, I am really disappointed. Here's the answer : [https://fr.wikipedia.org/wiki/Jon_Snow](https://fr.wikipedia.org/wiki/Jon_Snow).
-Its type would be *"character"* and it will stands in the *"game_of_throne"* index.
+Its type would be *"character"* and it will stands in the *"game_of_thrones"* index.
 
 To perform this operation, we need to use a JSON data file. I provided it in the Github repository, under the `queries/basics/add_document.json` file.
 
@@ -520,14 +520,14 @@ Its content is the following :
 Given that, the *CURL* request is the following :
 
 {% highlight sh %}
-$>curl -XPOST http://localhost:9200/game_of_throne/character/ -d '{"name": "Jon Snow","age": 14,"house": "Stark","gender": "male","biography": "Jon Snow is the bastard son of Eddard Stark, the lord of Winterfell. He is the half-brother of Arya, Sansa, Bran, Rickon and Robb.","tags": ["stark","nights watch","you know nothing"]}'
+$>curl -XPOST http://localhost:9200/game_of_thrones/character/ -d '{"name": "Jon Snow","age": 14,"house": "Stark","gender": "male","biography": "Jon Snow is the bastard son of Eddard Stark, the lord of Winterfell. He is the half-brother of Arya, Sansa, Bran, Rickon and Robb.","tags": ["stark","nights watch","you know nothing"]}'
 {% endhighlight %}
 
 The response given by the cluster :
 
 {% highlight json %}
 {
-    "_index" : "game_of_throne",
+    "_index" : "game_of_thrones",
     "_type" : "character",
     "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
     "_version" : 1,
@@ -535,7 +535,7 @@ The response given by the cluster :
 }
 {% endhighlight %}
 
-You can see here that our document has been inserted in the *"game_of_throne"* index, with the type *"character"*. You can also see that Elasticsearch gave our document an ID which id *AU0QJ2sJ1MYCa_CVGtD5*.
+You can see here that our document has been inserted in the *"game_of_thrones"* index, with the type *"character"*. You can also see that Elasticsearch gave our document an ID which id *AU0QJ2sJ1MYCa_CVGtD5*.
 Also, the version of the document has been set to 1 (the first version). Finally, Elasticsearch informed us that he performed the creation.
 
 ### Retrieve documents
@@ -579,17 +579,17 @@ Compared to the previous answer, there is two more fields here : *\_exists* and 
 
 #### Full Example : Retrieve Jon Snow
 
-Let's say that we want to retrieve the previous document ( *Jon Snow*) we stored in the *game_of_throne* index, and which has the *character* type. As a reminder, the ID Elasticsearch gave us is *AU0QJ2sJ1MYCa_CVGtD5*.
+Let's say that we want to retrieve the previous document ( *Jon Snow*) we stored in the *game_of_thrones* index, and which has the *character* type. As a reminder, the ID Elasticsearch gave us is *AU0QJ2sJ1MYCa_CVGtD5*.
 
 {% highlight sh %}
-$>curl –XGET http://localhost:9200/game_of_throne/character/AU0QJ2sJ1MYCa_CVGtD5
+$>curl –XGET http://localhost:9200/game_of_thrones/character/AU0QJ2sJ1MYCa_CVGtD5
 {% endhighlight %}
 
 The answer from the cluster is :
 
 {% highlight json %}
 {
-    "_index" : "game_of_throne",
+    "_index" : "game_of_thrones",
     "_type" : "character",
     "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
     "_version" : 1,
@@ -685,14 +685,14 @@ Our JSON will be the following (you can find it in `queries/basics/update_docume
 Then, we can make our request to the cluster :
 
 {% highlight sh %}
-$>curl –XPOST http://localhost:9200/game_of_throne/character/AU0QJ2sJ1MYCa_CVGtD5/_update -d '{"doc" : {"age" : 20} }'
+$>curl –XPOST http://localhost:9200/game_of_thrones/character/AU0QJ2sJ1MYCa_CVGtD5/_update -d '{"doc" : {"age" : 20} }'
 {% endhighlight %}
 
 The response from the Elasticsearch cluster is the following :
 
 {% highlight json %}
 {
-    "_index" : "game_of_throne",
+    "_index" : "game_of_thrones",
     "_type" : "character",
     "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
     "_version" : 2
@@ -737,14 +737,14 @@ is not really removed from it, unless a **segment merge** is processed ; instead
 Let's say that we want to delete the previous document ( *Jon Snow*) we stored. As a reminder, the **ID** Elasticsearch gave us is *AU0QJ2sJ1MYCa_CVGtD5*
 
 {% highlight sh %}
-$>curl –XDELETE http://localhost:9200/game_of_throne/character/AU0QJ2sJ1MYCa_CVGtD5
+$>curl –XDELETE http://localhost:9200/game_of_thrones/character/AU0QJ2sJ1MYCa_CVGtD5
 {% endhighlight %}
 
 The answer from the server is :
 
 {% highlight json %}
 {
-    "_index" : "game_of_throne",
+    "_index" : "game_of_thrones",
     "_type" : "character",
     "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
     "_version" : 3,
