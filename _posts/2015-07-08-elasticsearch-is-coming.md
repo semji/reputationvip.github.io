@@ -64,7 +64,7 @@ To launch the docker cluster, first clone the repository in the folder of your c
 I also require you to install [https://docs.docker.com/compose/]( *docker compose*), which is a good solution to build and run multi-container applications with Docker.
 The installation takes 2 minutes, and is really easy. Go here to install it : [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
 
-Once installed *docker compose* on your system, go into the `elasticsearch/docker` repository folder ; then, launch this command :
+Once installed *docker compose* on your system, go into the `docker` repository folder ; then, launch this command :
 
 `docker-compose build`
 
@@ -443,7 +443,7 @@ The table shows data about indices, such as name, health, number of documents, s
 Let's say we'd like to take a look at the *"game_of_throne"* index we just created.
 
 {% highlight sh %}
-$> curl -XPUT "http://localhost:9200/_cat/indices?v"
+$> curl -XGET "http://localhost:9200/_cat/indices?v"
 {% endhighlight %}
 
 And the response is :
@@ -520,7 +520,7 @@ Its content is the following :
 Given that, the *CURL* request is the following :
 
 {% highlight sh %}
-$>curl –XPOST http://localhost:9200/game_of_throne/character/ -d {"name": "Jon Snow","age": 14,"house": "Stark","gender": "male","biography": "Jon Snow is the bastard son of Eddard Stark, the lord of Winterfell. He is the half-brother of Arya, Sansa, Bran, Rickon and Robb.","tags": ["stark","night's watch","you know nothing"]}
+$>curl -XPOST http://localhost:9200/game_of_throne/character/ -d '{"name": "Jon Snow","age": 14,"house": "Stark","gender": "male","biography": "Jon Snow is the bastard son of Eddard Stark, the lord of Winterfell. He is the half-brother of Arya, Sansa, Bran, Rickon and Robb.","tags": ["stark","nights watch","you know nothing"]}'
 {% endhighlight %}
 
 The response given by the cluster :
@@ -582,7 +582,7 @@ Compared to the previous answer, there is two more fields here : *\_exists* and 
 Let's say that we want to retrieve the previous document ( *Jon Snow*) we stored in the *game_of_throne* index, and which has the *character* type. As a reminder, the ID Elasticsearch gave us is *AU0QJ2sJ1MYCa_CVGtD5*.
 
 {% highlight sh %}
-$>curl –XPOST http://localhost:9200/game_of_throne/character/AU0QJ2sJ1MYCa_CVGtD5
+$>curl –XGET http://localhost:9200/game_of_throne/character/AU0QJ2sJ1MYCa_CVGtD5
 {% endhighlight %}
 
 The answer from the cluster is :
@@ -685,7 +685,7 @@ Our JSON will be the following (you can find it in `queries/basics/update_docume
 Then, we can make our request to the cluster :
 
 {% highlight sh %}
-$>curl –XPOST http://localhost:9200/game_of_throne/character/AU0QJ2sJ1MYCa_CVGtD5/_update -d {"doc" : {"age" : 20} }
+$>curl –XPOST http://localhost:9200/game_of_throne/character/AU0QJ2sJ1MYCa_CVGtD5/_update -d '{"doc" : {"age" : 20} }'
 {% endhighlight %}
 
 The response from the Elasticsearch cluster is the following :
