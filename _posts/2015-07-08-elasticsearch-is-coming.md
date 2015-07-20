@@ -42,7 +42,7 @@ that you need to take a look at the basic operations first.
 First of all, throughout these articles, I will guide you through the understanding of Elasticsearch. 
 Each part of the articles will provide you theoretical explanations, as well as examples.
 
-At ReputationVIP, we are huge fans of Game of Thrones. So, the guideline I chose for this set of articles is Game of Thrones.
+At Reputation VIP, we are huge fans of Game of Thrones. So, the guideline I chose for this set of articles is Game of Thrones.
 All along these articles (though I don't know how many of them will follow this one), we will build a database filled with the Game of Thrones characters.
 
 #### The Github Repository
@@ -57,12 +57,12 @@ Beside being a big fan of Game of Thrones, I also am a big fan of Docker. For th
 So, I decided to create an Elasticsearch **cluster** with Docker containers.
 Each **node** of this **cluster** takes the name of a member of the Stark family.
 
-In deed, I know how difficult it can be to read and understand other people's examples, but with this Docker container, you will be in the same environment as I used to write this article.
+Indeed, I know how difficult it can be to read and understand other people's examples, but with this Docker container, you will be in the same environment as I used to write this article.
 
 To launch the docker cluster, first clone the repository in the folder of your choice, and go into it.
 
 I also require you to install [https://docs.docker.com/compose/]( *docker compose*), which is a good solution to build and run multi-container applications with Docker.
-The installation less than takes 2 minutes, and is really simple to use. Go here to install it: [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
+The installation takes less than 2 minutes, and is really simple to use. Go here to install it: [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
 
 Once installed *docker compose* on your system, go into the `docker` repository folder ; then, launch this command:
 
