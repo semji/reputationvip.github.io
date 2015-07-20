@@ -18,12 +18,12 @@ image:
 
 This article is the first of many to come about Elasticsearch. Elasticsearch is a vast and amazing technology, and I could go on talking about it for hours.
 
-So first, let me introduce the summary of this very first article :
+So first, let me introduce the summary of this very first article:
 
 1. A smooth introduction to Elasticsearch
-2. Theoretical approach : What's under the armor of Elasticsearch ?
+2. Theoretical approach: What's under the armor of Elasticsearch ?
 3. Installation and configuration of Elasticsearch
-4. Querying : Basic CRUD
+4. Querying: Basic CRUD
 5. Introduction to plugins
 
 ***
@@ -47,13 +47,13 @@ All along these articles (though I don't know how many of them will follow this 
 
 #### The Github Repository
 
-Available here : [https://github.com/quentinfayet/elasticsearch](https://github.com/quentinfayet/elasticsearch)
+Available here: [https://github.com/quentinfayet/elasticsearch](https://github.com/quentinfayet/elasticsearch)
 
-It contains everything you need to run the articles' examples : A ready-to-run Elasticsearch cluster under Docker containers, available to run with Docker-Compose.
+It contains everything you need to run the articles' examples: A ready-to-run Elasticsearch cluster under Docker containers, available to run with Docker-Compose.
 
 #### The Docker containers
 
-Beside being a big fan of Game of Thrones, I also am a big fan of Docker. For those who don't know about Docker, you can take a look here : [https://www.docker.com/](https://www.docker.com/).
+Beside being a big fan of Game of Thrones, I also am a big fan of Docker. For those who don't know about Docker, you can take a look here: [https://www.docker.com/](https://www.docker.com/).
 So, I decided to create an Elasticsearch **cluster** with Docker containers.
 Each **node** of this **cluster** takes the name of a member of the Stark family.
 
@@ -62,13 +62,13 @@ In deed, I know how difficult it can be to read and understand other people's ex
 To launch the docker cluster, first clone the repository in the folder of your choice, and go into it.
 
 I also require you to install [https://docs.docker.com/compose/]( *docker compose*), which is a good solution to build and run multi-container applications with Docker.
-The installation less than takes 2 minutes, and is really simple to use. Go here to install it : [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
+The installation less than takes 2 minutes, and is really simple to use. Go here to install it: [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
 
-Once installed *docker compose* on your system, go into the `docker` repository folder ; then, launch this command :
+Once installed *docker compose* on your system, go into the `docker` repository folder ; then, launch this command:
 
 `docker-compose build`
 
-This command will build the images of the containers. Once finished, just launch the cluster with the following command :
+This command will build the images of the containers. Once finished, just launch the cluster with the following command:
 
 `docker-compose up`
 
@@ -108,7 +108,7 @@ The **Token** is **an occurence of a Term in a text field**. It is composed of *
 
 ***
 
-## Theoretical approach : What's under the armor of Elasticsearch ?
+## Theoretical approach: What's under the armor of Elasticsearch ?
 
 In this part, I will talk about the main concepts that run Elasticsearch, about Apache Lucene and the full-text research. I will also give you an overview of data analysis, and how it is performed
 by Elasticsearch and Apache Lucene. Finally, I will talk a bit about the architecture Elasticsearch is based on.
@@ -120,16 +120,16 @@ instead of being **document-oriented** (like a classical document based database
 
 More than words, let me give you an example.
 
-Given these 3 documents (simple text lines) :
+Given these 3 documents (simple text lines):
 
-- Document <1> : ReputationVIP digital fortress
-- Document <2> : ReputationVIP likes Elasticsearch
-- Document <3> : Elasticsearch Article
+- Document <1>: ReputationVIP digital fortress
+- Document <2>: ReputationVIP likes Elasticsearch
+- Document <3>: Elasticsearch Article
 
-The resulting **inverted index mapping** would be :
+The resulting **inverted index mapping** would be:
 
 Terms         | Occurrences | Documents |
---------------|:----------: |---------- |
+--------------|:-----------:|---------- |
 ReputationVIP | 2           | <1>, <2>  |
 digital       | 1           | <1>       |
 fortress      | 1           | <1>       |
@@ -161,12 +161,12 @@ The result is called **Token Stream** (a stream of tokens that is processed one 
 #### Token Filters
 
 **Token Filters** are applied on each token of the token stream.
-Example of filters : 
+Example of filters: 
 
 - **Lowercase filter** (all tokens are lowercased)
 - **Synonyms filter** (applies basic synonym rules to tokens), ...
 
-The list of Elasticsearch's filters stands here : [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/analysis-tokenfilters.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/analysis-tokenfilters.html)
+The list of Elasticsearch's filters stands here: [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/analysis-tokenfilters.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/analysis-tokenfilters.html)
 
 **Token Filters are processed one after another**
 
@@ -184,16 +184,16 @@ the transaction rolls back, and restarts.
 ### Scoring & Relevance
 
 When Elasticsearch retrieves documents, it uses a formula, known as the **practical scoring function** to calculate the relevance of each results. This formula (you can find
-it here : [https://www.elastic.co/guide/en/elasticsearch/guide/current/practical-scoring-function.html](https://www.elastic.co/guide/en/elasticsearch/guide/current/practical-scoring-function.html)),
+it here: [https://www.elastic.co/guide/en/elasticsearch/guide/current/practical-scoring-function.html](https://www.elastic.co/guide/en/elasticsearch/guide/current/practical-scoring-function.html)),
 depends on several KPIs. I won't detail them here, because it is not really relevant to know them right now. You should just know that this formula is based on a concept named
 **TF/IDF (Term Frequency / Inverse Document Frequency)**. Basically, the final rank given to a document by Elasticsearch depends on the weight of each **term** in the document.
 
 This weight is calculated with the **term frequency** (how often does it appear in the document), the **inverse document frequency** (how often does it appear **in every** document in the collection),
 and the **field-length norm** (the field's length).
 
-Scoring is a really interesting theoretical subject, but too long to be explained here. If you want to know more about it, I suggest you to take a look here : [https://www.elastic.co/guide/en/elasticsearch/guide/current/scoring-theory.html](https://www.elastic.co/guide/en/elasticsearch/guide/current/scoring-theory.html).
+Scoring is a really interesting theoretical subject, but too long to be explained here. If you want to know more about it, I suggest you to take a look here: [https://www.elastic.co/guide/en/elasticsearch/guide/current/scoring-theory.html](https://www.elastic.co/guide/en/elasticsearch/guide/current/scoring-theory.html).
 
-### Architecture : Nodes & Clusters
+### Architecture: Nodes & Clusters
 
 Elasticsearch is organized in **clusters**, composed of **nodes**.
 
@@ -204,7 +204,7 @@ A **cluster** is a **group of nodes** working together as a single entity, with 
 
 ![Elasticsearch Cluster](/images/elastic/cluster.png)
 
-### Architecture : Shards
+### Architecture: Shards
 
 Nodes may be limited (RAM, I/O, Processing power, ...), and may not be able to answer queries fast enough.
 So, each node can have **shards**.
@@ -215,21 +215,21 @@ When a node is added to the cluster, shards are **dynamically re-allocated**
 
 ![Shard](/images/elastic/shard.png)
 
-### Architecture : Replicas
+### Architecture: Replicas
 
 A **replica** is an exact copy of a shard, stored on another server. It achieves **high availability**, because if a server fails down, the data can be found on an other **replica**.
-Elasticsearch choose a shard to be the one which handles the index updates. It is called **Primary Shard** ; other shards are known as **Replica Shards**.
+Elasticsearch choose a shard to be the one which handles the index updates. It is called **Primary Shard**; other shards are known as **Replica Shards**.
 If the primary shard is lost ( *i.e* the server crashes), a replica shard is chosen as the new **primary shard**.
 
 ![Replica Shard](/images/elastic/replica.png)
 
-### Architecture : Indexing
+### Architecture: Indexing
 
 With a sharded architecture, indexing becomes a tricky operation. **Master node is in charge of this operation**. Its role is to **distribute indexing operations** to other nodes.
 
 ![Indexing](/images/elastic/indexing.png)
 
-### Architecture : Querying
+### Architecture: Querying
 
 With a sharded architecture, querying also becomes a tricky operation. **Master node is in charge of this operation**. Its role is to **distribute searching operations** to other nodes.
 
@@ -246,7 +246,7 @@ First of all, please take a look at the prerequisites to install Elasticsearch (
 - Java 6 or more installed on each server of the cluster. **(Java 7 is highly recommended)**
 - OpenJDK is highly recommended.
 
-Elasticsearch is provided as a zip file, available here : [https://www.elastic.co/downloads/elasticsearch](https://www.elastic.co/downloads/elasticsearch)
+Elasticsearch is provided as a zip file, available here: [https://www.elastic.co/downloads/elasticsearch](https://www.elastic.co/downloads/elasticsearch)
 
 Now, just unpack it in the folder of your choice. **You're ready to run Elasticsearch**.
 
@@ -258,17 +258,17 @@ Now Elasticsearch is installed, we need to configure it before running.
 
 ### Directory Layout
 
-Let's take a look at the directory layout, which is pretty simple :
+Let's take a look at the directory layout, which is pretty simple:
 
 {% highlight sh %}
 Directory
-    |- *bin* : Stores the scripts used to run Elasticsearch
-    |- *config* : Stores the configuration files
-    |- *lib* : The libraries needed by Elasticsearch to run properly
-    |- *data* : All the data of the node will be stored here !
-    |- *logs* : The log files
-    |- *plugins* : Stores the installed plugins
-    |- *work* : The temporary files used by Elasticsearch when running
+    |- *bin*: Stores the scripts used to run Elasticsearch
+    |- *config*: Stores the configuration files
+    |- *lib*: The libraries needed by Elasticsearch to run properly
+    |- *data*: All the data of the node will be stored here !
+    |- *logs*: The log files
+    |- *plugins*: Stores the installed plugins
+    |- *work*: The temporary files used by Elasticsearch when running
 {% endhighlight %}
 
 You can notice that the *bin* directory is probably the most important for us, as it holds the Elasticsearch binaries. We will also need to take a look at the *config* folder,
@@ -287,11 +287,11 @@ Note that if you really don't like YAML, you can use a `config/elasticsearch.jso
 
 #### Important values
 
-There is a bunch of values in this file, but 3 of them are really important right now, and represent the basic configuration values :
+There is a bunch of values in this file, but 3 of them are really important right now, and represent the basic configuration values:
 
-- `cluster.name` : It is the name of the cluster. **It is used to identify nodes belonging to the same cluster**
-- `node.name` : It is the name of the node. If it is not provided, then Elasticsearch will perform a random-pick among a list of defined names.
-- `http.port` : It is the default port on which Elasticsearch will listen to the HTTP traffic.
+- `cluster.name`: It is the name of the cluster. **It is used to identify nodes belonging to the same cluster**
+- `node.name`: It is the name of the node. If it is not provided, then Elasticsearch will perform a random-pick among a list of defined names.
+- `http.port`: It is the default port on which Elasticsearch will listen to the HTTP traffic.
 
 #### The discovery & the discovery modes
 
@@ -302,7 +302,7 @@ There are **several ways for a new node to discover other nodes** of the same cl
 ##### Multicast Discovery
 
 The **multicast discovery** is the **simplest discovery mode**. Using the port 54328, the node will **ping** every other node with the multicast IP address on the network.
-To enable the multicast discovery, set the following line in your configuration file :
+To enable the multicast discovery, set the following line in your configuration file:
 
 `discovery.zen.ping.multicast.enabled: true`
 
@@ -311,7 +311,7 @@ To enable the multicast discovery, set the following line in your configuration 
 ##### Unicast Discovery
 
 In the **unicast discovery** mode, **each node has to know the other IP addresses nodes** in the cluster. The configuration in a little bit different. The configuration line in your
-configuration file is the following :
+configuration file is the following:
 
 `discovery.zen.ping.multicast.enabled: []`.
 
@@ -348,14 +348,14 @@ If you don't have *CURL* installed on your local machine (the machine with which
 
 All the examples above are available in the Github repository I created for this article, under the JSON format.
 
-*CURL* gives you two ways of using the JSON data for your queries :
+*CURL* gives you two ways of using the JSON data for your queries:
 
 - The first one, by including it directly into your *CURL* call, using the `-d` parameter.
 - The second one, by including data from the files I gave you in your *CURL* call, using the `--data-binary` parameter, indicating the path to the JSON file preceded with an @. (Example : `--data-binary @path/to/file.json`)
 
 ### Understanding the REST API
 
-To query Elasticsearch, we make calls to its **REST API**. The format of the URL we use is the following (assuming Elasticsearch is available on your localhost on port 9200) :
+To query Elasticsearch, we make calls to its **REST API**. The format of the URL we use is the following (assuming Elasticsearch is available on your localhost on port 9200):
 
 <div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">[/index[/type]]</span><span style="color: chartreuse">[/_action[?parameters]]</span></code></pre></div>
 
@@ -364,7 +364,7 @@ The first part is the **URL on which your Elasticsearch cluster API is available
 <span style="color: orange">The second part indicates on which index (an index could be compared to an SQL database, though I don't like this comparison) your
 query will be performed, and what is the type (a type could be compared to an SQL table, though I don't like this comparison either) of the document. **From now, I will write indices and types in orange**</span>
 
-<span style="color: ForestGreen">The last part is used to indicate what operation we want to perform ; parameters can be set here. Note the underscore (`_`) before the
+<span style="color: ForestGreen">The last part is used to indicate what operation we want to perform; parameters can be set here. Note the underscore (`_`) before the
 action name. **From now, I will write actions and parameters in green.**</span>
 
 ### Create an Index
@@ -385,11 +385,11 @@ The first part is the **URL on which your Elasticsearch cluster API is available
 
 #### The response
 
-The cluster should responds like this :
+The cluster should responds like this:
 
 {% highlight json %}
 {
-    "acknowledge" : true
+    "acknowledge": true
 }
 {% endhighlight %}
 
@@ -404,15 +404,15 @@ your indices' names to be semantic.
 $> curl -XPUT "http://localhost:9200/game_of_thrones?pretty"
 {% endhighlight %}
 
-And the response from the cluster is :
+And the response from the cluster is:
 
 {% highlight json %}
 {
-    "acknowledge" : true
+    "acknowledge": true
 }
 {% endhighlight %}
 
-More options can be passed to the index API. More about it here : [https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html)
+More options can be passed to the index API. More about it here: [https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html)
 
 ### List Indices
 
@@ -430,7 +430,7 @@ The first part is the **URL on which your Elasticsearch cluster API is available
 
 #### The Response
 
-The server should responds like this, with a table and the following headers :
+The server should responds like this, with a table and the following headers:
 
 {% highlight sh %}
 health   status   index   pri   rep   docs.count   docs.deleted   store.size   pri.store.size
@@ -446,7 +446,7 @@ Let's say we'd like to take a look at the *"game_of_thrones"* index we just crea
 $> curl -XGET "http://localhost:9200/_cat/indices?v"
 {% endhighlight %}
 
-And the response is :
+And the response is:
 
 {% highlight sh %}
 health   status   index          pri   rep   docs.count   docs.deleted   store.size   pri.store.size
@@ -457,7 +457,7 @@ green    open     game_of_thrones  5     1            0              0        97
 
 Here the real fun begins. Now that our cluster is properly set, and contains an index (*"game_of_thrones"*), we can take a look at the standards **CRUD** operations.
 
-The first operation is the **creation**. By this operation, Elasticsearch will stores documents into shards. The format is the following :
+The first operation is the **creation**. By this operation, Elasticsearch will stores documents into shards. The format is the following:
 
 #### The Query
 
@@ -474,15 +474,15 @@ and stored into the cluster.
 
 #### The Response
 
-The Elasticsearch cluster will answer, with the following response :
+The Elasticsearch cluster will answer, with the following response:
 
 {% highlight json %}
 {
-    "_index" : "index",
-    "_type" : "type",
-    "_id" : "id",
-    "_version" : 1,
-    "created" : true
+    "_index": "index",
+    "_type": "type",
+    "_id": "id",
+    "_version": 1,
+    "created": true
 }
 {% endhighlight %}
 
@@ -492,15 +492,15 @@ The Elasticsearch cluster will answer, with the following response :
 
 *\_version* is the **version of your document**. This is the famous **versioning** I talked about earlier.
 
-#### Full Example : Create Jon Snow
+#### Full Example: Create Jon Snow
 
 Let's say now we want to add a **Document** which represents *Jon Snow*.
-If you don't know who *Jon Snow* is, ... *Erf*, I am really disappointed. Here's the answer : [https://fr.wikipedia.org/wiki/Jon_Snow](https://fr.wikipedia.org/wiki/Jon_Snow).
+If you don't know who *Jon Snow* is, ... *Erf*, I am really disappointed. Here's the answer: [https://fr.wikipedia.org/wiki/Jon_Snow](https://fr.wikipedia.org/wiki/Jon_Snow).
 Its type would be *"character"* and it will stands in the *"game_of_thrones"* index.
 
 To perform this operation, we need to use a JSON data file. I provided it in the Github repository, under the `queries/basics/add_document.json` file.
 
-Its content is the following :
+Its content is the following:
 
 {% highlight json %}
 {
@@ -517,21 +517,21 @@ Its content is the following :
 }
 {% endhighlight %}
 
-Given that, the *CURL* request is the following :
+Given that, the *CURL* request is the following:
 
 {% highlight sh %}
 $>curl -XPOST http://localhost:9200/game_of_thrones/character/ -d '{"name": "Jon Snow","age": 14,"house": "Stark","gender": "male","biography": "Jon Snow is the bastard son of Eddard Stark, the lord of Winterfell. He is the half-brother of Arya, Sansa, Bran, Rickon and Robb.","tags": ["stark","nights watch","you know nothing"]}'
 {% endhighlight %}
 
-The response given by the cluster :
+The response given by the cluster:
 
 {% highlight json %}
 {
-    "_index" : "game_of_thrones",
-    "_type" : "character",
-    "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
-    "_version" : 1,
-    "created" : true
+    "_index": "game_of_thrones",
+    "_type": "character",
+    "_id": "AU0QJ2sJ1MYCa_CVGtD5",
+    "_version": 1,
+    "created": true
 }
 {% endhighlight %}
 
@@ -545,7 +545,7 @@ is designed to perform full-text research, a single document can be retrieved by
 
 #### The Query
 
-So, the second **CRUD** operation is the **Reading**. Elasticsearch is able to retrieve a document, as I said, according to its **ID** :
+So, the second **CRUD** operation is the **Reading**. Elasticsearch is able to retrieve a document, as I said, according to its **ID**:
 
 The query type is `GET`
 
@@ -561,23 +561,23 @@ The Elasticsearch cluster will answer with a response similar to the following:
 
 {% highlight json %}
 {
-    "_index" : "index",
-    "_type" : "type",
-    "_id" : "id",
-    "_version" : 1,
-    "_exists" : true,
-    "_source" : {
+    "_index": "index",
+    "_type": "type",
+    "_id": "id",
+    "_version": 1,
+    "_exists": true,
+    "_source": {
         "THE JSON DOCUMENT"
     }
 }
 {% endhighlight %}
 
-Compared to the previous answer, there are two more fields here : *\_exists* and *\_source*.
+Compared to the previous answer, there are two more fields here: *\_exists* and *\_source*.
 
 - *\_exists* is a **boolean** value that informs you if the document defined by the **ID** you gave exists in the given index and type. If so, then the value will be **true**, otherwise it will be **false**.
 - *\_source* contains the JSON document you requested.
 
-#### Full Example : Retrieve Jon Snow
+#### Full Example: Retrieve Jon Snow
 
 Let's say that we want to retrieve the previous document ( *Jon Snow*), stored in the *game_of_thrones* index, and that has the *character* type. As a reminder, the ID Elasticsearch gave us is *AU0QJ2sJ1MYCa_CVGtD5*.
 
@@ -585,16 +585,16 @@ Let's say that we want to retrieve the previous document ( *Jon Snow*), stored i
 $>curl –XGET http://localhost:9200/game_of_thrones/character/AU0QJ2sJ1MYCa_CVGtD5
 {% endhighlight %}
 
-The answer from the cluster is :
+The answer from the cluster is:
 
 {% highlight json %}
 {
-    "_index" : "game_of_thrones",
-    "_type" : "character",
-    "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
-    "_version" : 1,
-    "_exists" : true,
-    "_source" : {
+    "_index": "game_of_thrones",
+    "_type": "character",
+    "_id": "AU0QJ2sJ1MYCa_CVGtD5",
+    "_version": 1,
+    "_exists": true,
+    "_source": {
           "name": "Jon Snow",
           "age": 14,
           "house": "Stark",
@@ -636,14 +636,14 @@ The first part is the **URL on which your Elasticsearch cluster API is available
 
 <span style="color: ForestGreen">The last part is the name of the action. Here, *\_update* notifies Elasticsearch that we are willing to update an existing document.</span>
 
-To update a part of a document, the format of the JSON data you will provide is the following :
+To update a part of a document, the format of the JSON data you will provide is the following:
 
 {% highlight json %}
 {
-    "doc" : {
-        "field_name" : "new_value"
+    "doc": {
+        "field_name": "new_value"
     },
-    "detect_noop" : true
+    "detect_noop": true
 }
 {% endhighlight %}
 
@@ -654,20 +654,20 @@ Elasticsearch, and the one you're sending. If the difference is null, then Elast
 
 #### The Response
 
-The Elasticsearch cluster will answer with the following response :
+The Elasticsearch cluster will answer with the following response:
 
 {% highlight json %}
 {
-    "_index" : "index",
-    "_type" : "type",
-    "_id" : "id",
-    "_version" : 2
+    "_index": "index",
+    "_type": "type",
+    "_id": "id",
+    "_version": 2
 }
 {% endhighlight %}
 
 Here, the important change is in the *\_version* field. You can notice that it has been incremented.
 
-#### Full Example : Update Jon Snow
+#### Full Example: Update Jon Snow
 
 Let's say that we want to update the previous document ( *Jon Snow*) we stored, and change its age. As a reminder, its ID is *AU0QJ2sJ1MYCa_CVGtD5*.
 
@@ -675,27 +675,27 @@ Our JSON will be the following (you can find it in `queries/basics/update_docume
 
 {% highlight json %}
 {
-    "doc" : {
-        "age" : 20
+    "doc": {
+        "age": 20
     },
-    "detect_noop" : true
+    "detect_noop": true
 }
 {% endhighlight %}
 
-Then, we can make our request to the cluster :
+Then, we can make our request to the cluster:
 
 {% highlight sh %}
 $>curl –XPOST http://localhost:9200/game_of_thrones/character/AU0QJ2sJ1MYCa_CVGtD5/_update -d '{"doc" : {"age" : 20} }'
 {% endhighlight %}
 
-The response from the Elasticsearch cluster is the following :
+The response from the Elasticsearch cluster is the following:
 
 {% highlight json %}
 {
-    "_index" : "game_of_thrones",
-    "_type" : "character",
-    "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
-    "_version" : 2
+    "_index": "game_of_thrones",
+    "_type": "character",
+    "_id": "AU0QJ2sJ1MYCa_CVGtD5",
+    "_version": 2
 }
 {% endhighlight %}
 
@@ -717,22 +717,22 @@ The first part is the **URL on which your Elasticsearch cluster API is available
 
 #### The Response
 
-The Elasticsearch server will answer with the following response :
+The Elasticsearch server will answer with the following response:
 
 {% highlight json %}
 {
-    "_index" : "index",
-    "_type" : "type",
-    "_id" : "id",
-    "_version" : 3,
-    "found" : true
+    "_index": "index",
+    "_type": "type",
+    "_id": "id",
+    "_version": 3,
+    "found": true
 }
 {% endhighlight %}
 
-You can notice here that **the version of the document has been incremented !**. That's because of the segments. Remember : segments are **not updated**, so that the document
+You can notice here that **the version of the document has been incremented !**. That's because of the segments. Remember: segments are **not updated**, so that the document
 is not actually removed, unless a **segment merge** is processed; instead, a new version is created.
 
-#### Full Example : Delete Jon Snow
+#### Full Example: Delete Jon Snow
 
 Let's say that we want to delete the previous document ( *Jon Snow*) we stored. As a reminder, the **ID** Elasticsearch gave us is *AU0QJ2sJ1MYCa_CVGtD5*
 
@@ -740,15 +740,15 @@ Let's say that we want to delete the previous document ( *Jon Snow*) we stored. 
 $>curl –XDELETE http://localhost:9200/game_of_thrones/character/AU0QJ2sJ1MYCa_CVGtD5
 {% endhighlight %}
 
-The answer from the server is :
+The answer from the server is:
 
 {% highlight json %}
 {
-    "_index" : "game_of_thrones",
-    "_type" : "character",
-    "_id" : "AU0QJ2sJ1MYCa_CVGtD5",
-    "_version" : 3,
-    "found" : true
+    "_index": "game_of_thrones",
+    "_type": "character",
+    "_id": "AU0QJ2sJ1MYCa_CVGtD5",
+    "_version": 3,
+    "found": true
 }
 {% endhighlight %}
 
@@ -757,36 +757,36 @@ The answer from the server is :
 The last point I want to talk about in this first article is the plugins available on Elasticsearch.
 As Elasticsearch provides a REST API interface to communicate with the cluster, it is really easy to develop a bunch of helpful tools.
 
-Today, I will talk about two of the most known and used plugins : Marvel & Head (already installed in the Docker I provided)
+Today, I will talk about two of the most known and used plugins: Marvel & Head (already installed in the Docker I provided)
 
 ### How do plugins work with Elasticsearch ?
 
 Plugins are an important part of Elasticsearch. Natively, Elasticsearch handles plugins. It provides a binary file to install plugins from remote repositories.
 To install a plugin, the command line is really simple (but it requires you to have a shell access to the cluster).
 
-Once you're logged on the cluster (for example via SSH), installation of plugins comes that way (assuming Elasticsearch is in the `/usr/share/elasticsearch` directory) :
+Once you're logged on the cluster (for example via SSH), installation of plugins comes that way (assuming Elasticsearch is in the `/usr/share/elasticsearch` directory):
 
 `$> /usr/share/elasticsearch/bin/plugins -i name_of_the_plugin`
 
 Then, read the documentation of your plugin to learn the usage.
 
-#### Cluster managing : *Head*
+#### Cluster managing: *Head*
 
-*Head*'s official documentation here : [http://mobz.github.io/elasticsearch-head/](http://mobz.github.io/elasticsearch-head/).
+*Head*'s official documentation here: [http://mobz.github.io/elasticsearch-head/](http://mobz.github.io/elasticsearch-head/).
 *Head* is a tool designed to help you manage your Elasticsearch cluster, using a web-based interface.
 To connect **Head** on our cluster, open your favorite browser, and go to `http://127.0.0.1:9200/_plugin/head/`.
-On the main page, you can see our three Elasticsearch nodes : *Arya Stark*, *Catelyn Stark*, and *Eddard Stark*.
+On the main page, you can see our three Elasticsearch nodes: *Arya Stark*, *Catelyn Stark*, and *Eddard Stark*.
 For each node, you can access related information and actions (such as power off).
 On the top of the page, the health of your cluster is displayed. The value is based on several KPIs such as the number of shards, replicas, etc.
 The top tabs give you access to indices management, and also a graphical way to perform requests.
 
-#### Cluster monitoring : *Marvel*
+#### Cluster monitoring: *Marvel*
 
 *Marvel* is an official plugin from Elastic.co, and the documentation is available here: [https://www.elastic.co/products/marvel](https://www.elastic.co/products/marvel)
 This plugin is free only for development purpose.
 I did not install it on the cluster, but you can do it yourself, by following the instructions I gave you above.
 It is based on the ELK (Elasticsearch - Logstach - Kibana) stack, each of these products are from Elastic.co.
-*Marvel* provides you statistics about your cluster, KPIs monitoring, and a very powerful log parser ; moreover, it has a nice interface !
+*Marvel* provides you statistics about your cluster, KPIs monitoring, and a very powerful log parser; moreover, it has a nice interface !
 
 ## What's coming next ?
 
