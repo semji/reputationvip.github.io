@@ -20,11 +20,11 @@ This article is the first of many to come about Elasticsearch. Elasticsearch is 
 
 So first, let me introduce the summary of this very first article:
 
-1. A smooth introduction to Elasticsearch
-2. Theoretical approach: What's under the armor of Elasticsearch ?
-3. Installation and configuration of Elasticsearch
-4. Querying: Basic CRUD
-5. Introduction to plugins
+1. [A smooth introduction to Elasticsearch](/elasticsearch-is-coming/#a-smooth-introduction-to-elasticsearch)
+2. [Theoretical approach: What's under the armor of Elasticsearch ?](/elasticsearch-is-coming/#theoretical-approach-whats-under-the-armor-of-elasticsearch-)
+3. [Installation and configuration of Elasticsearch](/elasticsearch-is-coming/#installation)
+4. [Querying: Basic CRUD](/elasticsearch-is-coming/#querying)
+5. [Introduction to plugins](/elasticsearch-is-coming/#introduction-to-plugins)
 
 ***
 
