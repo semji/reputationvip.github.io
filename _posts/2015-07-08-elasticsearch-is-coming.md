@@ -7,7 +7,7 @@ modified: 2015-07-15
 tags: [gitlab, git]
 comments: true
 image:
-  feature: bandeau-gitlab.jpg
+  feature: elastic-is-coming-ban.png
   credit: Alban Pommeret
   creditlink: http://reputationvip.io
 ---
