@@ -43,4 +43,18 @@ article, I will talk mainly about two points:
 From now, I can tell you that we won't talk about all the query types available in Elasticsearch in this article. There is two reasons to that : the first one is that there is
 plenty of query types, and the second one is that most of them are not everyday-use
 
+## Indexing is back !
+
+Before having fun with the full-text research, I want to talk more about **indexing**. Indeed, this operation is quite important in Elasticsearch, because the quality and the
+speed of your queries directly depend on the structure of your index.
+
+### What exactly are we talking about ?
+
+Here, I want to deal with two operations of the indexing : **Mapping** and **Batch Indexing**. They are not the only operations of indexing, but I won't talk about the other ones
+in this article, but in the next one.
+
+The first operation we'll talk about is : **Mapping**. **Mapping** means to describe the schema of your data. As Elasticsearch is **schemaless** (it doesn't care about the schema
+of the data you're giving to it), I think it is better to define the schema. There is many reasons why you should describe your data schema as far as practical. Schemaless has a
+lot of advantages, **on the DB layer** (easy to go with autoscaling, for example). But on the application layer, data has a schema most often.
+
 ***
