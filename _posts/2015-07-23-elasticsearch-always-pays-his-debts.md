@@ -97,4 +97,26 @@ Then, if you try to insert a document into an index which hasn't been created, y
 fact that you want to allow or disallow automatic index creation for the indices' names pattern that match the regex. For example :
 `action.auto_create_index: -game, +game_of, -*` will disallow automatic index creation for indices' names beginning with "game" (*-game*), but allow automatic index creation
 for indices' names beginning with "game_of" (*+game_of*), and finally, the `-*` will disallow automatic index creation for every other patterns.
+
+#### Dynamic Mapping
+
+Before we dive into defining our own mapping, it is important to understand **dynamic mapping**, how it works, and what we can configure.
+
+##### Type detection
+
+When you're inserting data into Elasticsearch, they are formatted with JSON structure. Elasticsearch is able to automatically guess the type of each fields : numbers, string,
+booleans. Indeed, numbers are defined with digits, strings are surrounded by quotes, and boolean are specific words. This behavior is called **type detection**.
+
+But, what if we want this behavior to be a little different ? Several options are set by Elasticsearch to customize the type detection.  For example,
+we could like digits between quotes to be recognized as numbers (the default behavior is to identify them as strings).
+
+These parameters are specific to each index. It means that the parameters have to be set through the Elasticsearch cluster's API.
+
+###### Numeric detection
+
+One of these parameters is the **numeric detection**. If the `numeric_detection` parameter is set to `true`, then Elasticsearch will search into strings to find out if the string is a real string,
+or if it is a number. For example, with the **numeric detection** enabled, a string like `"10"` would be considered as a number.
+
+
+
 ***
