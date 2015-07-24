@@ -62,4 +62,9 @@ lot of advantages, **on the DB layer** (easy to go with autoscaling, for example
 The second operation we'll make concerns **Batch Indexing**. Currently, we know how to index a single document into Elasticsearch. However, there is ways to index multiple documents
 at the same time, being efficient and fast.
 
+### Mapping
+
+Well, **Mapping**. In the previous article, I did talk a bit about the index creation. In reality, index creation can be more complex, and there is a bunch of parameters that can
+be configured.
+
 ***
