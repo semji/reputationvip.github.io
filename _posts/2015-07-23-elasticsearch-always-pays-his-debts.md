@@ -102,6 +102,9 @@ for indices' names beginning with "game_of" (*+game_of*), and finally, the `-*` 
 
 Before we dive into defining our own mapping, it is important to understand **dynamic mapping**, how it works, and what we can configure.
 
+**Be careful: The parameters shown bellow can only be set when creating the index. If you want to modify the mapping of an existing index, there is some tricks
+involving aliases, but we will talk about it later.**
+
 ##### Type detection
 
 When you're inserting data into Elasticsearch, they are formatted with JSON structure. Elasticsearch is able to automatically guess the type of each fields : numbers, string,
