@@ -88,8 +88,8 @@ Then, if you try to insert a document into an index which hasn't been created, y
 
 {% highlight json %}
 {
-    "error":"IndexMissingException[[your_index_name] missing]",
-    "status":404
+    "error": "IndexMissingException[[your_index_name] missing]",
+    "status": 404
 }
 {% endhighlight %}
 
