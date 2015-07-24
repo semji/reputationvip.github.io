@@ -120,6 +120,26 @@ These parameters are specific to each index. It means that the parameters have t
 One of these parameters is the **numeric detection**. If the `numeric_detection` parameter is set to `true`, then Elasticsearch will search into strings to find out if the string is a real string,
 or if it is a number. For example, with the **numeric detection** enabled, a string like `"10"` would be considered as a number.
 
+**The query**
+
+To turn on the `numeric detection`, we will have to query our cluster.
+
+The query type is `PUT`.
+
+<div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">/indexName</span><span style="color: chartreuse">?pretty</span></code></pre></div>
+
+The data you need to send are the following:
+
+{% highlight json %}
+{
+    "name_of_your_index": {
+        "numeric_detection": true
+    }
+}
+{% endhighlight %}
+
+**The response**
+
 
 
 ***
