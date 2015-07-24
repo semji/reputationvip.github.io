@@ -80,4 +80,17 @@ you find this mistake of yours, because Elasticsearch will not send your applica
 
 The good practice hidden behind this situation is to disable automated index creation if you don't need it.
 
+To do so, we need to edit the configuration file *elasticsearch.yml* (or *elasticsearch.json* if you chose the JSON format) to add the following line :
+
+`action.auto_create_index: false`
+
+Then, if you try to insert a document into an index which hasn't been created, you will find yourself having an error from Elasticsearch :
+
+{% highlight json %}
+{
+    "error":"IndexMissingException[[your_index_name] missing]",
+    "status":404
+}
+{% endhighlight %}
+
 ***
