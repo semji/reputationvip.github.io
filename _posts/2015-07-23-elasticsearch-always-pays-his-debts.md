@@ -47,7 +47,7 @@ plenty of query types, and the second one is that most of them are not everyday-
 
 ## Indexing is back !
 
-Before having fun with the full-text research, I want to talk more about **indexing**. Indeed, this operation is quite important in Elasticsearch, because the quality and the
+Before we have fun with the full-text research, I want to tell you more about **indexing**. Indeed, this operation is quite important in Elasticsearch, because the quality and the
 speed of your queries directly depend on the structure of your index.
 
 ### What exactly are we talking about ?
