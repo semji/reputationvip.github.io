@@ -93,4 +93,8 @@ Then, if you try to insert a document into an index which hasn't been created, y
 }
 {% endhighlight %}
 
+> `action.auto_create_index` can take more than a *true/false* value. You can specify several regex, separated by a coma, and begining with a *+* or a *-*, according to the
+fact that you want to allow or disallow automatic index creation for the indices' names pattern that match the regex. For example :
+`action.auto_create_index: -game, +game_of, -*` will disallow automatic index creation for indices' names beginning with "game" (*-game*), but allow automatic index creation
+for indices' names beginning with "game_of" (*+game_of*), and finally, the `-*` will disallow automatic index creation for every other patterns.
 ***
