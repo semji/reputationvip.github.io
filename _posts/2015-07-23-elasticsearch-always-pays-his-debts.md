@@ -67,4 +67,17 @@ at the same time, being efficient and fast.
 Well, **Mapping**. In the previous article, I did talk a bit about the index creation. In reality, index creation can be more complex, and there is a bunch of parameters that can
 be configured.
 
+#### Automated Index creation
+
+In the last article, I did talk a bit about **index creation**. What you may not know about Elasticsearch, is that by default, you **don't need to create index before you insert
+documents into it**. Well, **that's not necessarily a good thing**.
+
+Let's imagine the following situation : You've got the automated index creation enabled, and you're quietly working on your application. Let's say that you store data in an index
+called *book*. As a reminder, indices names should be written in the singular form. Now, let's assume that you've made a typo in your application, writing *book* as *boook* (with
+three *o* letter). When you are running the application, you have no error. That is because **automated index creation is enabled : If Elasticsearch is not aware of the index you are
+trying to insert data into, it will create it !**. And know, you're application stored data on two different indices, causing a phase shift in your data. You may spend hours before
+you find this mistake of yours, because Elasticsearch will not send your application any error !
+
+The good practice hidden behind this situation is to disable automated index creation if you don't need it.
+
 ***
