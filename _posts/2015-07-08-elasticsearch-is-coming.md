@@ -47,7 +47,7 @@ All along these articles (though I don't know how many of them will follow this 
 
 #### The Github Repository
 
-Available here: [https://github.com/quentinfayet/elasticsearch](https://github.com/quentinfayet/elasticsearch)
+Available here: [https://github.com/quentinfayet/elasticsearch/tree/v1.0](https://github.com/quentinfayet/elasticsearch/tree/v1.0)
 
 It contains everything you need to run the articles' examples: A ready-to-run Elasticsearch cluster under Docker containers, available to run with Docker-Compose.
 
