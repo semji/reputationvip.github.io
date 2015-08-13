@@ -4,7 +4,7 @@ author: quentin_fayet
 title: "Elasticsearch Is Coming"
 excerpt: "Our first article about Elasticsearch, the full-text search engine based on Apache Lucene"
 modified: 2015-07-15
-tags: [gitlab, git]
+tags: [elasticsearch, full-text research, elastic]
 comments: true
 image:
   feature: elastic-is-coming-ban.jpg
