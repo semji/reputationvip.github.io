@@ -20,9 +20,11 @@ image:
 
 The goal of this article is to propose a new method based on Gherkin language and behat 3 to write and load fixtures on Symfony2.
 
+For further information about behat test, refer to this article : [BDD, Behaviour Driven Development](/bdd-behat-driven-development) 
+
 ***
 
-## Current ways to write fixtures
+## Current ways to write fixtures on Symfony2
 
 There are two main ways to write symfony2 fixtures.
 
