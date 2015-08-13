@@ -22,6 +22,7 @@ amine_bsila:
 guilhem_bourgoin:
   name: Guilhem Bourgoin
   avatar: avatars/guilhem-bourgoin.jpg
+  email: contact@guilhembourgoin.com
   web: http://www.guilhembourgoin.com
   bio: Behat lover
   github: guilhemVB
@@ -47,4 +48,4 @@ quentin_fayet:
   web: http://www.quentinfayet.com/
   avatar: avatars/quentinfayet.jpeg
   github: quentinfayet
-  linkedin: quentin-fayet
+  linkedin: quentinfayet
