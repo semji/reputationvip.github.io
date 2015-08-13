@@ -258,7 +258,7 @@ bin/behat --config behat_fixtures.yml
 
 ## To conclude
 
-There are many benefits to use behat 3 to load fixtures :
+There are many benefits to using behat 3 to load fixtures :
 
 * Fixtures are more readable and easy to write
 * If you already use behat 3, your current steps definitions can be reused
