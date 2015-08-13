@@ -12,8 +12,6 @@ image:
   creditlink: http://reputationvip.io
 ---
 
-# Symfony2 - Load fixtures thanks to Behat
-
 ## What is a fixture ?
 
 [DoctrineFixturesBundle documentation](http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html) :
