@@ -169,7 +169,7 @@ default:
                 env: dev
 {% endhighlight %}
 
-Next, precise the folder with fixtures files,  here *src/AppBundle/DataFixtures/* :
+Next, specify the folder with fixtures files,  here *src/AppBundle/DataFixtures/* :
 
 {% highlight gherkin %}
 default:
