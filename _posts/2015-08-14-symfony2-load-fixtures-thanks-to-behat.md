@@ -24,7 +24,7 @@ The goal of this article is to propose a new method based on Gherkin language an
 
 ## Current ways to write fixtures
 
-They are two main ways to write symfony2 fixtures.
+There are two main ways to write symfony2 fixtures.
 
 Write your entities directly in PHP :
 
