@@ -104,7 +104,7 @@ Gherkin language is more readable than yml format. Even if you are not a develop
 
 ## Translate Gherkin language to data
 
-If you already use behat on your projet, "Given" steps definitions are certainly already defined in one of your Context.
+If you are already using behat on your projet, "Given" steps definitions are certainly already defined in one of your Context.
 Example of steps corresponding to fixtures above :
 
 {% highlight php startinline=true %}
@@ -140,7 +140,7 @@ public function books(TableNode $tableBooks)
 
 ## Behat3 settings
 
-Behat test use test databases, but fixtures have to use dev database. Create *behat_fixtures.yml* file in the root of your projet as below :
+Behat test use test databases, but fixtures have to use dev database. Create *behat_fixtures.yml* file in the root of your project as below :
 
 {% highlight gherkin %}
 default:
