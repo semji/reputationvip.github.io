@@ -117,8 +117,8 @@ These parameters are specific to each index. It means that the parameters have t
 
 ###### Numeric detection
 
-One of these parameters is the **numeric detection**. If the `numeric_detection` parameter is set to `true`, then Elasticsearch will search into strings to find out if the string is a real string,
-or if it is a number. For example, with the **numeric detection** enabled, a string like `"10"` would be considered as a number.
+One of these parameters is the **numeric detection**. If the `numeric_detection` parameter is set to `true`, then Elasticsearch will search into strings to find out if the string
+is a real string, or if it is a number. For example, with the **numeric detection** enabled for the `age` field, a string like `"10"` would be considered as a number.
 
 **The query**
 
@@ -132,7 +132,7 @@ The data you need to send are the following:
 
 {% highlight json %}
 {
-    "name_of_your_index": {
+    "name_of_the_type": {
         "numeric_detection": true
     }
 }
@@ -140,6 +140,62 @@ The data you need to send are the following:
 
 **The response**
 
+{% highlight json %}
+{
+  "acknowledged" : true
+}
+{% endhighlight %}
 
+As you can see, there is nothing special in the response. It looks like every other response from the server, when you are creating an index. So the question that might come to
+your mind is the following : How can you check that the **numeric detection** has been turned on for a given field 
+
+Actually, it is very simple. You can request your cluster about its settings. I don't want this article to be too much, so I won't talk much about it right here. I'd rather let
+you have a look here, on the official documentation : [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/indices-get-settings.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/indices-get-settings.html).
+
+**Full example**
+
+Let's say that we want to build an index, indexing all cities and places in Westeros. By the way, Elasticsearch provides spatial search, which is an amazing feature. I hope that
+I will have time to talk about it in the articles to come. Anyway, we want to index the Westeros places. For that, let's say that our index would contain the population count
+of each cities we are indexing. The index would be `game_of_thrones_place` and the type for cities, `city`. Of course, we want to enable **numeric detection** for the `city` type.
+
+Our curl request would be :
+
+{% highlight sh %}
+$> curl –XPUT http://localhost:9200/game_of_thrones_place?pretty -d '{"city": {"numeric_detection": true }}'
+{% endhighlight %}
 
 ***
+
+###### Date detection
+
+I'm gonna speed up a bit, because the principle about **date detection** is exactly the same than the numeric detection. The request you have to make is the same, only the
+value is changing. The parameter is called `dynamic_date_formats`. As you may have noticed, the name of this parameter is plural. The reason is that the value will be an array,
+containing every formats you want to recognize as a valid date format. **The format has to be specified following ISO 8601
+([https://en.wikipedia.org/wiki/ISO_8601](https://en.wikipedia.org/wiki/ISO_8601))**
+
+Considering that, your request would looks like this:
+
+{% highlight json %}
+{
+    "name_of_the_type": {
+        "numeric_detection": ["format_1", "format_2", ...]
+    }
+}
+{% endhighlight %}
+
+Replacing `format_1` and `format_2` with the date format, at the ISO 8601 standard, will give you a correct request.
+
+For example, let's say that we want to enable **date detection** on a type, and allow the two following date format : `yyyy-MM-dd hh:mm` and `dd-MM-yyyy hh:mm`. The forged request
+would be the following:
+
+{% highlight json %}
+{
+    "name_of_the_type": {
+        "numeric_detection": ["yyyy-MM-dd hh:mm", "dd-MM-yyyy hh:mm"]
+    }
+}
+{% endhighlight %}
+
+###### The boolean case
+
+Well, no tool can be perfect. Unfortunately, at the time I wrote this article, boolean guessing from string doesn't exist in Elasticsearch.
