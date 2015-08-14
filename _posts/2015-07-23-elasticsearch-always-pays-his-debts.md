@@ -199,3 +199,41 @@ would be the following:
 ###### The boolean case
 
 Well, no tool can be perfect. Unfortunately, at the time I wrote this article, boolean guessing from string doesn't exist in Elasticsearch.
+
+##### Turn dynamic type guessing off
+
+We talked about type guessing, and how to handle dynamic type guessing, such as numeric or date. But now, let's have a look about what to do if you want the type guessing to
+be disabled. With **dynamic type guessing** turned on, every unknown field (field which is not described in mapping) will be automatically type-guessed and added into
+the document. This can lead to undesired behaviour of your application. Disabling **dynamic type guessing** allows you to completely control the shape of your document,
+the fields, and the format they should have.
+
+**Be careful : Disabling dynamic type guessing lead you to define your entire mapping; without defining it, unknown field will be ignored.**
+
+**The query**
+
+The query will have two parts:
+
+- The first part is the type guessing disabling.
+- The second part is the definition of the fields mapping.
+
+{% highlight json %}
+{
+    "name_of_the_type": {
+        "dynamic": false,
+        "properties": {
+            ...
+            ...
+        }
+    }
+}
+{% endhighlight %}
+
+As you might guess, `"dynamic": false` turns the type guessing off. On the other hand, `"properties": { ... }` contains your mapping.
+
+Mapping could be either really simple, or really complex. Elasticsearch allows you to precisely define the format of each fields, and the way it will be handled
+by Apache Lucene. To read more about the available options of each field type, you can take a look here : [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/mapping-core-types.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/mapping-core-types.html).
+This page is talking about `Core Types`, which are the *basic* types : *Integer*, *String*, *float / double*, ... But even more types are available in Elasticsearch, such as `Array`,
+`Object`, `IP`, `Geo Point` and `Geo Shape` (two types I'd like to write an article about).
+
+I could write a hundred pages article about types, as they have hundred of options, but I don't think it would be relevant here. So that I let you read the official documentation,
+which is complete and clear.
