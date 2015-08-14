@@ -240,3 +240,362 @@ This page is talking about `Core Types`, which are the *basic* types : *Integer*
 
 I could write a hundred pages article about types, as they have hundred of options, but I don't think it would be relevant here. So that I let you read the official documentation,
 which is complete and clear.
+
+#### Analyzers
+
+Wow, wow, wow ! It has been a long way til there. Right now will be our first talk about **full-text research**, and more precisely, **text analysis** with Elasticsearch's **Analyzers**.
+
+I hope you do remember, I talked a bit about **Tokenizers** and **Token filters** in the first article, when I gave you an overview of what is behind Elasticsearch, and how text is processed by Elasticsearch.
+
+Today, I'm in the mood, so let me refresh your memory about them.
+
+> Using Elasticsearch, data and queries can be analyzed, with the precious help of **analyzers**. **Analyzers** is the word we use to talk about both **Tokenizers** and **Token filters**.
+**Tokenizers** stand to split a string into several **tokens**, which are processed by one or more **Token filters**. The role of **Token filters** is to modify tokens : lowercasing,
+uppercasing, removing some tokens, ...
+
+Anyway, you should remember that an **analyzer** is composed of a **tokenizer** and one or more **token filters** (and some other stuff, like a **character filter**).
+
+As Elasticsearch's developers are cool guys, they already provided you some ready-to-use **analyzers**. Nowadays, there are 4 **analyzers**, but the amazing point is that, using
+**tokenizer** and **token filters**, you are able to define your own **analyzers**.
+
+First, let's talk about the ready-to-use **analyzers**, how to use it, and finally, how to define your owns.
+
+##### Ready-to-use Analyzers
+
+Elasticsearch provides, at this time, 8 **analyzers**. I will talk a bit about the ones that I consider to be the most interesting.
+
+###### Standard Analyzer
+
+Well, as its name defines it, the **standard analyzer** is the most simple one, in terms of European Languages. Using the **standard tokenizer**, it passes tokens through **standard
+token filter**, **lower case filter** ans then **stop token filter**. Although **standard token filter** and **lower case filter** speak for themselves, let's stop on the **stop token
+filter**. This filter stands to remove tokens defined as *stop words*. *Stop words* are small words, such as, for example: "and", "the", etc.
+
+Let's practice it.
+
+In their gread goodness, Elasticsearch developers provided us a way to have a look at the token stream. That will help us to try the **analyzers** right now, and get rid of the
+configuration for now.
+
+**The query**
+
+The query type is `GET`
+
+<div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">/game_of_thrones</span><span style="color: chartreuse">/_analyze?analyzer=standard</span></code></pre></div>
+
+The data we need to provide it, is a string, containing the text to analyze.
+
+**The response**
+
+Our cluster will send us a response of the following format:
+
+{% highlight json %}
+{
+    "tokens": [
+        {
+            "token": "value",
+            "start_offset": xxxx,
+            "end_offset": yyyy,
+            "type": "type",
+            "position": zzzz
+        },
+        ...
+    ]
+}
+{% endhighlight %}
+
+What we got there is an array of objects. Each object represents a token, defined, as we talked in the first article, by its value, its **start offset** in the original string, and
+its **end offset**. Also, you can see the type of the token, and the position in the **token stream**.
+
+**Full example**
+
+Ok. Remember Jon Snow ? We created his biography in the first article. Let's take the sentence I used to describe him:
+
+> Jon Snow (15) is the bastard son of Eddard Stark, the lord of Winterfell. He is the half-brother of Arya, Sansa, Bran, Rickon and Robb.
+
+Let's process this sentence through the **standard analyzer**, and see what we get. For that, we are using the first index we created in the first article, `game_of_thrones`.
+
+{% highlight sh %}
+$> curl -XGET 'http://localhost:9200/game_of_thrones/_analyze?pretty&analyzer=standard' -d 'Jon Snow (15) is the bastard son of Eddard Stark, the lord of Winterfell. He is the half-brother of Arya, Sansa, Bran, Rickon and Robb.'
+{% endhighlight %}
+
+And now, let's see the result.
+
+{% highlight json %}
+{
+  "tokens" : [ {
+    "token" : "jon",
+    "start_offset" : 0,
+    "end_offset" : 3,
+    "type" : "<ALPHANUM>",
+    "position" : 1
+  }, {
+    "token" : "snow",
+    "start_offset" : 4,
+    "end_offset" : 8,
+    "type" : "<ALPHANUM>",
+    "position" : 2
+  }, {
+    "token" : "15",
+    "start_offset" : 10,
+    "end_offset" : 12,
+    "type" : "<NUM>",
+    "position" : 3
+  }, {
+    "token" : "is",
+    "start_offset" : 14,
+    "end_offset" : 16,
+    "type" : "<ALPHANUM>",
+    "position" : 4
+  }, {
+    "token" : "the",
+    "start_offset" : 17,
+    "end_offset" : 20,
+    "type" : "<ALPHANUM>",
+    "position" : 5
+  }, {
+    "token" : "bastard",
+    "start_offset" : 21,
+    "end_offset" : 28,
+    "type" : "<ALPHANUM>",
+    "position" : 6
+  }, {
+    "token" : "son",
+    "start_offset" : 29,
+    "end_offset" : 32,
+    "type" : "<ALPHANUM>",
+    "position" : 7
+  }, {
+    "token" : "of",
+    "start_offset" : 33,
+    "end_offset" : 35,
+    "type" : "<ALPHANUM>",
+    "position" : 8
+  }, {
+    "token" : "eddard",
+    "start_offset" : 36,
+    "end_offset" : 42,
+    "type" : "<ALPHANUM>",
+    "position" : 9
+  }, {
+    "token" : "stark",
+    "start_offset" : 43,
+    "end_offset" : 48,
+    "type" : "<ALPHANUM>",
+    "position" : 10
+  }, {
+    "token" : "the",
+    "start_offset" : 50,
+    "end_offset" : 53,
+    "type" : "<ALPHANUM>",
+    "position" : 11
+  }, {
+    "token" : "lord",
+    "start_offset" : 54,
+    "end_offset" : 58,
+    "type" : "<ALPHANUM>",
+    "position" : 12
+  }, {
+    "token" : "of",
+    "start_offset" : 59,
+    "end_offset" : 61,
+    "type" : "<ALPHANUM>",
+    "position" : 13
+  }, {
+    "token" : "winterfell",
+    "start_offset" : 62,
+    "end_offset" : 72,
+    "type" : "<ALPHANUM>",
+    "position" : 14
+  }, {
+    "token" : "he",
+    "start_offset" : 74,
+    "end_offset" : 76,
+    "type" : "<ALPHANUM>",
+    "position" : 15
+  }, {
+    "token" : "is",
+    "start_offset" : 77,
+    "end_offset" : 79,
+    "type" : "<ALPHANUM>",
+    "position" : 16
+  }, {
+    "token" : "the",
+    "start_offset" : 80,
+    "end_offset" : 83,
+    "type" : "<ALPHANUM>",
+    "position" : 17
+  }, {
+    "token" : "half",
+    "start_offset" : 84,
+    "end_offset" : 88,
+    "type" : "<ALPHANUM>",
+    "position" : 18
+  }, {
+    "token" : "brother",
+    "start_offset" : 89,
+    "end_offset" : 96,
+    "type" : "<ALPHANUM>",
+    "position" : 19
+  }, {
+    "token" : "of",
+    "start_offset" : 97,
+    "end_offset" : 99,
+    "type" : "<ALPHANUM>",
+    "position" : 20
+  }, {
+    "token" : "arya",
+    "start_offset" : 100,
+    "end_offset" : 104,
+    "type" : "<ALPHANUM>",
+    "position" : 21
+  }, {
+    "token" : "sansa",
+    "start_offset" : 106,
+    "end_offset" : 111,
+    "type" : "<ALPHANUM>",
+    "position" : 22
+  }, {
+    "token" : "bran",
+    "start_offset" : 113,
+    "end_offset" : 117,
+    "type" : "<ALPHANUM>",
+    "position" : 23
+  }, {
+    "token" : "rickon",
+    "start_offset" : 119,
+    "end_offset" : 125,
+    "type" : "<ALPHANUM>",
+    "position" : 24
+  }, {
+    "token" : "and",
+    "start_offset" : 126,
+    "end_offset" : 129,
+    "type" : "<ALPHANUM>",
+    "position" : 25
+  }, {
+    "token" : "robb",
+    "start_offset" : 130,
+    "end_offset" : 134,
+    "type" : "<ALPHANUM>",
+    "position" : 26
+  } ]
+}
+{% endhighlight %}
+
+Well, we got pretty lot of data here. There is several interesting points. The first one, as I told you, **lowercase token filter** has been used, and you can see that proper names,
+such as *Arya*, or *Rickon* has been divest of their uppercased first letter. Second point, parts of the original string have been removed; it is the case for parenthesis, and
+final point. If you take a look at the `type` field, you may notice something. Here, I haven't disable **dynamic type guessing**, and the only number (`15`) in the string has
+been recognized as such (`<NUM>`).
+
+###### Simple analyzer
+
+The second analyzer I'd like to talk about is the **simple analyzer**. The difference between it and the standard analyzer is really thin, but significant. First, it will ignore
+and remove all non-letter characters. For example, analyzing `Jon11111Snow` with the **simple analyzer** will result as two token, `Jon` and `Snow`. The second difference is about
+the type. The resulting token's type will be `word`.
+
+I won't give you a full example here, because the query is almost the same (only the name of the analyzer is different).
+
+###### The Snowball analyzer
+
+The last analyzer I want to talk about is the **snowball analyzer**. This analyzer is like the ugly duckling of ready-to-use analyzers. It is using a stemming algorithm, and the token
+stream resulting is made with root words. Let's take an example. Analyzing `King's Landing` with the **snowball analyzer** will result in a stream of two tokens : `king` and
+`landing`. What we have here is a loss of data. Indeed, `landing` has been transformed into `land`, its root word. 
+
+##### Configuring Indices Mapping with Analyzers
+
+Right until now, we tested the analyzers directly through the cluster's API, without really storing data. The cluster was sending us the **token stream**, so that we can dive inside
+it. But of course, I think you guessed that we can configure indices to automatically apply analyzers right onto input data. For each field defined in your mapping, you will be
+able to define an analyzer to be applied on the input data.
+
+**The query**
+
+When defining mapping of a given type, for a given index, you can set an **analyzer** for each field, separately. The request would looks like this:
+
+{% highlight json %}
+{
+    "name_of_the_type": {
+        "properties": {
+            "field_name": {
+                ...,
+                "analyzer": "name_of_the_analyzer",
+                ...,
+            }
+        }
+    }
+}
+{% endhighlight %}
+
+**The response**
+
+The response will be the classical `"aknowledge": true` of the indices creation query.
+
+**Here, I won't give you full example, because we will make practical usage of tokens when we will come to full-text research.**
+
+##### Making you own Analyzer
+
+Because Elasticsearch aims to be flexible, you can **create your own analyzers**. If you remember, what we call **analyzer** is simply a combination of a **tokenizer**, some
+**token filters** (and some other stuff, like a **character filter**). The creation of a custom analyzer step during the creation of the index. The definition of it stands
+in the `settings.index.analysis.analyzer` field of the query you send to the cluster to create the index.
+
+**The query**
+
+{% highlight json %}
+{
+    "settings": {
+        "index": {
+            "analysis": {
+                "analyzer": {
+                    "name_of_your_analyzer": {
+                        "tokenizer": "tokenizer",
+                        "filter": [
+                            "filter1",
+                            "filter2",
+                            ...
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
+{% endhighlight %}
+
+Pay attention to the `filter` field; despite the fact that it is an array, the field's name remains singular.
+
+**The response**
+
+As this process step in the index creation process, the response will be the classical response returned when creating an index.
+
+**Full example**
+
+I want to create an analyzer, which I will name as `wildfire_analyzer`. It will be composed, for the tokenizer, of the `standard` tokenizer, and for the token filter,
+of the `synonym` token filter and the `trim` token filter. Actually, I choose them randomly, so that I don't really know what could be the token stream resulting of the analysis
+of a stream by my `wildfire_analyzer`.
+
+{% highlight json %}
+{
+    "settings": {
+        "index": {
+            "analysis": {
+                "analyzer": {
+                    "name_of_your_analyzer": {
+                        "tokenizer": "standard",
+                        "filter": [
+                            "synonym",
+                            "trim"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
+{% endhighlight %}
+
+That's it ! You just defined your own analyzer ! And since you also can create your own filters, you really are able to handle data the way you want.
+
+##### More analyzers
+
+The handful of ready-to-use analyzers defined by Elasticsearch might not be enough. Fortunately, Elasticsearch developpers are maintaining several Github repositories, with custom
+analyzers. To use them, you just have to install them the classic way you install plugins. For examples, you can find a **phonetic analyzer**, **smart chinese analyzer**, and so on.
+
+If you don't remember how to install plugins, you can have a look at the end of [the first article's introduction to plugin](http://reputationvip.io/elasticsearch-is-coming/#introduction-to-plugins).
