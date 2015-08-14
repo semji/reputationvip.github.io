@@ -18,6 +18,9 @@ image:
 - Set the proper date (modified : xxxx)
 - Complete tags if needed
 - Build summary
+- Create the queries files
+- Charlotte review
+- :
 
 # ELASTICSEARCH ALWAYS PAYS HIS DEBTS
 
