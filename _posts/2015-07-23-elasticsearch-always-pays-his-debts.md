@@ -21,6 +21,9 @@ image:
 - Create the queries files
 - Charlotte review
 - :
+- Insert data into indexing json highlighter
+- Check genericity of `the request` parts : no real index name, ...
+- Bulk index request : full example
 
 # ELASTICSEARCH ALWAYS PAYS HIS DEBTS
 
@@ -591,7 +594,7 @@ of a stream by my `wildfire_analyzer`.
 }
 {% endhighlight %}
 
-That's it ! You just defined your own analyzer ! And since you also can create your own filters, you really are able to handle data the way you want.
+That's it! You just defined your own analyzer ! And since you also can create your own filters, you really are able to handle data the way you want.
 
 ##### More analyzers
 
@@ -599,3 +602,90 @@ The handful of ready-to-use analyzers defined by Elasticsearch might not be enou
 analyzers. To use them, you just have to install them the classic way you install plugins. For examples, you can find a **phonetic analyzer**, **smart chinese analyzer**, and so on.
 
 If you don't remember how to install plugins, you can have a look at the end of [the first article's introduction to plugin](http://reputationvip.io/elasticsearch-is-coming/#introduction-to-plugins).
+
+### Batch Indexing
+
+Wel, I must admit that... There is still some little things that I'd like to talk about, before we dive into full-text research. In the first
+article, I talked about indexing a single document. But now, let's imagine that you have to put one million of documents into an index. At this
+point, you got two choices: The first one, you can do it all by yourself, indexing them one after another... But honestly, I don't recommend you
+to do so; the second choice, and probably the reasonable one, is to use **batch indexing*.
+
+#### Request format
+
+*Batch indexing* provides you the solution to perform creation, replacement, indexing, and deletion of many documents, all in one request. Hence, the
+request's format has been optimized to perform efficiency. And, the icing on the cake: Each request can contain multiple type of operation, among
+the ones I listed above.
+
+The principle is simple: Elasticsearch assumes that each line of your request's data is a JSON object, containing the type of query you are making
+(*index*, *create*, *delete*), and information about it, such as index's name, type's name, etc. The following line must contain the data you are
+indexing or creating. In the case of a *delete*, no data are required (and thus, Elasticsearch assumes that for *delete*, the following line is
+a new set of instructions).
+
+For example, the following data could be used to batch index some Game Of Thrones' characters:
+
+{% highlight json %}
+{}
+{% endhighlight %}
+
+The bad news is that **there is a limitation about the size of the data you are passing through the API.** This limitation is of **100 Mb**...
+But, we are working here with Elasticsearch, and almost nothing is impossible. This means that, of course, you can configure this limitation !
+The corresponding line in the configuration file of your node is `http.max_content_length`.
+
+#### Bulk index request
+
+Now that we know how to format our data, let's see how to call the cluster's API to execute our queries.
+
+**The query**
+
+The query type is `POST`
+
+<div class="highlight"><pre><code>http://localhost:9200<span style="color: chartreuse">/_bulk</span></code></pre></div>
+
+**The data**
+
+Something really important about this special request is: the data. As I said before, Elasticsearch is parsing the data you give using new lines
+characters. Yet, the `-d` option we were used to use with *curl* doesn't preserver new lines character. Then, you will have to use the
+`--data-binary` option, indicating then the path to the file which contains your data. The path must start with `@` and is relative.
+
+**The Response**
+
+The response is kind of more complex than the response we were used to. It is composed of many fields: `took`, which is the total time it took
+to Elasticsearch to run each query. The `errors` field (a boolean), indicates whether the process encountered errors; if set to `true`, it doesn't
+mean that the whole process failed, but that an error occurred with at least one of the queries. Finally, the `items` field is an array. It contains
+a set of objects, describing the result of each query you sent. The object contains information such as index name, type, id, version (actually, it
+should remember you the result returned for the CRUD operations). The object also contained a `status` field, filled with an HTTP code. Also, if something
+went wrong, the object should contain an `error` field, describing the error.
+
+**Full example**
+
+//TODO Full example
+
+#### UDP Bulk Request
+
+**First of all, you should know that this way to make request is deprecated, and will be removed in Elasticsearch 2.0. Anyway, I found this
+interesting, and I want to give you some information about it.**
+
+I told you many times that Elasticsearch wishes you the best. Bulk requests throughout API are quick. But if you are looking for an even more
+efficient way to make bulk queries, then the **UDP** bulk operations are here for you. As a reminder, **UDP** stands for **User Datagram Protocol**.
+It is the brother of **TCP**. So yes, **UDP** is faster. BUT. Yes, there is a but. You can't have your cake and eat it. **UDP** is faster because
+it does not guarantee that some data wont be lost during the process. You should use it **only if performances are more important than data accuracy**.
+
+**I want to use it !**
+
+Well, well, you got me, I'll show you how to use it.
+
+##### Configuring the cluster for UDP bulk
+
+Yes, nothing comes without a bit of configuration. In the Elasticsearch configuration file, some fields stand to configure **UDP** API. `bulk.udp.host`
+indicates the host (default is the same than the standard API's host). `bulk.udp.port` indicates the port on which the UDP API can be requested.
+
+##### Requesting
+
+To make it quicker, let's assume your queries are available in a file called `queries.json`, and the **UDP API** reachable on `localhost`, under
+the port `9700`. Then, the command line should look like:
+
+{% highlight sh %}
+$> cat queries.json | nc -u localhost 9700
+{% endhighlight %}
+
+`nc` (for *netcat*) will send the data piped to it from `queries.json`, using *UDP* protocol (`-u` argument).
