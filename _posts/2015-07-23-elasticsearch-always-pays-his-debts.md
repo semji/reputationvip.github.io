@@ -689,3 +689,12 @@ $> cat queries.json | nc -u localhost 9700
 {% endhighlight %}
 
 `nc` (for *netcat*) will send the data piped to it from `queries.json`, using *UDP* protocol (`-u` argument).
+
+### Searching
+
+WOOOOOW ! Can you believe it ?! We are finally there, talking about the most important and valuable feature of Elasticsearch: **The full-text search** !!
+
+But first, I need to be honest with you. There is still plenty of things that need to be said about other features of Elasticsearch. I am thinking about routing, Segment merging,
+and so on. Nevertheless, I don't want this article to be boring, so I decided to talk about full-text search now, since routing & cie are not essentials to practice full-text search.
+
+Let me introduce you a to full-text search.
