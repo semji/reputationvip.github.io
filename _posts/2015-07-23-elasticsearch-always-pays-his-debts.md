@@ -40,7 +40,7 @@ If you've read the first article, then you've learned all the basics required to
 behind Elasticsearch ; we've also seen a bit about the basic architecture Elasticsearch is based on ; then, we've talked about the basics *CRUD* operations, and a bit about
 **indexing**; finally, we've talked about some Elasticsearch plugins: **Head** and **Marvel**
 
-Well, I'm keeping in mind that Elasticsearch is a full-text search engine above all. In the first article, we didn't really have fun with full-text research features. In this
+Well, I'm keeping in mind that Elasticsearch is a full-text search engine above all. In the first article, we didn't really have fun with full-text search features. In this
 article, I will talk mainly about two points:
 
 - Indexing operations : **Mappings config** and **Batch Indexing**
@@ -53,7 +53,7 @@ plenty of query types, and the second one is that most of them are not everyday-
 
 ## Indexing is back !
 
-Before we have fun with the full-text research, I want to tell you more about **indexing**. Indeed, this operation is quite important in Elasticsearch, because the quality and the
+Before we have fun with the full-text search, I want to tell you more about **indexing**. Indeed, this operation is quite important in Elasticsearch, because the quality and the
 speed of your queries directly depend on the structure of your index.
 
 ### What exactly are we talking about ?
@@ -246,7 +246,7 @@ which is complete and clear.
 
 #### Analyzers
 
-Wow, wow, wow ! It has been a long way til there. Right now will be our first talk about **full-text research**, and more precisely, **text analysis** with Elasticsearch's **Analyzers**.
+Wow, wow, wow ! It has been a long way til there. Right now will be our first talk about **full-text search**, and more precisely, **text analysis** with Elasticsearch's **Analyzers**.
 
 I hope you do remember, I talked a bit about **Tokenizers** and **Token filters** in the first article, when I gave you an overview of what is behind Elasticsearch, and how text is processed by Elasticsearch.
 
@@ -531,7 +531,7 @@ When defining mapping of a given type, for a given index, you can set an **analy
 
 The response will be the classical `"aknowledge": true` of the indices creation query.
 
-**Here, I won't give you full example, because we will make practical usage of tokens when we will come to full-text research.**
+**Here, I won't give you full example, because we will make practical usage of tokens when we will come to full-text search.**
 
 ##### Making you own Analyzer
 
@@ -605,7 +605,7 @@ If you don't remember how to install plugins, you can have a look at the end of 
 
 ### Batch Indexing
 
-Wel, I must admit that... There is still some little things that I'd like to talk about, before we dive into full-text research. In the first
+Wel, I must admit that... There is still some little things that I'd like to talk about, before we dive into full-text search. In the first
 article, I talked about indexing a single document. But now, let's imagine that you have to put one million of documents into an index. At this
 point, you got two choices: The first one, you can do it all by yourself, indexing them one after another... But honestly, I don't recommend you
 to do so; the second choice, and probably the reasonable one, is to use **batch indexing*.
@@ -628,7 +628,7 @@ For example, the following data could be used to batch index some Game Of Throne
 {% endhighlight %}
 
 The bad news is that **there is a limitation about the size of the data you are passing through the API.** This limitation is of **100 Mb**...
-But, we are working here with Elasticsearch, and almost nothing is impossible. This means that, of course, you can configure this limitation !
+But, we are working here with Elasticsearch, and quite nothing is impossible. This means that, of course, you can configure this limitation !
 The corresponding line in the configuration file of your node is `http.max_content_length`.
 
 #### Bulk index request
