@@ -23,7 +23,8 @@ image:
 - :
 - Insert data into indexing json highlighter
 - Check genericity of `the request` parts : no real index name, ...
-- Bulk index request : full example
+- Check //TODO
+- Check mapping in Search > mapping corresponds to the Github repo's mapping.
 
 # ELASTICSEARCH ALWAYS PAYS HIS DEBTS
 
@@ -126,11 +127,11 @@ These parameters are specific to each index. It means that the parameters have t
 One of these parameters is the **numeric detection**. If the `numeric_detection` parameter is set to `true`, then Elasticsearch will search into strings to find out if the string
 is a real string, or if it is a number. For example, with the **numeric detection** enabled for the `age` field, a string like `"10"` would be considered as a number.
 
-**The query**
+**The request**
 
 To turn on the `numeric detection`, we will have to query our cluster.
 
-The query type is `PUT`.
+The request type is `PUT`.
 
 <div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">/indexName</span><span style="color: chartreuse">?pretty</span></code></pre></div>
 
@@ -215,9 +216,9 @@ the fields, and the format they should have.
 
 **Be careful : Disabling dynamic type guessing lead you to define your entire mapping; without defining it, unknown field will be ignored.**
 
-**The query**
+**The request**
 
-The query will have two parts:
+The request will have two parts:
 
 - The first part is the type guessing disabling.
 - The second part is the definition of the fields mapping.
@@ -278,9 +279,9 @@ Let's practice it.
 In their gread goodness, Elasticsearch developers provided us a way to have a look at the token stream. That will help us to try the **analyzers** right now, and get rid of the
 configuration for now.
 
-**The query**
+**The request**
 
-The query type is `GET`
+The request type is `GET`
 
 <div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">/game_of_thrones</span><span style="color: chartreuse">/_analyze?analyzer=standard</span></code></pre></div>
 
@@ -509,7 +510,7 @@ Right until now, we tested the analyzers directly through the cluster's API, wit
 it. But of course, I think you guessed that we can configure indices to automatically apply analyzers right onto input data. For each field defined in your mapping, you will be
 able to define an analyzer to be applied on the input data.
 
-**The query**
+**The request**
 
 When defining mapping of a given type, for a given index, you can set an **analyzer** for each field, separately. The request would looks like this:
 
@@ -539,7 +540,7 @@ Because Elasticsearch aims to be flexible, you can **create your own analyzers**
 **token filters** (and some other stuff, like a **character filter**). The creation of a custom analyzer step during the creation of the index. The definition of it stands
 in the `settings.index.analysis.analyzer` field of the query you send to the cluster to create the index.
 
-**The query**
+**The request**
 
 {% highlight json %}
 {
@@ -624,7 +625,8 @@ a new set of instructions).
 For example, the following data could be used to batch index some Game Of Thrones' characters:
 
 {% highlight json %}
-{}
+{"create":{"_index":"game_of_thrones","_type":"character","_id":"JonSnow"}}
+{"house":"Stark","age":"17","biography":"Hello I'm Jon","tags":["jon","night's watch"]}
 {% endhighlight %}
 
 The bad news is that **there is a limitation about the size of the data you are passing through the API.** This limitation is of **100 Mb**...
@@ -635,9 +637,9 @@ The corresponding line in the configuration file of your node is `http.max_conte
 
 Now that we know how to format our data, let's see how to call the cluster's API to execute our queries.
 
-**The query**
+**The request**
 
-The query type is `POST`
+The request type is `POST`
 
 <div class="highlight"><pre><code>http://localhost:9200<span style="color: chartreuse">/_bulk</span></code></pre></div>
 
@@ -656,14 +658,10 @@ a set of objects, describing the result of each query you sent. The object conta
 should remember you the result returned for the CRUD operations). The object also contained a `status` field, filled with an HTTP code. Also, if something
 went wrong, the object should contain an `error` field, describing the error.
 
-**Full example**
-
-//TODO Full example
-
 #### UDP Bulk Request
 
-**First of all, you should know that this way to make request is deprecated, and will be removed in Elasticsearch 2.0. Anyway, I found this
-interesting, and I want to give you some information about it.**
+**First of all, you should know that this way to make request is deprecated, and will be removed in Elasticsearch 2.0. Anyway, I thought this
+was worth to talk about, and I want to give you some information about it.**
 
 I told you many times that Elasticsearch wishes you the best. Bulk requests throughout API are quick. But if you are looking for an even more
 efficient way to make bulk queries, then the **UDP** bulk operations are here for you. As a reminder, **UDP** stands for **User Datagram Protocol**.
@@ -697,4 +695,95 @@ WOOOOOW ! Can you believe it ?! We are finally there, talking about the most imp
 But first, I need to be honest with you. There is still plenty of things that need to be said about other features of Elasticsearch. I am thinking about routing, Segment merging,
 and so on. Nevertheless, I don't want this article to be boring, so I decided to talk about full-text search now, since routing & cie are not essentials to practice full-text search.
 
-Let me introduce you a to full-text search.
+Before we start making full-text search queries, we should have something on what to search... Which is actually not the case. As my objective right now is not to introduce you
+to high-performances full-text search, we won't need a big as hell database. In my infinite kindness, I provided you a JSON document you can find in the `dataset` folder of the
+Github repositories that comes with this article. Okey, you won, I give you the address: [https://github.com/quentinfayet/elasticsearch/tree/v2.0](https://github.com/quentinfayet/elasticsearch/tree/v2.0). This document, named as `game_of_thrones_dataset.json` contains a hand-made
+(yes, I said hand-made) dataset of Game of Thrones characters, along with their biographies.
+
+#### The mapping
+
+Before bulk indexing data, we need to configure the index's mapping. I provided you a turnkey mapping, that can be found into the `queries/mapping/mapping.json` file of the Github
+repository. First of all, let's take a look at this mapping.
+
+{% highlight json %}
+{
+    "mappings": {
+        "character": {
+            "dynamic": "false",
+            "properties": {
+                "id": {"type": "string"},
+                "house": {"type": "string", "index": "not_analyzed"},
+                "gender": {"type": "string", "index": "not_analyzed"},
+                "age": {"type":"integer"},
+                "biography": {"type": "string", "term_vector": "with_positions_offsets", "index": "analyzed"},
+                "tags": {"type": "string"}
+            }
+        }
+    }
+}
+{% endhighlight %}
+
+As you can see, I defined 5 fields for the `character` type.
+
+- `id` (the document's ID) is simply a string.
+- `house` refers to the house's name of the character (for example: "Stark", "Lannister", ...). As this field can be considered as a single entity,
+I set the `index` property to `not_analyzed`. This will result as the value of this field to be considered as a single term. You can learn more about `index` property
+here [https://www.elastic.co/guide/en/elasticsearch//reference/master/mapping-index.html](https://www.elastic.co/guide/en/elasticsearch//reference/master/mapping-index.html)
+- `gender` representq the gender of the character. The value would be either "male" or "female", so that it could be considered as a single term. That's why the `index` property
+is also set to `no_analyzed`.
+- `age` stores the age of the character. Its type is `integer`.
+- `biography` is the field we will talk the most when performing full-text search. The `term_vector` property describes which data this field's term_vector contains. The value
+`with_positions_offsets` is valuable when we want to use fast vector highlighter (I will talk about this in details later in this article). Also, `index` is set to `analyzed`,
+that means this string will go through analyzers to be converted into terms; then, when searching, the query string will go through the same analyzer.
+- `tags` is an array (arrays are Elasticsearch's datatype, and you should have a look to the difference between `Array` and `Nested` datatypes).
+
+So, let's perform this mapping:
+
+{% highlight sh %}
+$>curl –XPUT http://localhost:9200/game_of_thrones/ -d @mapping.json
+{% endhighlight %}
+
+#### Bulk inserting the data
+
+I know you may be impatient to start full-text search. But before that (the last step, I promise), we need to insert data into our Elasticsearch cluster. In a surge of generosity,
+I created a bulk-index request, that you can find in the `dataset` folder.
+
+You can perform the bulk request with the following command:
+
+{% highlight sh %}
+$>curl –XPOST http://localhost:9200/_bulk/ -d @game_of_thrones_dataset
+{% endhighlight %}
+
+#### Basic search query
+
+Elasticsearch accepts 3 main types of queries. The `basic queries`, such as, for example, term queries. The `compound queries`, such as boolean ones, and, finally, the `filter queries`.
+
+Right now, we will go into the basic queries.
+
+Elasticsearch API provides us two way of performing the basic queries.
+
+##### The inline query
+
+The first way, I named it as "inline query", is a way to pass the query through the get parameters, directly into the URL.
+
+**The request**
+
+The request type is `GET`
+
+<div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">/index/type</span><span style="color: chartreuse">/_search?q=the_query</span></code></pre></div>
+
+The action, `_search` indicates to Elasticsearch that we are willing to perform a search. The `q` parameter contains the query. Its format is basic: `field:value`.
+
+**The response**
+
+The response from the server will contains each **whole document** that matches your query.
+
+**Full example**
+
+Well, let's say that I want to retrieve each `character` that field `house` is set to `Stark`.
+
+{% highlight sh %}
+$>curl –XGET 'http://localhost:9200/game_of_thrones/character/_search?q=house:Stark&pretty'
+{% endhighlight %}
+
+That's it ! You will get each document that match `house:Stark`.
