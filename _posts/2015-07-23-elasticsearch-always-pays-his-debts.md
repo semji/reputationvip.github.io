@@ -938,7 +938,16 @@ Note that if you give an empty array to the `fields` field, all fields will be r
 Yes, Elasticsearch allows you to do scripting! I told you, what an amazing tool! Actually, we are talking here about fields that value is
 calculated by the cluster.
 
-For example, let's say that we want to know how old the character of the "Stark" house will be in 23 years. What we need to do, is to create
+The first thing to do, is to turn scripting on. Indeed, by default, this module is disabled, because it may cause security issues on not well configured
+clusters. Scripting requires to be turned on specifically for each type of request (search, aggregate, ...). For example, to turn on inline scripting
+on search request (we will need that right after), the need is just to put this line in your `elasticsearch.yml` file:
+
+`script.engine.groovy.inline.search: on`
+
+Fortunately, if you are using the pre-configured docker-based Elasticsearch cluster I provided you in the Github repository, this configuration
+is already set.
+
+So, for example, let's say that we want to know how old the character of the "Stark" house will be in 23 years. What we need to do, is to create
 a script-evaluated field, named `future_age`, calculated from the `age` field. All we have to do, is to add `16` to the `age` field.
 
 With scripting, there is two ways to select a field from a document.
