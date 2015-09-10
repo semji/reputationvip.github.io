@@ -751,7 +751,7 @@ I created a bulk-index request, that you can find in the `dataset` folder.
 You can perform the bulk request with the following command:
 
 {% highlight sh %}
-$>curl –XPOST http://localhost:9200/_bulk/ -d @game_of_thrones_dataset
+$>curl –XPOST http://localhost:9200/_bulk/ --data-binary @game_of_thrones_dataset
 {% endhighlight %}
 
 #### Basic search query
