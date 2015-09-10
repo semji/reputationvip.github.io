@@ -950,7 +950,7 @@ is already set.
 So, for example, let's say that we want to know how old the character of the "Stark" house will be in 23 years. What we need to do, is to create
 a script-evaluated field, named `future_age`, calculated from the `age` field. All we have to do, is to add `16` to the `age` field.
 
-With scripting, there is two ways to select a field from a document.
+With scripting, there is two ways to select a field from an existing document.
 
 - Using `doc['name_of_the_field'].value`, is faster but has a higher memory usage, and is limiter to fields that have a single value, and single terms.
 For us, that would mean that we cannot use the `doc` notation on fields such as `tags` (it is an array), or `biography` (it is not single term field).
@@ -958,11 +958,15 @@ For us, that would mean that we cannot use the `doc` notation on fields such as 
 
 I will show you the two ways to retrieve the `future_age`:
 
-The first one, with the `doc` notation:
+The first one, with the `doc` notation (can be found in `queries/DSL/query_string_script_doc.json`):
 
 {% highlight json %}
 {
-  "fields": ["id", "age"],
+  "script_fields": {
+    "future_age": {
+      "script": "doc['age'].value + 16"
+    }
+  },
   "query": {
     "query_string": {
       "query": "house:Stark"
@@ -970,3 +974,69 @@ The first one, with the `doc` notation:
   }
 }
 {% endhighlight %}
+
+And the second one, with the `_source` notation (can be found in `queries/DSL/query_string_script_source.json`):
+
+{% highlight json %}
+{
+  "script_fields": {
+    "future_age": {
+      "script": "_source.age + 16"
+    }
+  },
+  "query": {
+    "query_string": {
+      "query": "house:Stark"
+    }
+  }
+}
+{% endhighlight %}
+
+We can try each of them by executing the request on the cluster (assuming we are located in `queries/DSL`):
+
+The request type is `GET`:
+
+{% highlight sh %}
+$>curl –XGET 'http://localhost:9200/_search?pretty -d @query_string_script_doc.json'
+{% endhighlight %}
+
+Or
+
+{% highlight sh %}
+$>curl –XGET 'http://localhost:9200/_search?pretty -d @query_string_script_source.json'
+{% endhighlight %}
+
+The response would look like this:
+
+{% highlight json %}
+{
+  [...]
+  "hits" : {
+    [...]
+    "hits" : [ {
+      "_index" : "game_of_thrones",
+      "_type" : "character",
+      "_id" : "Robb Stark",
+      "_score" : 1.4054651,
+      "fields" : {
+        "future_age" : [ 38 ]
+      }
+    }, {
+      "_index" : "game_of_thrones",
+      "_type" : "character",
+      "_id" : "Arya Stark",
+      "_score" : 1.2231436,
+      "fields" : {
+        "future_age" : [ 33 ]
+      }
+    },
+    [...]
+    ]
+  }
+}
+{% endhighlight %}
+
+As you can see, for each `hits.fields`, the field `future_age` has been calculated by the cluster.
+
+> Note that the cluster didn't insert the `_source` field containing the whole document. Indeed, if you wish to have the `_source` field, you will have to request for it by
+using the `fields` parameter in the DSL query, the same way we did above.
