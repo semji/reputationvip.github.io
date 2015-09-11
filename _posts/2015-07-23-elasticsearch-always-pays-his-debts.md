@@ -17,7 +17,7 @@ image:
 - Complete excerpt with what's in the article exactly
 - Set the proper date (modified : xxxx)
 - Complete tags if needed
-- Build summary
+- Build summary (with links)
 - Create the queries files
 - Charlotte review
 - :
@@ -1040,3 +1040,19 @@ As you can see, for each `hits.fields`, the field `future_age` has been calculat
 
 > Note that the cluster didn't insert the `_source` field containing the whole document. Indeed, if you wish to have the `_source` field, you will have to request for it by
 using the `fields` parameter in the DSL query, the same way we did above.
+
+#### The basic queries
+
+I want to introduce to you some of the basic queries, available on Elasticsearch. There is a bunch of query types that can be performed. The ones we are going to review
+right now are the simplest ones. In the next article, I will talk about more complicated queries (such as compound queries, geo-localisation, ...).
+
+But let's focus on the full-text basic queries for now.
+
+##### The Term and Terms queries
+
+The two first queries I want to talk about are the *Term* and *Terms* queries. The first one, the *Term* query is simply searching for a single term on the cluster, for a
+specific field. The second one, the *Terms* query - as you might have guessed - stands to search for one or several terms, for a specific field.
+
+**The Term query**
+
+There is not much to be said about this query, except that the term you will provide has to be the *exact* term you are looking form=,
