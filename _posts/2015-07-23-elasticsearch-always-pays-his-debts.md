@@ -25,6 +25,7 @@ image:
 - Check genericity of `the request` parts : no real index name, ...
 - Check //TODO
 - Check mapping in Search > mapping corresponds to the Github repo's mapping.
+- Check that all "-X...." are set
 
 # ELASTICSEARCH ALWAYS PAYS HIS DEBTS
 
@@ -1055,4 +1056,66 @@ specific field. The second one, the *Terms* query - as you might have guessed - 
 
 **The Term query**
 
-There is not much to be said about this query, except that the term you will provide has to be the *exact* term you are looking form=,
+There is not much to be said about this query, except that the term you will provide has to be the *exact* term you are looking for (it is not analyzed). The JSON syntax for this type of
+query is quite simple:
+
+{% highlight json %}
+{
+  "query": {
+    "term": {
+      "nameOfTheField": "valueToBeSearched"
+    }
+  }
+}
+{% endhighlight %}
+
+`nameOfTheField` should be replaced with the field's name that contain the term you are looking for, and `valueToBeSearched` represents this value.
+
+For example, if we want to retrieve all characters that belongs to the `Targaryen` house. `house` field would then be set to `Targaryen`. Please note that, once again, only
+the **exact** term will be searched. Therefore, terms such à `targaryen` (whithout first capital letter), or `TaRgArYEN` won't not match anything.
+
+Our query is the following:
+
+{% highlight json %}
+{
+    "query": {
+        "term": {
+            "house": "Targaryen"
+        }
+    }
+}
+{% endhighlight %}
+
+Then, let's query the cluster:
+
+{% highlight sh %}
+$> curl -XGET http://localhost:9200/game_of_thrones/character/_search?pretty -d @query_term.json
+{% endhighlight %}
+
+> Note that as the `game_of_thrones` index contains only one type (`character`), we could get rid of the `/character` part in the curl call.
+
+We got the response from the server:
+
+{% highlight json %}
+{
+  [...]
+  "hits" : {
+    "total" : 1,
+    "max_score" : 1.4054651,
+    "hits" : [ {
+      "_index" : "game_of_thrones",
+      "_type" : "character",
+      "_id" : "Daenerys Targaryen",
+      "_score" : 1.4054651,
+      "_source":{
+            "house": "Targaryen",
+            "gender": "female",
+            "age":18,
+            "biography": "Daenerys Targaryen [...] a trail she is surrounded.",
+            "tags": ["targaryen","dothraki","khaleesi"]}
+    } ]
+  }
+}
+{% endhighlight %}
+
+As you can see, only one document matches the query, with the id `Daenerys Targaryen`.
