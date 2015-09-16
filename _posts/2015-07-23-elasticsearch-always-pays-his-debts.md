@@ -1074,7 +1074,7 @@ query is quite simple:
 For example, if we want to retrieve all characters that belongs to the `Targaryen` house. `house` field would then be set to `Targaryen`. Please note that, once again, only
 the **exact** term will be searched. Therefore, terms such à `targaryen` (whithout first capital letter), or `TaRgArYEN` won't not match anything.
 
-Our query is the following:
+Our query is the following (available at `queries/DSL/query_term.json`):
 
 {% highlight json %}
 {
@@ -1119,3 +1119,85 @@ We got the response from the server:
 {% endhighlight %}
 
 As you can see, only one document matches the query, with the id `Daenerys Targaryen`.
+
+**The terms query**
+
+This query allows to search documents that match several terms in their content. The query will then be an array of all different searched terms, and in addition to that,
+a `minimum_match` parameter can be set, indicating how many terms have to match in the document for it to be considered as matching the query.
+
+The query is the following:
+
+{% highlight json %}
+{
+    "query": {
+        "terms": {
+            "nameOfTheField": ["value1", "value2", ...]
+            "minimum_match": minimumMatchNumber
+        }
+    }
+}
+{% endhighlight %}
+
+The search will be performed on the field named as `nameOfTheField`, and will search for the values contain in the array. In addition, the parameter `minimum_match` will ensure
+that the document contains at least `minimumMatchNumber` matching terms.
+
+For example, as you know, bastards in Game of Thrones are named as Snow. In the dataset I provided you, the field `tags` contains a bunch of keywords related to each character.
+For bastards, such as Jon Snow, I added the tag `snow`. Let's look for it.
+
+Our query (available at `queries/DSL/query_terms.json`):
+
+{% highlight json %}
+{
+    "query": {
+        "terms": {
+            "tags": ["snow"],
+            "minimum_match": 1
+        }
+    }
+}
+{% endhighlight %}
+
+We can launch it with curl:
+
+{% highlight sh %}
+$> curl -XGET http://localhost:9200/game_of_thrones/character/_search?pretty -d @query_terms.json
+{% endhighlight %}
+
+And the result will be the following:
+
+{% highlight json %}
+{
+  [...]
+  "hits" : {
+    "total" : 2,
+    "max_score" : 0.83837724,
+    "hits" : [ {
+      "_index" : "game_of_thrones",
+      "_type" : "character",
+      "_id" : "Jon Snow",
+      "_score" : 0.83837724,
+      "_source":{
+            "house": "Stark",
+            "gender": "male",
+            "age":19,
+            "biography": "Jon Snow is the bastard [...] in the snow.",
+            "tags": ["stark","night's watch","brother","snow"]
+            }
+    }, {
+      "_index" : "game_of_thrones",
+      "_type" : "character",
+      "_id" : "Ramsay Bolton",
+      "_score" : 0.614891,
+      "_source":{
+            "house": "Bolton",
+            "gender": "male",
+            "age":23,
+            "biography": "The illegitimate son of Roose Bolton, Ramsay Snow [...] the process.",
+            "tags": ["bolton","sansa stark","bastard","snow"]}
+    } ]
+  }
+}
+
+{% endhighlight %}
+
+As you can see, two characters has been returned: Jon Snow and Ramsay Bolton.
