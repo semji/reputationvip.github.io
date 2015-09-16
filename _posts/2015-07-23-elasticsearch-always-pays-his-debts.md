@@ -1123,7 +1123,8 @@ As you can see, only one document matches the query, with the id `Daenerys Targa
 **The terms query**
 
 This query allows to search documents that match several terms in their content. The query will then be an array of all different searched terms, and in addition to that,
-a `minimum_match` parameter can be set, indicating how many terms have to match in the document for it to be considered as matching the query.
+a `minimum_match` parameter can be set, indicating how many terms have to match in the document for it to be considered as matching the query. Careful though, as the
+*Term* query, the term is not analyzed, and has to be *exactly* the one you are searching.
 
 The query is the following:
 
@@ -1201,3 +1202,152 @@ And the result will be the following:
 {% endhighlight %}
 
 As you can see, two characters has been returned: Jon Snow and Ramsay Bolton.
+
+##### The Match query
+
+I talked about *Term* and *Terms* queries, that are working with non-analyzed terms. In other words, you have to give Elasticsearch the *exact* term you are looking for, because
+the cluster is not going to analyze it. For example, a *term* query on `Jon Snow and Cersei Lannister` on the `biography` field won't giv us any result, because the term is considered to be
+the full sentence: `Jon Snow and Cersei Lannister`.
+
+Well now, if we want to search for `Jon`, `Snow`, `and`, `Cersei`, `Lannister`, *term* query won't be enough. Though we can proceed this query with *terms* query, it is not
+convenient. Moreover, *match* query allows us to use some more parameters, as we will see. Also, the query string will be **analyzed**.
+
+The global format for this query is the following:
+
+{% highlight json %}
+{
+    "query": {
+        "match": {
+            "nameOfTheField": "queryString",
+        }
+    }
+}
+{% endhighlight %}
+
+Well here, `nameOfTheField` should be replaced with the field's name, and `queryString` with the query string.
+
+Let's try it on the previous query string (`Jon Snow and Cersei Lannister`) (available at `queries/DSL/query_match.json`):
+
+{% highlight json %}
+{
+    "query": {
+        "match": {
+            "biography": "Jon Snow and Cersei Lannister"
+        }
+    }
+}
+{% endhighlight %}
+
+Then, we request the cluster:
+
+{% highlight sh %}
+$> curl -XGET http://localhost:9200/game_of_thrones/character/_search?pretty -d @query_match.json
+{% endhighlight %}
+
+And the result is:
+
+{% highlight json %}
+{
+  [...]
+  "hits" : {
+    "total" : 13,
+    "max_score" : 0.17795758,
+    "hits" : [ {
+      "_index" : "game_of_thrones",
+      "_type" : "character",
+      "_id" : "Bran Stark",
+      "_score" : 0.17795758,
+      "_source":{
+            "house": "Stark",
+            "gender": "male",
+            "age":11,
+            "biography": "Brandon Bran Stark [...] instead.",
+            "tags": ["stark","disable","crow"]}
+    }, {
+      "_index" : "game_of_thrones",
+      "_type" : "character",
+      "_id" : "Jon Snow",
+      "_score" : 0.10023197,
+      "_source":{
+            "house": "Stark",
+            "gender": "male",
+            "age":19,
+            "biography": "Jon Snow is [...] the snow.",
+            "tags": ["stark","night's watch","brother","snow"]}
+    },
+    ...
+    ]
+  }
+}
+
+{% endhighlight %}
+
+You can see that 13 documents are matching the query.
+
+If you wish to insert parameters, then the format is the following:
+
+{% highlight json %}
+{
+    "query": {
+        "match": {
+            "nameOfTheField": {
+                "query": "queryString",
+                "parameter1": "value",
+                [...]
+            }
+        }
+    }
+}
+{% endhighlight %}
+
+The syntax in nearly the same than the "without parameters" *match* query, except that `nameOfTheField` contains an object that describes both the query and its parameters. Then, the query string has to be set as the value
+of the `query` parameter, followed by the other parameters.
+
+I won't detail each parameter, because some are not relevant in this article. Furthermore, some parameters would need a bunch of explanations...
+
+Ok, let's simply begin with the `operator` parameter. What you should know is that the query string is in fact analyzed by the cluster (by default, with the same analyzer than
+the field). Once the query string analyzed (and split into *terms*), a *term* query is performed for each *term*. Then, the results are merged to create the final result.
+Default value of `operator` is `or`. Possible values are either `and` or `or`.
+
+For example, let's perform the same query, but with the `and` operator (query available in `queries/DSL/query_match_operator_and.json`):
+
+{% highlight json %}
+{
+  "query": {
+    "match": {
+      "biography": {
+        "query": "Jon Snow and Cersei Lannister",
+        "operator": "and"
+      }
+    }
+  }
+}
+{% endhighlight %}
+
+Requesting the cluster with this query would return the following result:
+
+{% highlight json %}
+{
+  [...]
+  "hits" : {
+    "total" : 1,
+    "max_score" : 0.1779576,
+    "hits" : [ {
+      "_index" : "game_of_thrones",
+      "_type" : "character",
+      "_id" : "Bran Stark",
+      "_score" : 0.1779576,
+      "_source":{
+            "house": "Stark",
+            "gender": "male",
+            "age":11,
+            "biography": "[...] Cersei and [...] Lannister [...] Jon Snow [...]",
+            "tags": ["stark","disable","crow"]}
+    } ]
+  }
+}
+
+{% endhighlight %}
+
+As you can see, the document identified as `Bran Stark` is the only one that gather the requirements. Indeed, in its `biography` field, all the required terms are present.
+
