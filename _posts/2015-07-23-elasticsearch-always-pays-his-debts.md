@@ -1351,3 +1351,63 @@ Requesting the cluster with this query would return the following result:
 
 As you can see, the document identified as `Bran Stark` is the only one that gather the requirements. Indeed, in its `biography` field, all the required terms are present.
 
+The next parameter I would like to introduce is the `fuzziness` parameter. To make it short, *fuzziness* is like "allowing you to make typo mistakes". On numeric, IP and date
+fields, fuzziness will be interpreted as a range. On string, an algorith, known as *Levenshtein Edit Distance* will be applied [https://en.wikipedia.org/wiki/Levenshtein_distance](https://en.wikipedia.org/wiki/Levenshtein_distance).
+
+The fuzziness value must be set between 0.0 and 2.0, or `AUTO`. Also, fuzziness depends on the length of the terms. The more longer the term is, the more "edits" will be allowed.
+
+Let's try the previous query (with the `operator` parameter), but with setting the `fuzziness` parameter to `2`.
+
+The format of the query (available at `queries/DSL/query_match_fuzziness.json`):
+
+{% highlight json %}
+{
+  "query": {
+    "match": {
+      "biography": {
+        "query": "Jon Snow and Cersei Lannister",
+        "operator": "and",
+        "fuzziness": 2
+      }
+    }
+  }
+}
+{% endhighlight %}
+
+The result returned by the cluster:
+
+{% highlight json %}
+{
+  [...]
+  "hits" : {
+    "total" : 8,
+    "max_score" : 0.29372954,
+    "hits" : [ {
+      "_index" : "game_of_thrones",
+      "_type" : "character",
+      "_id" : "Jaime Lannister",
+      "_score" : 0.29372954,
+      "_source":{
+            "house": "Lannister",
+            "gender": "male",
+            "age":34,
+            "biography": "Ser Jaime Lannister [...]",
+            "tags": ["lannister","king slayer","golden hand","ser","blond"]}
+    }, {
+      "_index" : "game_of_thrones",
+      "_type" : "character",
+      "_id" : "Cersei Lannister",
+      "_score" : 0.21208765,
+      "_source":{
+            "house": "Lannister",
+            "gender": "female",
+            "age":34,
+            "biography": "Cersei Lannister, [...] Gregor Clegane.",
+            "tags": ["lannister","queen","baratheon","shame"]}
+    },
+     ...]
+  }
+}
+{% endhighlight %}
+
+As you can see, from the same request, with `and` operator and `fuzziness` set to `2`, we got **8 results**.
