@@ -1411,3 +1411,8 @@ The result returned by the cluster:
 {% endhighlight %}
 
 As you can see, from the same request, with `and` operator and `fuzziness` set to `2`, we got **8 results**.
+
+##### The "common" terms query
+
+Well, here, we are entering the fabulous world of the power that can be unleashed by Elasticsearch. I haven't talked to much about how the cluster is handling queries,
+how queries are performed, internally, by Elasticsearch. Now is the time I begin to talk about this a bit.
