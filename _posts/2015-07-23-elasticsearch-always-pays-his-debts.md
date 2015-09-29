@@ -12,14 +12,13 @@ image:
   creditlink: http://reputationvip.io
 ---
 
-# TODOS
+# TODO
 
 - Complete excerpt with what's in the article exactly
 - Set the proper date (modified : xxxx)
 - Complete tags if needed
 - Build summary (with links)
 - Create the queries files
-- Charlotte review
 - :
 - Insert data into indexing json highlighter
 - Check genericity of `the request` parts : no real index name, ...
@@ -45,7 +44,7 @@ behind Elasticsearch ; we've also seen a bit about the basic architecture Elasti
 Well, I'm keeping in mind that Elasticsearch is a full-text search engine above all. In the first article, we didn't really have fun with full-text search features. In this
 article, I will talk mainly about two points:
 
-- Indexing operations : **Mappings config** and **Batch Indexing**
+- Indexing operations : **Mappings configuration** and **Batch Indexing**
 - Searching operations: **Querying** and **Filtering** the results.
 
 From now, I can tell you that we won't talk about all the query types available in Elasticsearch in this article. There is two reasons to that : the first one is that there is
@@ -60,12 +59,12 @@ speed of your queries directly depend on the structure of your index.
 
 ### What exactly are we talking about ?
 
-Here, I want to deal with two operations of the indexing : **Mapping** and **Batch Indexing**. They are not the only operations of indexing, but I won't talk about the other ones
+Here, I want to deal with two operations of the indexing : **Mapping** and **Batch Indexing**. They are not the only operations of indexing, however I won't talk about the other ones
 in this article, but in the next one.
 
 The first operation we'll talk about is : **Mapping**. **Mapping** means to describe the schema of your data. As Elasticsearch is **schemaless** (it doesn't care about the schema
 of the data you're giving to it), I think it is better to define the schema. There is many reasons why you should describe your data schema as far as practical. Schemaless has a
-lot of advantages, **on the DB layer** (easy to go with autoscaling, for example). But on the application layer, data has a schema most often.
+lot of advantages, **on the database layer** (easy to go with autoscaling, for example). But on the application layer, data has a schema most often.
 
 The second operation we'll make concerns **Batch Indexing**. Currently, we know how to index a single document into Elasticsearch. However, there is ways to index multiple documents
 at the same time, being efficient and fast.
@@ -77,13 +76,13 @@ be configured.
 
 #### Automated Index creation
 
-In the last article, I did talk a bit about **index creation**. What you may not know about Elasticsearch, is that by default, you **don't need to create index before you insert
+What you may not know about Elasticsearch, is that by default, you **don't need to create index before you insert
 documents into it**. Well, **that's not necessarily a good thing**.
 
 Let's imagine the following situation : You've got the automated index creation enabled, and you're quietly working on your application. Let's say that you store data in an index
 called *book*. As a reminder, indices names should be written in the singular form. Now, let's assume that you've made a typo in your application, writing *book* as *boook* (with
-three *o* letter). When you are running the application, you have no error. That is because **automated index creation is enabled : If Elasticsearch is not aware of the index you are
-trying to insert data into, it will create it !**. And know, you're application stored data on two different indices, causing a phase shift in your data. You may spend hours before
+three *"o"* letter). When you are running the application, you have no error. That is because **automated index creation is enabled : If Elasticsearch is not aware of the index you are
+trying to insert data into, it will create it !**. And now, your application stores data on two different indices, causing a phase shift in your data. You may spend hours before
 you find this mistake of yours, because Elasticsearch will not send your application any error !
 
 The good practice hidden behind this situation is to disable automated index creation if you don't need it.
@@ -111,7 +110,7 @@ for indices' names beginning with "game_of" (*+game_of*), and finally, the `-*` 
 Before we dive into defining our own mapping, it is important to understand **dynamic mapping**, how it works, and what we can configure.
 
 **Be careful: The parameters shown bellow can only be set when creating the index. If you want to modify the mapping of an existing index, there is some tricks
-involving aliases, but we will talk about it later.**
+involving aliases.**
 
 ##### Type detection
 
@@ -155,15 +154,15 @@ The data you need to send are the following:
 {% endhighlight %}
 
 As you can see, there is nothing special in the response. It looks like every other response from the server, when you are creating an index. So the question that might come to
-your mind is the following : How can you check that the **numeric detection** has been turned on for a given field 
+your mind is the following : How can you check that the **numeric detection** has been turned on for a given field ?
 
 Actually, it is very simple. You can request your cluster about its settings. I don't want this article to be too much, so I won't talk much about it right here. I'd rather let
 you have a look here, on the official documentation : [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/indices-get-settings.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/indices-get-settings.html).
 
 **Full example**
 
-Let's say that we want to build an index, indexing all cities and places in Westeros. By the way, Elasticsearch provides spatial search, which is an amazing feature. I hope that
-I will have time to talk about it in the articles to come. Anyway, we want to index the Westeros places. For that, let's say that our index would contain the population count
+Let's say that we want to build an index, indexing all cities and places in *Westeros*. By the way, Elasticsearch provides spatial search, which is an amazing feature. I hope that
+I will have time to talk about it in the articles to come. Anyway, we want to index the *Westeros* places. For that, let's say that our index would contain the population count
 of each cities we are indexing. The index would be `game_of_thrones_place` and the type for cities, `city`. Of course, we want to enable **numeric detection** for the `city` type.
 
 Our curl request would be :
@@ -178,7 +177,7 @@ $> curl –XPUT http://localhost:9200/game_of_thrones_place?pretty -d '{"city": 
 
 I'm gonna speed up a bit, because the principle about **date detection** is exactly the same than the numeric detection. The request you have to make is the same, only the
 value is changing. The parameter is called `dynamic_date_formats`. As you may have noticed, the name of this parameter is plural. The reason is that the value will be an array,
-containing every formats you want to recognize as a valid date format. **The format has to be specified following ISO 8601
+containing every patterns you want to recognize as a valid date format. **The format has to be specified following ISO 8601
 ([https://en.wikipedia.org/wiki/ISO_8601](https://en.wikipedia.org/wiki/ISO_8601))**
 
 Considering that, your request would looks like this:
@@ -215,7 +214,7 @@ be disabled. With **dynamic type guessing** turned on, every unknown field (fiel
 the document. This can lead to undesired behaviour of your application. Disabling **dynamic type guessing** allows you to completely control the shape of your document,
 the fields, and the format they should have.
 
-**Be careful : Disabling dynamic type guessing lead you to define your entire mapping; without defining it, unknown field will be ignored.**
+**Be careful : Disabling dynamic type guessing leads you to define your entire mapping; without defining it, unknown field will be ignored.**
 
 **The request**
 
@@ -236,7 +235,7 @@ The request will have two parts:
 }
 {% endhighlight %}
 
-As you might guess, `"dynamic": false` turns the type guessing off. On the other hand, `"properties": { ... }` contains your mapping.
+As you might guess, `"dynamic": false` turns the type guessing off. On the other hand, `"properties": { ... }` contains your mapping (we will see it later).
 
 Mapping could be either really simple, or really complex. Elasticsearch allows you to precisely define the format of each fields, and the way it will be handled
 by Apache Lucene. To read more about the available options of each field type, you can take a look here : [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/mapping-core-types.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/mapping-core-types.html).
@@ -248,7 +247,7 @@ which is complete and clear.
 
 #### Analyzers
 
-Wow, wow, wow ! It has been a long way til there. Right now will be our first talk about **full-text search**, and more precisely, **text analysis** with Elasticsearch's **Analyzers**.
+Wow, wow, wow ! It has been a long way till there. Right now will be our first talk about **full-text search**, and more precisely, **text analysis** with Elasticsearch's **Analyzers**.
 
 I hope you do remember, I talked a bit about **Tokenizers** and **Token filters** in the first article, when I gave you an overview of what is behind Elasticsearch, and how text is processed by Elasticsearch.
 
@@ -260,8 +259,8 @@ uppercasing, removing some tokens, ...
 
 Anyway, you should remember that an **analyzer** is composed of a **tokenizer** and one or more **token filters** (and some other stuff, like a **character filter**).
 
-As Elasticsearch's developers are cool guys, they already provided you some ready-to-use **analyzers**. Nowadays, there are 4 **analyzers**, but the amazing point is that, using
-**tokenizer** and **token filters**, you are able to define your own **analyzers**.
+As Elasticsearch's developers are cool guys, they already provided you some ready-to-use **analyzers**. Nowadays, there are 8 **analyzers**, but the amazing point is that, using
+**tokenizer** and **token filters**, you can to define your own **analyzers**.
 
 First, let's talk about the ready-to-use **analyzers**, how to use it, and finally, how to define your owns.
 
@@ -277,7 +276,7 @@ filter**. This filter stands to remove tokens defined as *stop words*. *Stop wor
 
 Let's practice it.
 
-In their gread goodness, Elasticsearch developers provided us a way to have a look at the token stream. That will help us to try the **analyzers** right now, and get rid of the
+In their great goodness, Elasticsearch developers provided us a way to take a look at the token stream. This will help us to try the **analyzers** right now, and get rid of the
 configuration for now.
 
 **The request**
@@ -308,7 +307,7 @@ Our cluster will send us a response of the following format:
 {% endhighlight %}
 
 What we got there is an array of objects. Each object represents a token, defined, as we talked in the first article, by its value, its **start offset** in the original string, and
-its **end offset**. Also, you can see the type of the token, and the position in the **token stream**.
+its **end offset**. Also, you can see the type of the token, and its position in the **token stream**.
 
 **Full example**
 
@@ -488,7 +487,7 @@ And now, let's see the result.
 
 Well, we got pretty lot of data here. There is several interesting points. The first one, as I told you, **lowercase token filter** has been used, and you can see that proper names,
 such as *Arya*, or *Rickon* has been divest of their uppercased first letter. Second point, parts of the original string have been removed; it is the case for parenthesis, and
-final point. If you take a look at the `type` field, you may notice something. Here, I haven't disable **dynamic type guessing**, and the only number (`15`) in the string has
+final point. If you take a look at the `type` field, you may notice something. Here, I haven't disabled **dynamic type guessing**, and the only number (`15`) in the string has
 been recognized as such (`<NUM>`).
 
 ###### Simple analyzer
@@ -503,12 +502,12 @@ I won't give you a full example here, because the query is almost the same (only
 
 The last analyzer I want to talk about is the **snowball analyzer**. This analyzer is like the ugly duckling of ready-to-use analyzers. It is using a stemming algorithm, and the token
 stream resulting is made with root words. Let's take an example. Analyzing `King's Landing` with the **snowball analyzer** will result in a stream of two tokens : `king` and
-`landing`. What we have here is a loss of data. Indeed, `landing` has been transformed into `land`, its root word. 
+`land`. What we have here is a loss of data. Indeed, `landing` has been transformed into `land`, its root word. 
 
 ##### Configuring Indices Mapping with Analyzers
 
 Right until now, we tested the analyzers directly through the cluster's API, without really storing data. The cluster was sending us the **token stream**, so that we can dive inside
-it. But of course, I think you guessed that we can configure indices to automatically apply analyzers right onto input data. For each field defined in your mapping, you will be
+it. But of course, I think you guessed that we can configure indices so that they automatically apply analyzers right onto input data. For each field defined in your mapping, you will be
 able to define an analyzer to be applied on the input data.
 
 **The request**
@@ -533,12 +532,12 @@ When defining mapping of a given type, for a given index, you can set an **analy
 
 The response will be the classical `"aknowledge": true` of the indices creation query.
 
-**Here, I won't give you full example, because we will make practical usage of tokens when we will come to full-text search.**
+**Here, I won't give you full example, because we will make practical usage of tokens when we will come to full-text search (soon, I promise)**
 
 ##### Making you own Analyzer
 
-Because Elasticsearch aims to be flexible, you can **create your own analyzers**. If you remember, what we call **analyzer** is simply a combination of a **tokenizer**, some
-**token filters** (and some other stuff, like a **character filter**). The creation of a custom analyzer step during the creation of the index. The definition of it stands
+Because Elasticsearch aims to be flexible, you can **create your own analyzers**. If you remember well, what we call **analyzer** is simply a combination of a **tokenizer**, some
+**token filters** (and some other stuff, like a **character filter**). The creation of a custom analyzer steps during the creation of the index. The definition of it stands
 in the `settings.index.analysis.analyzer` field of the query you send to the cluster to create the index.
 
 **The request**
@@ -568,13 +567,19 @@ Pay attention to the `filter` field; despite the fact that it is an array, the f
 
 **The response**
 
-As this process step in the index creation process, the response will be the classical response returned when creating an index.
+As this process step in the index creation process, the response will be the classical response returned when creating an index:
+
+{% highlight json %}
+{
+  "acknowledged" : true
+}
+{% endhighlight %}
 
 **Full example**
 
 I want to create an analyzer, which I will name as `wildfire_analyzer`. It will be composed, for the tokenizer, of the `standard` tokenizer, and for the token filter,
-of the `synonym` token filter and the `trim` token filter. Actually, I choose them randomly, so that I don't really know what could be the token stream resulting of the analysis
-of a stream by my `wildfire_analyzer`.
+of the `synonym` token filter and the `trim` token filter. Actually, I chose them randomly, so that I don't really know what could be the token stream resulting of the analysis
+of a stream by my `wildfire_analyzer`, this just stands for example.
 
 {% highlight json %}
 {
@@ -601,22 +606,26 @@ That's it! You just defined your own analyzer ! And since you also can create yo
 ##### More analyzers
 
 The handful of ready-to-use analyzers defined by Elasticsearch might not be enough. Fortunately, Elasticsearch developpers are maintaining several Github repositories, with custom
-analyzers. To use them, you just have to install them the classic way you install plugins. For examples, you can find a **phonetic analyzer**, **smart chinese analyzer**, and so on.
+analyzers. To use them, you just have to install them the classic way you install plugins. For examples, you can find a **phonetic analyzer**, a **smart chinese analyzer**, and so on.
 
-If you don't remember how to install plugins, you can have a look at the end of [the first article's introduction to plugin](http://reputationvip.io/elasticsearch-is-coming/#introduction-to-plugins).
+If you don't remember how to install plugins, you can take a look at the end of [the first article's introduction to plugin](http://reputationvip.io/elasticsearch-is-coming/#introduction-to-plugins).
 
 ### Batch Indexing
 
 Wel, I must admit that... There is still some little things that I'd like to talk about, before we dive into full-text search. In the first
 article, I talked about indexing a single document. But now, let's imagine that you have to put one million of documents into an index. At this
 point, you got two choices: The first one, you can do it all by yourself, indexing them one after another... But honestly, I don't recommend you
-to do so; the second choice, and probably the reasonable one, is to use **batch indexing*.
+to do so; the second choice, and probably the reasonable one, is to use **batch indexing**.
 
 #### Request format
 
 *Batch indexing* provides you the solution to perform creation, replacement, indexing, and deletion of many documents, all in one request. Hence, the
 request's format has been optimized to perform efficiency. And, the icing on the cake: Each request can contain multiple type of operation, among
-the ones I listed above.
+the following:
+
+- *create*: This operations stands to create a whole new document (a document that has never be indexed)
+- *index*: Adding or replacing an exiting document
+- *delete*: delete a document
 
 The principle is simple: Elasticsearch assumes that each line of your request's data is a JSON object, containing the type of query you are making
 (*index*, *create*, *delete*), and information about it, such as index's name, type's name, etc. The following line must contain the data you are
@@ -630,8 +639,8 @@ For example, the following data could be used to batch index some Game Of Throne
 {"house":"Stark","age":"17","biography":"Hello I'm Jon","tags":["jon","night's watch"]}
 {% endhighlight %}
 
-The bad news is that **there is a limitation about the size of the data you are passing through the API.** This limitation is of **100 Mb**...
-But, we are working here with Elasticsearch, and quite nothing is impossible. This means that, of course, you can configure this limitation !
+The bad news is that **there is a default limitation about the size of the data you are passing through the API.** This limitation is of **100 Mb**...
+But, we are working here with Elasticsearch, and quite nothing is impossible. It means that, of course, you can configure this limitation !
 The corresponding line in the configuration file of your node is `http.max_content_length`.
 
 #### Bulk index request
@@ -647,16 +656,35 @@ The request type is `POST`
 **The data**
 
 Something really important about this special request is: the data. As I said before, Elasticsearch is parsing the data you give using new lines
-characters. Yet, the `-d` option we were used to use with *curl* doesn't preserver new lines character. Then, you will have to use the
+characters. Yet, the `-d` option we were used to use with *curl* doesn't preserve new lines character. Then, you will have to use the
 `--data-binary` option, indicating then the path to the file which contains your data. The path must start with `@` and is relative.
 
 **The Response**
 
-The response is kind of more complex than the response we were used to. It is composed of many fields: `took`, which is the total time it took
-to Elasticsearch to run each query. The `errors` field (a boolean), indicates whether the process encountered errors; if set to `true`, it doesn't
+{% highlight json %}
+{
+  "took" : 39,
+  "errors" : false,
+  "items" : [ {
+    "create" : {
+      "_index" : "nameOfTheIndex",
+      "_type" : "nameOfTheType",
+      "_id" : "ID",
+      "status" : 200,
+      "error" : "SomeError"
+    }
+  },
+  ...
+  ]
+}
+{% endhighlight %}
+
+
+The response is more complex than the response we were used to. It is composed of many fields: `took`, which is the total time it took
+to Elasticsearch to run all queries (in milliseconds). The `errors` field (a boolean), indicates whether the process encountered errors; if set to `true`, it doesn't
 mean that the whole process failed, but that an error occurred with at least one of the queries. Finally, the `items` field is an array. It contains
 a set of objects, describing the result of each query you sent. The object contains information such as index name, type, id, version (actually, it
-should remember you the result returned for the CRUD operations). The object also contained a `status` field, filled with an HTTP code. Also, if something
+should remember you the result returned for the CRUD operations). The object also contains a `status` field, filled with an HTTP code. Also, if something
 went wrong, the object should contain an `error` field, describing the error.
 
 #### UDP Bulk Request
@@ -730,12 +758,12 @@ As you can see, I defined 5 fields for the `character` type.
 - `house` refers to the house's name of the character (for example: "Stark", "Lannister", ...). As this field can be considered as a single entity,
 I set the `index` property to `not_analyzed`. This will result as the value of this field to be considered as a single term. You can learn more about `index` property
 here [https://www.elastic.co/guide/en/elasticsearch//reference/master/mapping-index.html](https://www.elastic.co/guide/en/elasticsearch//reference/master/mapping-index.html)
-- `gender` representq the gender of the character. The value would be either "male" or "female", so that it could be considered as a single term. That's why the `index` property
+- `gender` represents the gender of the character. The value would be either "male" or "female", so that it could be considered as a single term. That's why the `index` property
 is also set to `no_analyzed`.
 - `age` stores the age of the character. Its type is `integer`.
 - `biography` is the field we will talk the most when performing full-text search. The `term_vector` property describes which data this field's term_vector contains. The value
-`with_positions_offsets` is valuable when we want to use fast vector highlighter (I will talk about this in details later in this article). Also, `index` is set to `analyzed`,
-that means this string will go through analyzers to be converted into terms; then, when searching, the query string will go through the same analyzer.
+`with_positions_offsets` is valuable when we want to use fast vector highlighter (I will talk about this in details in an other article). Also, `index` is set to `analyzed`,
+that means this string will go through analyzer (standard analyzer, as it is the default analyzer) to be converted into terms; then, when searching, the query string will go through the same analyzer.
 - `tags` is an array (arrays are Elasticsearch's datatype, and you should have a look to the difference between `Array` and `Nested` datatypes).
 
 So, let's perform this mapping:
@@ -788,7 +816,7 @@ Well, let's say that I want to retrieve each `character` that field `house` is s
 $>curl –XGET 'http://localhost:9200/game_of_thrones/character/_search?q=house:Stark&pretty'
 {% endhighlight %}
 
-That's it ! You will get each document that match `house:Stark` (and some more informations, I will detail it right after).
+That's it ! You will get each document that matches `house:Stark` (and some more informations, I will detail it right after).
 
 ##### The DSL Query
 
@@ -801,12 +829,12 @@ The request type is `GET`.
 
 <div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">/index/type</span><span style="color: chartreuse">/_search</span></code></pre></div>
 
-As you might guess, we will use either `-d` option of curl, providing then our JSON query, or the `--data-binary` query, by indicating then the path
+As you might guess, we will use either `-d` option of curl, providing then our JSON query, or the `--data-binary` query, by indicating it the path
 to the file that contains the JSON query.
 
 **The response**
 
-The response depends on your DSL query, and is composed of a document. Along this article, I will detail separately each response. 
+The response depends on your DSL query, and is composed of a document. All Along this article, I will detail separately each response. 
 
 **Full example**
 
@@ -875,16 +903,16 @@ Let's take a closer look at the response, which should looks like the following 
 
 This JSON document, more than just giving your the results, also provides some data about the way the query has been handled. The `took` field
 tells you how long (in milliseconds) the request took to be executed. `_shards` gives you information about the shards involved in the processing
-of the query. Finally, `hists` provides information about the results: `total` is the total number of documents that matches the query, `max_score`
+of the query. Finally, `hits` provides information about the results: `total` is the total number of documents that matches the query, `max_score`
 is the maximum relevance score found among the matching documents, and finally, `hits` is an array that contains JSON objects. Inside these objects,
 your document can be found in the `_source` field.
 
 #### Choosing the fields to be returned
 
 Well, sometimes, documents can be heavy. That's why it could be interesting, when querying, to only return some specifics fields. That can
-be done by precising the `fields` field in your DSL query. The `fields` field is an array, containing the name of the fields you want to be returned.
+be done by setting the `fields` field in your DSL query. The `fields` field is an array, containing the name of the fields you want to be returned.
 
-For example, let's say that we wand only the name and the age of the Game Of Thrones' character that match the house "Targaryen" to be returned (for reminder, the
+For example, let's say that we only want the name and the age of the Game Of Thrones' character that match the house "Targaryen" to be returned (for reminder, the
 name is also our document's id, so it is stored into the `id` field).
 
 **The DSL Query:**
@@ -948,12 +976,12 @@ on search request (we will need that right after), the need is just to put this 
 Fortunately, if you are using the pre-configured docker-based Elasticsearch cluster I provided you in the Github repository, this configuration
 is already set.
 
-So, for example, let's say that we want to know how old the character of the "Stark" house will be in 23 years. What we need to do, is to create
+So, for example, let's say that we want to know how old the character of the "Stark" house will be in 16 years. What we need to do, is to create
 a script-evaluated field, named `future_age`, calculated from the `age` field. All we have to do, is to add `16` to the `age` field.
 
 With scripting, there is two ways to select a field from an existing document.
 
-- Using `doc['name_of_the_field'].value`, is faster but has a higher memory usage, and is limiter to fields that have a single value, and single terms.
+- Using `doc['name_of_the_field'].value`, is faster but has a higher memory usage, and is limited to fields that have a single value, and single terms.
 For us, that would mean that we cannot use the `doc` notation on fields such as `tags` (it is an array), or `biography` (it is not single term field).
 - Using `_source.name_of_the_field` notation, that allows more complicated fields to be used, and has a lower memory usage (but is slower).
 
@@ -1044,7 +1072,7 @@ using the `fields` parameter in the DSL query, the same way we did above.
 
 #### The basic queries
 
-I want to introduce to you some of the basic queries, available on Elasticsearch. There is a bunch of query types that can be performed. The ones we are going to review
+I want to introduce you some of the basic queries, available on Elasticsearch. There is a bunch of query types that can be performed. The ones we are going to review
 right now are the simplest ones. In the next article, I will talk about more complicated queries (such as compound queries, geo-localisation, ...).
 
 But let's focus on the full-text basic queries for now.
@@ -1069,7 +1097,7 @@ query is quite simple:
 }
 {% endhighlight %}
 
-`nameOfTheField` should be replaced with the field's name that contain the term you are looking for, and `valueToBeSearched` represents this value.
+`nameOfTheField` should be replaced with the field's name that contain the term you are looking for, and `valueToBeSearched` represents its value.
 
 For example, if we want to retrieve all characters that belongs to the `Targaryen` house. `house` field would then be set to `Targaryen`. Please note that, once again, only
 the **exact** term will be searched. Therefore, terms such à `targaryen` (whithout first capital letter), or `TaRgArYEN` won't not match anything.
@@ -1205,8 +1233,8 @@ As you can see, two characters has been returned: Jon Snow and Ramsay Bolton.
 
 ##### The Match query
 
-I talked about *Term* and *Terms* queries, that are working with non-analyzed terms. In other words, you have to give Elasticsearch the *exact* term you are looking for, because
-the cluster is not going to analyze it. For example, a *term* query on `Jon Snow and Cersei Lannister` on the `biography` field won't giv us any result, because the term is considered to be
+I talked about *Term* and *Terms* queries, that are working with non-analyzed terms. In other words, you have to give Elasticsearch the *exact* term(s) you are looking for, because
+the cluster is not going to analyze it. For example, a *term* query on `Jon Snow and Cersei Lannister` on the `biography` field won't give us any result, because the term is considered to be
 the full sentence: `Jon Snow and Cersei Lannister`.
 
 Well now, if we want to search for `Jon`, `Snow`, `and`, `Cersei`, `Lannister`, *term* query won't be enough. Though we can proceed this query with *terms* query, it is not
@@ -1352,7 +1380,7 @@ Requesting the cluster with this query would return the following result:
 As you can see, the document identified as `Bran Stark` is the only one that gather the requirements. Indeed, in its `biography` field, all the required terms are present.
 
 The next parameter I would like to introduce is the `fuzziness` parameter. To make it short, *fuzziness* is like "allowing you to make typo mistakes". On numeric, IP and date
-fields, fuzziness will be interpreted as a range. On string, an algorith, known as *Levenshtein Edit Distance* will be applied [https://en.wikipedia.org/wiki/Levenshtein_distance](https://en.wikipedia.org/wiki/Levenshtein_distance).
+fields, fuzziness will be interpreted as a range. On string, an algorith, known as *Levenshtein Edit Distance* will be applied. [https://en.wikipedia.org/wiki/Levenshtein_distance](https://en.wikipedia.org/wiki/Levenshtein_distance).
 
 The fuzziness value must be set between 0.0 and 2.0, or `AUTO`. Also, fuzziness depends on the length of the terms. The more longer the term is, the more "edits" will be allowed.
 
