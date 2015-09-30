@@ -16,8 +16,6 @@ image:
 
 - Set the proper date (modified: xxxx)
 - Create the queries files
--:
-- Insert data into indexing json highlighter
 
 # ELASTICSEARCH ALWAYS PAYS HIS DEBTS
 
