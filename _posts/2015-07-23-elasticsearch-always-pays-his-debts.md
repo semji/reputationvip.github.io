@@ -17,12 +17,12 @@ image:
 - Set the proper date (modified: xxxx)
 # ELASTICSEARCH ALWAYS PAYS HIS DEBTS
 
-Welcome back ! First of all, if you're new to Elasticsearch and/or you don't feel comfortable with the basics of Elasticsearch,
+Welcome back! First of all, if you're new to Elasticsearch and/or you don't feel comfortable with the basics of Elasticsearch,
 I advise you to read our first article about Elasticsearch. You can find it here: [http://reputationvip.io/elasticsearch-is-coming](http://reputationvip.io/elasticsearch-is-coming).
 
 From the title, you may have guessed that this set of article if following a guideline: Game Of Thrones. In this article, there is no spoilers about the TV show nor the books.
 
-**Well, let's go !**
+**Well, let's go!**
 
 ## ROADMAP
 
@@ -51,7 +51,7 @@ plenty of query types, and the second one is that most of them are not everyday-
 Before we have fun with the full-text search, I want to tell you more about **indexing**. Indeed, this operation is quite important in Elasticsearch, because the quality and the
 speed of your queries directly depend on the structure of your index.
 
-### What exactly are we talking about ?
+### What exactly are we talking about?
 
 Here, I want to deal with two operations of the indexing: **Mapping** and **Batch Indexing**. They are not the only operations of indexing, however I won't talk about the other ones
 in this article, but in the next one.
@@ -76,8 +76,8 @@ documents into it**. Well, **that's not necessarily a good thing**.
 Let's imagine the following situation: You've got the automated index creation enabled, and you're quietly working on your application. Let's say that you store data in an index
 called *book*. As a reminder, indices names should be written in the singular form. Now, let's assume that you've made a typo in your application, writing *book* as *boook* (with
 three *"o"* letter). When you are running the application, you have no error. That is because **automated index creation is enabled: If Elasticsearch is not aware of the index you are
-trying to insert data into, it will create it !**. And now, your application stores data on two different indices, causing a phase shift in your data. You may spend hours before
-you find this mistake of yours, because Elasticsearch will not send your application any error !
+trying to insert data into, it will create it!**. And now, your application stores data on two different indices, causing a phase shift in your data. You may spend hours before
+you find this mistake of yours, because Elasticsearch will not send your application any error!
 
 The good practice hidden behind this situation is to disable automated index creation if you don't need it.
 
@@ -111,7 +111,7 @@ involving aliases.**
 When you're inserting data into Elasticsearch, they are formatted with JSON structure. Elasticsearch is able to automatically guess the type of each fields: numbers, string,
 booleans. Indeed, numbers are defined with digits, strings are surrounded by quotes, and boolean are specific words. This behavior is called **type detection**.
 
-But, what if we want this behavior to be a little different ? Several options are set by Elasticsearch to customize the type detection.  For example,
+But, what if we want this behavior to be a little different? Several options are set by Elasticsearch to customize the type detection.  For example,
 we could like digits between quotes to be recognized as numbers (the default behavior is to identify them as strings).
 
 These parameters are specific to each index. It means that the parameters have to be set through the Elasticsearch cluster's API.
@@ -148,7 +148,7 @@ The data you need to send are the following:
 {% endhighlight %}
 
 As you can see, there is nothing special in the response. It looks like every other response from the server, when you are creating an index. So the question that might come to
-your mind is the following: How can you check that the **numeric detection** has been turned on for a given field ?
+your mind is the following: How can you check that the **numeric detection** has been turned on for a given field?
 
 Actually, it is very simple. You can request your cluster about its settings. I don't want this article to be too much, so I won't talk much about it right here. I'd rather let
 you have a look here, on the official documentation: [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/indices-get-settings.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/indices-get-settings.html).
@@ -241,7 +241,7 @@ which is complete and clear.
 
 #### Analyzers
 
-Wow, wow, wow ! It has been a long way till there. Right now will be our first talk about **full-text search**, and more precisely, **text analysis** with Elasticsearch's **Analyzers**.
+Wow, wow, wow! It has been a long way till there. Right now will be our first talk about **full-text search**, and more precisely, **text analysis** with Elasticsearch's **Analyzers**.
 
 I hope you do remember, I talked a bit about **Tokenizers** and **Token filters** in the first article, when I gave you an overview of what is behind Elasticsearch, and how text is processed by Elasticsearch.
 
@@ -305,7 +305,7 @@ its **end offset**. Also, you can see the type of the token, and its position in
 
 **Full example**
 
-Ok. Remember Jon Snow ? We created his biography in the first article. Let's take the sentence I used to describe him:
+Ok. Remember Jon Snow? We created his biography in the first article. Let's take the sentence I used to describe him:
 
 > Jon Snow (15) is the bastard son of Eddard Stark, the lord of Winterfell. He is the half-brother of Arya, Sansa, Bran, Rickon and Robb.
 
@@ -595,7 +595,7 @@ of a stream by my `wildfire_analyzer`, this just stands for example.
 }
 {% endhighlight %}
 
-That's it! You just defined your own analyzer ! And since you also can create your own filters, you really are able to handle data the way you want.
+That's it! You just defined your own analyzer! And since you also can create your own filters, you really are able to handle data the way you want.
 
 ##### More analyzers
 
@@ -634,7 +634,7 @@ For example, the following data could be used to batch index some Game Of Throne
 {% endhighlight %}
 
 The bad news is that **there is a default limitation about the size of the data you are passing through the API.** This limitation is of **100 Mb**...
-But, we are working here with Elasticsearch, and quite nothing is impossible. It means that, of course, you can configure this limitation !
+But, we are working here with Elasticsearch, and quite nothing is impossible. It means that, of course, you can configure this limitation!
 The corresponding line in the configuration file of your node is `http.max_content_length`.
 
 #### Bulk index request
@@ -691,7 +691,7 @@ efficient way to make bulk queries, then the **UDP** bulk operations are here fo
 It is the brother of **TCP**. So yes, **UDP** is faster. BUT. Yes, there is a but. You can't have your cake and eat it. **UDP** is faster because
 it does not guarantee that some data wont be lost during the process. You should use it **only if performances are more important than data accuracy**.
 
-**I want to use it !**
+**I want to use it!**
 
 Well, well, you got me, I'll show you how to use it.
 
@@ -713,7 +713,7 @@ $> cat queries.json | nc -u localhost 9700
 
 ### Searching
 
-WOOOOOW ! Can you believe it ?! We are finally there, talking about the most important and valuable feature of Elasticsearch: **The full-text search** !!
+WOOOOOW! Can you believe it?! We are finally there, talking about the most important and valuable feature of Elasticsearch: **The full-text search**!!
 
 But first, I need to be honest with you. There is still plenty of things that need to be said about other features of Elasticsearch. I am thinking about routing, Segment merging,
 and so on. Nevertheless, I don't want this article to be boring, so I decided to talk about full-text search now, since routing & cie are not essentials to practice full-text search.
@@ -809,7 +809,7 @@ Well, let's say that I want to retrieve each `character` that field `house` is s
 $>curl –XGET 'http://localhost:9200/game_of_thrones/character/_search?q=house:Stark&pretty'
 {% endhighlight %}
 
-That's it ! You will get each document that matches `house:Stark` (and some more informations, I will detail it right after).
+That's it! You will get each document that matches `house:Stark` (and some more informations, I will detail it right after).
 
 ##### The DSL Query
 
@@ -1433,7 +1433,7 @@ The result returned by the cluster:
 
 As you can see, from the same request, with `and` operator and `fuzziness` set to `2`, we got **8 results**.
 
-## What's coming next ?
+## What's coming next?
 
 With this article, I just started to scratch the surface of Elasticsearch's possibilities concerning full-text search.
 
