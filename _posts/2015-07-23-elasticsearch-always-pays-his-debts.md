@@ -14,15 +14,10 @@ image:
 
 # TODO
 
-- Complete excerpt with what's in the article exactly
 - Set the proper date (modified : xxxx)
-- Complete tags if needed
-- Build summary (with links)
 - Create the queries files
 - :
 - Insert data into indexing json highlighter
-- Check genericity of `the request` parts : no real index name, ...
-- Check //TODO
 - Check mapping in Search > mapping corresponds to the Github repo's mapping.
 - Check that all "-X...." are set
 
@@ -144,7 +139,7 @@ The data you need to send are the following:
 
 {% highlight json %}
 {
-    "name_of_the_type": {
+    "nameOfTheType": {
         "numeric_detection": true
     }
 }
@@ -230,7 +225,7 @@ The request will have two parts:
 
 {% highlight json %}
 {
-    "name_of_the_type": {
+    "nameOfTheType": {
         "dynamic": false,
         "properties": {
             ...
@@ -521,11 +516,11 @@ When defining mapping of a given type, for a given index, you can set an **analy
 
 {% highlight json %}
 {
-    "name_of_the_type": {
+    "nameOfTheType": {
         "properties": {
-            "field_name": {
+            "nameOfTheField": {
                 ...,
-                "analyzer": "name_of_the_analyzer",
+                "analyzer": "nameOfTheAnalyzer",
                 ...,
             }
         }
@@ -553,8 +548,8 @@ in the `settings.index.analysis.analyzer` field of the query you send to the clu
         "index": {
             "analysis": {
                 "analyzer": {
-                    "name_of_your_analyzer": {
-                        "tokenizer": "tokenizer",
+                    "nameOfYourAnalyzer": {
+                        "tokenizer": "nameOfTheTokenizer",
                         "filter": [
                             "filter1",
                             "filter2",
