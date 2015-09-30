@@ -4,7 +4,7 @@ author: quentin_fayet
 title: "Elasticsearch Always Pays His Debts"
 excerpt: "This second article about Elasticsearch goes through mapping and the basic of full-text search"
 modified: 2015-07-23
-tags: [elasticsearch, fullt-text research, apache, lucene]
+tags: [elasticsearch, fullt-text research, apache, lucene, mapping]
 comments: true
 image:
   feature: elastic-is-coming-ban.jpg
