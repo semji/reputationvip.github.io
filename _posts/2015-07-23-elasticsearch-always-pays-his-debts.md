@@ -15,8 +15,6 @@ image:
 # TODO
 
 - Set the proper date (modified: xxxx)
-- Create the queries files
-
 # ELASTICSEARCH ALWAYS PAYS HIS DEBTS
 
 Welcome back ! First of all, if you're new to Elasticsearch and/or you don't feel comfortable with the basics of Elasticsearch,
@@ -917,7 +915,7 @@ name is also our document's id, so it is stored into the `id` field).
   "fields": ["id", "age"],
   "query": {
     "query_string": {
-      "query": "house:Stark"
+      "query": "house:Targaryen"
     }
   }
 }
