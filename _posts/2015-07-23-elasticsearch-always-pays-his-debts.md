@@ -18,7 +18,6 @@ image:
 - Create the queries files
 - :
 - Insert data into indexing json highlighter
-- Check mapping in Search > mapping corresponds to the Github repo's mapping.
 
 # ELASTICSEARCH ALWAYS PAYS HIS DEBTS
 
