@@ -977,6 +977,10 @@ name is also our document's id, so it is stored into the `id` field).
 
 This DSL query is available in the `queries/DSL/query_string_fields.json` file.
 
+{% highlight sh %}
+$>curl –XGET 'http://localhost:9200/game_of_thrones/character/_search?pretty' --data-binary @query_string_fields.json
+{% endhighlight %}
+
 After executing the query as we did above, we obtained the following JSON response:
 
 {% highlight json %}
