@@ -619,17 +619,17 @@ to do so; the second choice, and probably the reasonable one, is to use **batch 
 
 #### Request format
 
-*Batch indexing* provides you the solution to perform creation, replacement, indexing, and deletion of many documents, all in one request. Hence, the
+*Batch indexing* provides you the solution to **perform creation, replacement, indexing, and deletion of many documents, all in one request**. Hence, the
 request's format has been optimized to perform efficiency. And, the icing on the cake: Each request can contain multiple type of operation, among
 the following:
 
-- *create*: This operations stands to create a whole new document (a document that has never be indexed)
+- *create*: This operations stands to create a whole new document (**a document that has never be indexed**)
 - *index*: Adding or replacing an exiting document
 - *delete*: delete a document
 
-The principle is simple: Elasticsearch assumes that each line of your request's data is a JSON object, containing the type of query you are making
-(*index*, *create*, *delete*), and information about it, such as index's name, type's name, etc. The following line must contain the data you are
-indexing or creating. In the case of a *delete*, no data are required (and thus, Elasticsearch assumes that for *delete*, the following line is
+The principle is simple: Elasticsearch assumes that **each line of your request's data is a JSON object**, containing the type of query you are making
+(*index*, *create*, *delete*), and information about it, such as index's name, type's name, etc. **The following line must contain the data you are
+indexing or creating.** In the case of a *delete*, no data are required (and thus, Elasticsearch assumes that for *delete*, the following line is
 a new set of instructions).
 
 For example, the following data could be used to batch index some Game Of Thrones' characters:
@@ -656,7 +656,7 @@ The request type is `POST`
 **The data**
 
 Something really important about this special request is: the data. As I said before, Elasticsearch is parsing the data you give using new lines
-characters. Yet, the `-d` option we were used to use with *curl* doesn't preserve new lines character. Then, you will have to use the
+characters. Yet, the `-d` option we were used to use with *curl* **doesn't preserve new lines character**. Then, you will have to use the
 `--data-binary` option, indicating then the path to the file which contains your data. The path must start with `@` and is relative.
 
 **The Response**
@@ -680,9 +680,9 @@ characters. Yet, the `-d` option we were used to use with *curl* doesn't preserv
 {% endhighlight %}
 
 
-The response is more complex than the response we were used to. It is composed of many fields: `took`, which is the total time it took
-to Elasticsearch to run all queries (in milliseconds). The `errors` field (a boolean), indicates whether the process encountered errors; if set to `true`, it doesn't
-mean that the whole process failed, but that an error occurred with at least one of the queries. Finally, the `items` field is an array. It contains
+The response is more complex than the response we were used to. It is composed of many fields: `took`, which is the **total time it took
+to Elasticsearch to run all queries** (in milliseconds). The `errors` field (a boolean), indicates whether the process encountered errors; if set to `true`, it **doesn't
+mean that the whole process failed**, but that an error occurred with **at least one of the queries**. Finally, the `items` field is an array. It contains
 a set of objects, describing the result of each query you sent. The object contains information such as index name, type, id, version (actually, it
 should remember you the result returned for the CRUD operations). The object also contains a `status` field, filled with an HTTP code. Also, if something
 went wrong, the object should contain an `error` field, describing the error.
@@ -725,13 +725,13 @@ But first, I need to be honest with you. There is still plenty of things that ne
 and so on. Nevertheless, I don't want this article to be boring, so I decided to talk about full-text search now, since routing & cie are not essentials to practice full-text search.
 
 Before we start making full-text search queries, we should have something on what to search... Which is actually not the case. As my objective right now is not to introduce you
-to high-performances full-text search, we won't need a big as hell database. In my infinite kindness, I provided you a JSON document you can find in the `dataset` folder of the
-Github repositories that comes with this article. Okey, you won, I give you the address: [https://github.com/quentinfayet/elasticsearch/tree/v2.0](https://github.com/quentinfayet/elasticsearch/tree/v2.0). This document, named as `game_of_thrones_dataset.json` contains a hand-made
+to high-performances full-text search, we won't need a big as hell database. In my infinite kindness, **I provided you a JSON document you can find in the `dataset` folder of the
+Github repositories that comes with this article**. Okey, you won, I give you the address: [https://github.com/quentinfayet/elasticsearch/tree/v2.0](https://github.com/quentinfayet/elasticsearch/tree/v2.0). This document, named as `game_of_thrones_dataset.json` contains a hand-made
 (yes, I said hand-made) dataset of Game of Thrones characters, along with their biographies.
 
 #### The mapping
 
-Before bulk indexing data, we need to configure the index's mapping. I provided you a turnkey mapping, that can be found into the `queries/mapping/mapping.json` file of the Github
+Before bulk indexing data, **we need to configure the index's mapping**. I provided you a turnkey mapping, that can be found into the `queries/mapping/mapping.json` file of the Github
 repository. First of all, let's take a look at this mapping.
 
 {% highlight json %}
@@ -754,16 +754,16 @@ repository. First of all, let's take a look at this mapping.
 
 As you can see, I defined 5 fields for the `character` type.
 
-- `id` (the document's ID) is simply a string.
-- `house` refers to the house's name of the character (for example: "Stark", "Lannister", ...). As this field can be considered as a single entity,
-I set the `index` property to `not_analyzed`. This will result as the value of this field to be considered as a single term. You can learn more about `index` property
+- `id` (the document's ID) is simply **a string**.
+- `house` refers to the house's name of the character (for example: "Stark", "Lannister", ...). As **this field can be considered as a single entity**,
+I set the `index` property to `not_analyzed`. This will result as **the value of this field to be considered as a single term**. You can learn more about `index` property
 here [https://www.elastic.co/guide/en/elasticsearch//reference/master/mapping-index.html](https://www.elastic.co/guide/en/elasticsearch//reference/master/mapping-index.html)
-- `gender` represents the gender of the character. The value would be either "male" or "female", so that it could be considered as a single term. That's why the `index` property
+- `gender` represents the gender of the character. The value would be either "male" or "female", so that it could be **considered as a single term**. That's why the `index` property
 is also set to `no_analyzed`.
 - `age` stores the age of the character. Its type is `integer`.
-- `biography` is the field we will talk the most when performing full-text search. The `term_vector` property describes which data this field's term_vector contains. The value
+- `biography` is the field we will talk the most when performing full-text search. The `term_vector` property describes **which data this field's term_vector contains**. The value
 `with_positions_offsets` is valuable when we want to use fast vector highlighter (I will talk about this in details in an other article). Also, `index` is set to `analyzed`,
-that means this string will go through analyzer (standard analyzer, as it is the default analyzer) to be converted into terms; then, when searching, the query string will go through the same analyzer.
+that means **this string will go through analyzer** (standard analyzer, as it is the default analyzer) to be converted into terms; then, **when searching, the query string will go through the same analyzer.**
 - `tags` is an array (arrays are Elasticsearch's datatype, and you should have a look to the difference between `Array` and `Nested` datatypes).
 
 So, let's perform this mapping:
@@ -793,7 +793,7 @@ Elasticsearch API provides us two way of performing the basic queries.
 
 ##### The inline query
 
-The first way, I named it as "inline query", is a way to pass the query through the get parameters, directly into the URL.
+The first way, is the **inline query**, is a way to pass the query through the get parameters, **directly into the URL.**
 
 **The request**
 
@@ -805,7 +805,6 @@ The action, `_search` indicates to Elasticsearch that we are willing to perform 
 
 **The response**
 
-//TODO vérifier si la requête renvoi bien TOUT le document, s'il y a un moyen de trier, ...
 The response from the server will contains each **whole document** that matches your query.
 
 **Full example**
@@ -820,7 +819,7 @@ That's it ! You will get each document that matches `house:Stark` (and some more
 
 ##### The DSL Query
 
-The DSL (for *Domain Specific Language*) query is a way to perform queries on the Elasticsearch cluster, by using a JSON structured document that
+The **DSL (for *Domain Specific Language*) query** is a way to perform queries on the Elasticsearch cluster, by using a **JSON structured document** that
 describes your query.
 
 **The request**
@@ -902,15 +901,15 @@ Let's take a closer look at the response, which should looks like the following 
 {% endhighlight %}
 
 This JSON document, more than just giving your the results, also provides some data about the way the query has been handled. The `took` field
-tells you how long (in milliseconds) the request took to be executed. `_shards` gives you information about the shards involved in the processing
-of the query. Finally, `hits` provides information about the results: `total` is the total number of documents that matches the query, `max_score`
-is the maximum relevance score found among the matching documents, and finally, `hits` is an array that contains JSON objects. Inside these objects,
+tells you **how long (in milliseconds) the request took to be executed.** `_shards` gives you **information about the shards involved in the processing
+of the query.** Finally, `hits` provides information about the results: `total` is the **total number of documents that matches the query**, `max_score`
+is the **maximum relevance score found among the matching documents**, and finally, `hits` is an array that **contains JSON objects**. Inside these objects,
 your document can be found in the `_source` field.
 
 #### Choosing the fields to be returned
 
-Well, sometimes, documents can be heavy. That's why it could be interesting, when querying, to only return some specifics fields. That can
-be done by setting the `fields` field in your DSL query. The `fields` field is an array, containing the name of the fields you want to be returned.
+Well, sometimes, documents can be heavy. That's why it could be interesting, when querying, to **only return some specifics fields**. That can
+be done by setting the `fields` field in your DSL query. The `fields` field is an array, **containing the name of the fields you want to be returned.**
 
 For example, let's say that we only want the name and the age of the Game Of Thrones' character that match the house "Targaryen" to be returned (for reminder, the
 name is also our document's id, so it is stored into the `id` field).
@@ -957,33 +956,33 @@ After executing the query as we did above, we obtained the following JSON respon
 }
 {% endhighlight %}
 
-Here, you can see a little difference between this document and the previous response. Indeed, `_source` field has been replaced by `fields` field,
+Here, you can see a little difference between this document and the previous response. Indeed, `_source` **field has been replaced by** `fields` field,
 containing the fields your required. Also, you can see that `_id` field is separated from other fields, and is not contained into `fields` field.
 
 Note that if you give an empty array to the `fields` field, all fields will be returned (an other way would be to give `*` value to `fields` field).
 
 #### Scripting
 
-Yes, Elasticsearch allows you to do scripting! I told you, what an amazing tool! Actually, we are talking here about fields that value is
-calculated by the cluster.
+Yes, Elasticsearch **allows you to do scripting!** I told you, what an amazing tool! Actually, we are talking here about **fields that value is
+calculated by the cluster.**
 
-The first thing to do, is to turn scripting on. Indeed, by default, this module is disabled, because it may cause security issues on not well configured
-clusters. Scripting requires to be turned on specifically for each type of request (search, aggregate, ...). For example, to turn on inline scripting
+The first thing to do, is to **turn scripting on.** Indeed, **by default, this module is disabled, because it may cause security issues on not well configured
+clusters.** Scripting requires to be turned on specifically for **each type of request** (search, aggregate, ...). For example, to turn on inline scripting
 on search request (we will need that right after), the need is just to put this line in your `elasticsearch.yml` file:
 
 `script.engine.groovy.inline.search: on`
 
-Fortunately, if you are using the pre-configured docker-based Elasticsearch cluster I provided you in the Github repository, this configuration
-is already set.
+Fortunately, **if you are using the pre-configured docker-based Elasticsearch cluster I provided you in the Github repository, this configuration
+is already set.**
 
 So, for example, let's say that we want to know how old the character of the "Stark" house will be in 16 years. What we need to do, is to create
 a script-evaluated field, named `future_age`, calculated from the `age` field. All we have to do, is to add `16` to the `age` field.
 
 With scripting, there is two ways to select a field from an existing document.
 
-- Using `doc['name_of_the_field'].value`, is faster but has a higher memory usage, and is limited to fields that have a single value, and single terms.
+- Using `doc['name_of_the_field'].value`, is **faster but has a higher memory usage**, and is **limited to fields that have a single value**, and **single terms.**
 For us, that would mean that we cannot use the `doc` notation on fields such as `tags` (it is an array), or `biography` (it is not single term field).
-- Using `_source.name_of_the_field` notation, that allows more complicated fields to be used, and has a lower memory usage (but is slower).
+- Using `_source.name_of_the_field` notation, that allows **more complicated fields to be used, and has a lower memory usage (but is slower).**
 
 I will show you the two ways to retrieve the `future_age`:
 
@@ -1072,15 +1071,15 @@ using the `fields` parameter in the DSL query, the same way we did above.
 
 #### The basic queries
 
-I want to introduce you some of the basic queries, available on Elasticsearch. There is a bunch of query types that can be performed. The ones we are going to review
+I want to introduce you some of the **basic queries**, available on Elasticsearch. There is a bunch of query types that can be performed. The ones we are going to review
 right now are the simplest ones. In the next article, I will talk about more complicated queries (such as compound queries, geo-localisation, ...).
 
 But let's focus on the full-text basic queries for now.
 
 ##### The Term and Terms queries
 
-The two first queries I want to talk about are the *Term* and *Terms* queries. The first one, the *Term* query is simply searching for a single term on the cluster, for a
-specific field. The second one, the *Terms* query - as you might have guessed - stands to search for one or several terms, for a specific field.
+The two first queries I want to talk about are the *Term* and *Terms* queries. The first one, the *Term* query is **simply searching for a single term on the cluster, for a
+specific field.** The second one, the *Terms* query - as you might have guessed - stands to **search for one or several terms, for a specific field.**
 
 **The Term query**
 
@@ -1150,9 +1149,9 @@ As you can see, only one document matches the query, with the id `Daenerys Targa
 
 **The terms query**
 
-This query allows to search documents that match several terms in their content. The query will then be an array of all different searched terms, and in addition to that,
-a `minimum_match` parameter can be set, indicating how many terms have to match in the document for it to be considered as matching the query. Careful though, as the
-*Term* query, the term is not analyzed, and has to be *exactly* the one you are searching.
+This query allows to search documents that **match several terms in their content.** The query will then be an array of all different searched terms, and in addition to that,
+a `minimum_match` parameter can be set, indicating **how many terms have to match in the document for it to be considered as matching the query.** Careful though, as the
+*Term* query, the term **is not analyzed**, and has to be *exactly* the one you are searching.
 
 The query is the following:
 
@@ -1238,7 +1237,7 @@ the cluster is not going to analyze it. For example, a *term* query on `Jon Snow
 the full sentence: `Jon Snow and Cersei Lannister`.
 
 Well now, if we want to search for `Jon`, `Snow`, `and`, `Cersei`, `Lannister`, *term* query won't be enough. Though we can proceed this query with *terms* query, it is not
-convenient. Moreover, *match* query allows us to use some more parameters, as we will see. Also, the query string will be **analyzed**.
+convenient. Moreover, *match* query allows us to use some more parameters, as we will see. Also, **the query string will be analyzed.**
 
 The global format for this query is the following:
 
@@ -1328,13 +1327,13 @@ If you wish to insert parameters, then the format is the following:
 }
 {% endhighlight %}
 
-The syntax in nearly the same than the "without parameters" *match* query, except that `nameOfTheField` contains an object that describes both the query and its parameters. Then, the query string has to be set as the value
+The syntax in nearly the same than the "without parameters" *match* query, except that `nameOfTheField` contains an **object that describes both the query and its parameters.** Then, the query string has to be set as the value
 of the `query` parameter, followed by the other parameters.
 
 I won't detail each parameter, because some are not relevant in this article. Furthermore, some parameters would need a bunch of explanations...
 
-Ok, let's simply begin with the `operator` parameter. What you should know is that the query string is in fact analyzed by the cluster (by default, with the same analyzer than
-the field). Once the query string analyzed (and split into *terms*), a *term* query is performed for each *term*. Then, the results are merged to create the final result.
+Ok, let's simply begin with the `operator` parameter. What you should know is that the query string is in fact **analyzed by the cluster** (by default, with the same analyzer than
+the field). Once the query string analyzed (and split into *terms*), a *term* query is performed for each *term*. Then, the **results are merged to create the final result.**
 Default value of `operator` is `or`. Possible values are either `and` or `or`.
 
 For example, let's perform the same query, but with the `and` operator (query available in `queries/DSL/query_match_operator_and.json`):
@@ -1379,8 +1378,8 @@ Requesting the cluster with this query would return the following result:
 
 As you can see, the document identified as `Bran Stark` is the only one that gather the requirements. Indeed, in its `biography` field, all the required terms are present.
 
-The next parameter I would like to introduce is the `fuzziness` parameter. To make it short, *fuzziness* is like "allowing you to make typo mistakes". On numeric, IP and date
-fields, fuzziness will be interpreted as a range. On string, an algorith, known as *Levenshtein Edit Distance* will be applied. [https://en.wikipedia.org/wiki/Levenshtein_distance](https://en.wikipedia.org/wiki/Levenshtein_distance).
+The next parameter I would like to introduce is the `fuzziness` parameter. To make it short, *fuzziness* is like **"allowing you to make typo mistakes"**. On numeric, IP and date
+fields, fuzziness **will be interpreted as a range.** On string, an algorithm, known as *Levenshtein Edit Distance* will be applied. [https://en.wikipedia.org/wiki/Levenshtein_distance](https://en.wikipedia.org/wiki/Levenshtein_distance).
 
 The fuzziness value must be set between 0.0 and 2.0, or `AUTO`. Also, fuzziness depends on the length of the terms. The more longer the term is, the more "edits" will be allowed.
 
@@ -1440,7 +1439,3 @@ The result returned by the cluster:
 
 As you can see, from the same request, with `and` operator and `fuzziness` set to `2`, we got **8 results**.
 
-##### The "common" terms query
-
-Well, here, we are entering the fabulous world of the power that can be unleashed by Elasticsearch. I haven't talked to much about how the cluster is handling queries,
-how queries are performed, internally, by Elasticsearch. Now is the time I begin to talk about this a bit.
