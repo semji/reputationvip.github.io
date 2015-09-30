@@ -50,9 +50,14 @@ article, I will talk mainly about two points:
 From now, I can tell you that we won't talk about all the query types available in Elasticsearch in this article. There is two reasons to that : the first one is that there is
 plenty of query types, and the second one is that most of them are not everyday-use
 
+1. [Indexing is back!](/elasticsearch-always-pays-his-debts/#indexing-is-back)
+2. [Mapping](/elasticsearch-always-pays-his-debts/#mapping)
+3. [Batch Indexing](/elasticsearch-always-pays-his-debts/#batch-indexing)
+4. [Searching](/elasticsearch-always-pays-his-debts/#searching)
+
 ***
 
-## Indexing is back !
+## Indexing is back!
 
 Before we have fun with the full-text search, I want to tell you more about **indexing**. Indeed, this operation is quite important in Elasticsearch, because the quality and the
 speed of your queries directly depend on the structure of your index.
