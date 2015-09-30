@@ -1,7 +1,7 @@
 ---
 layout: post
 author: quentin_fayet
-title: "Elasticsearch Always Pays His Debts"
+title: "Elasticsearch Always Pays Its Debts"
 excerpt: "This second article about Elasticsearch goes through mapping and the basic of full-text search"
 modified: 2015-07-23
 tags: [elasticsearch, fullt-text research, apache, lucene, mapping]
@@ -16,7 +16,7 @@ image:
 
 - Set the proper date (modified: xxxx)
 
-# ELASTICSEARCH ALWAYS PAYS HIS DEBTS
+# ELASTICSEARCH ALWAYS PAYS ITS DEBTS
 
 Welcome back! First of all, if you're new to Elasticsearch and/or you don't feel comfortable with the basics of Elasticsearch,
 I advise you to read our first article about Elasticsearch. You can find it here: [http://reputationvip.io/elasticsearch-is-coming](http://reputationvip.io/elasticsearch-is-coming).
