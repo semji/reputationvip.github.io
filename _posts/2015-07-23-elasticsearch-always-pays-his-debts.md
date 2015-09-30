@@ -163,7 +163,7 @@ of each cities we are indexing. The index would be `game_of_thrones_place` and t
 Our curl request would be:
 
 {% highlight sh %}
-$> curl –XPUT http://localhost:9200/game_of_thrones_place?pretty -d '{"city": {"numeric_detection": true }}'
+$> curl –XPUT 'http://localhost:9200/game_of_thrones_place?pretty' -d '{"city": {"numeric_detection": true }}'
 {% endhighlight %}
 
 ***
@@ -764,7 +764,7 @@ that means **this string will go through analyzer** (standard analyzer, as it is
 So, let's perform this mapping:
 
 {% highlight sh %}
-$>curl –XPUT http://localhost:9200/game_of_thrones/ -d @mapping.json
+$>curl –XPUT 'http://localhost:9200/game_of_thrones/' -d @mapping.json
 {% endhighlight %}
 
 #### Bulk inserting the data
@@ -775,7 +775,7 @@ I created a bulk-index request, that you can find in the `dataset` folder.
 You can perform the bulk request with the following command:
 
 {% highlight sh %}
-$>curl –XPOST http://localhost:9200/_bulk/ --data-binary @game_of_thrones_dataset
+$>curl –XPOST 'http://localhost:9200/_bulk/' --data-binary @game_of_thrones_dataset
 {% endhighlight %}
 
 #### Basic search query
@@ -1077,13 +1077,13 @@ We can try each of them by executing the request on the cluster (assuming we are
 The request type is `GET`:
 
 {% highlight sh %}
-$>curl –XGET 'http://localhost:9200/_search?pretty -d @query_string_script_doc.json'
+$>curl –XGET 'http://localhost:9200/_search?pretty' -d @query_string_script_doc.json
 {% endhighlight %}
 
 Or
 
 {% highlight sh %}
-$>curl –XGET 'http://localhost:9200/_search?pretty -d @query_string_script_source.json'
+$>curl –XGET 'http://localhost:9200/_search?pretty' -d @query_string_script_source.json
 {% endhighlight %}
 
 The response would look like this:
@@ -1168,7 +1168,7 @@ Our query is the following (available at `queries/DSL/query_term.json`):
 Then, let's query the cluster:
 
 {% highlight sh %}
-$> curl -XGET http://localhost:9200/game_of_thrones/character/_search?pretty -d @query_term.json
+$> curl -XGET 'http://localhost:9200/game_of_thrones/character/_search?pretty' -d @query_term.json
 {% endhighlight %}
 
 > Note that as the `game_of_thrones` index contains only one type (`character`), we could get rid of the `/character` part in the curl call.
@@ -1240,7 +1240,7 @@ Our query (available at `queries/DSL/query_terms.json`):
 We can launch it with curl:
 
 {% highlight sh %}
-$> curl -XGET http://localhost:9200/game_of_thrones/character/_search?pretty -d @query_terms.json
+$> curl -XGET 'http://localhost:9200/game_of_thrones/character/_search?pretty' -d @query_terms.json
 {% endhighlight %}
 
 And the result will be the following:
@@ -1320,7 +1320,7 @@ Let's try it on the previous query string (`Jon Snow and Cersei Lannister`) (ava
 Then, we request the cluster:
 
 {% highlight sh %}
-$> curl -XGET http://localhost:9200/game_of_thrones/character/_search?pretty -d @query_match.json
+$> curl -XGET 'http://localhost:9200/game_of_thrones/character/_search?pretty' -d @query_match.json
 {% endhighlight %}
 
 And the result is:
