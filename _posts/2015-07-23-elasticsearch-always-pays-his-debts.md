@@ -14,17 +14,17 @@ image:
 
 # TODO
 
-- Set the proper date (modified : xxxx)
+- Set the proper date (modified: xxxx)
 - Create the queries files
-- :
+-:
 - Insert data into indexing json highlighter
 
 # ELASTICSEARCH ALWAYS PAYS HIS DEBTS
 
 Welcome back ! First of all, if you're new to Elasticsearch and/or you don't feel comfortable with the basics of Elasticsearch,
-I advise you to read our first article about Elasticsearch. You can find it here : [http://reputationvip.io/elasticsearch-is-coming](http://reputationvip.io/elasticsearch-is-coming).
+I advise you to read our first article about Elasticsearch. You can find it here: [http://reputationvip.io/elasticsearch-is-coming](http://reputationvip.io/elasticsearch-is-coming).
 
-From the title, you may have guessed that this set of article if following a guideline : Game Of Thrones. In this article, there is no spoilers about the TV show nor the books.
+From the title, you may have guessed that this set of article if following a guideline: Game Of Thrones. In this article, there is no spoilers about the TV show nor the books.
 
 **Well, let's go !**
 
@@ -37,10 +37,10 @@ behind Elasticsearch ; we've also seen a bit about the basic architecture Elasti
 Well, I'm keeping in mind that Elasticsearch is a full-text search engine above all. In the first article, we didn't really have fun with full-text search features. In this
 article, I will talk mainly about two points:
 
-- Indexing operations : **Mappings configuration** and **Batch Indexing**
+- Indexing operations: **Mappings configuration** and **Batch Indexing**
 - Searching operations: **Querying** and **Filtering** the results.
 
-From now, I can tell you that we won't talk about all the query types available in Elasticsearch in this article. There is two reasons to that : the first one is that there is
+From now, I can tell you that we won't talk about all the query types available in Elasticsearch in this article. There is two reasons to that: the first one is that there is
 plenty of query types, and the second one is that most of them are not everyday-use
 
 1. [Indexing is back!](/elasticsearch-always-pays-his-debts/#indexing-is-back)
@@ -57,10 +57,10 @@ speed of your queries directly depend on the structure of your index.
 
 ### What exactly are we talking about ?
 
-Here, I want to deal with two operations of the indexing : **Mapping** and **Batch Indexing**. They are not the only operations of indexing, however I won't talk about the other ones
+Here, I want to deal with two operations of the indexing: **Mapping** and **Batch Indexing**. They are not the only operations of indexing, however I won't talk about the other ones
 in this article, but in the next one.
 
-The first operation we'll talk about is : **Mapping**. **Mapping** means to describe the schema of your data. As Elasticsearch is **schemaless** (it doesn't care about the schema
+The first operation we'll talk about is: **Mapping**. **Mapping** means to describe the schema of your data. As Elasticsearch is **schemaless** (it doesn't care about the schema
 of the data you're giving to it), I think it is better to define the schema. There is many reasons why you should describe your data schema as far as practical. Schemaless has a
 lot of advantages, **on the database layer** (easy to go with autoscaling, for example). But on the application layer, data has a schema most often.
 
@@ -77,19 +77,19 @@ be configured.
 What you may not know about Elasticsearch, is that by default, you **don't need to create index before you insert
 documents into it**. Well, **that's not necessarily a good thing**.
 
-Let's imagine the following situation : You've got the automated index creation enabled, and you're quietly working on your application. Let's say that you store data in an index
+Let's imagine the following situation: You've got the automated index creation enabled, and you're quietly working on your application. Let's say that you store data in an index
 called *book*. As a reminder, indices names should be written in the singular form. Now, let's assume that you've made a typo in your application, writing *book* as *boook* (with
-three *"o"* letter). When you are running the application, you have no error. That is because **automated index creation is enabled : If Elasticsearch is not aware of the index you are
+three *"o"* letter). When you are running the application, you have no error. That is because **automated index creation is enabled: If Elasticsearch is not aware of the index you are
 trying to insert data into, it will create it !**. And now, your application stores data on two different indices, causing a phase shift in your data. You may spend hours before
 you find this mistake of yours, because Elasticsearch will not send your application any error !
 
 The good practice hidden behind this situation is to disable automated index creation if you don't need it.
 
-To do so, we need to edit the configuration file *elasticsearch.yml* (or *elasticsearch.json* if you chose the JSON format) to add the following line :
+To do so, we need to edit the configuration file *elasticsearch.yml* (or *elasticsearch.json* if you chose the JSON format) to add the following line:
 
 `action.auto_create_index: false`
 
-Then, if you try to insert a document into an index which hasn't been created, you will find yourself having an error from Elasticsearch :
+Then, if you try to insert a document into an index which hasn't been created, you will find yourself having an error from Elasticsearch:
 
 {% highlight json %}
 {
@@ -99,7 +99,7 @@ Then, if you try to insert a document into an index which hasn't been created, y
 {% endhighlight %}
 
 > `action.auto_create_index` can take more than a *true/false* value. You can specify several regex, separated by a coma, and begining with a *+* or a *-*, according to the
-fact that you want to allow or disallow automatic index creation for the indices' names pattern that match the regex. For example :
+fact that you want to allow or disallow automatic index creation for the indices' names pattern that match the regex. For example:
 `action.auto_create_index: -game, +game_of, -*` will disallow automatic index creation for indices' names beginning with "game" (*-game*), but allow automatic index creation
 for indices' names beginning with "game_of" (*+game_of*), and finally, the `-*` will disallow automatic index creation for every other patterns.
 
@@ -112,7 +112,7 @@ involving aliases.**
 
 ##### Type detection
 
-When you're inserting data into Elasticsearch, they are formatted with JSON structure. Elasticsearch is able to automatically guess the type of each fields : numbers, string,
+When you're inserting data into Elasticsearch, they are formatted with JSON structure. Elasticsearch is able to automatically guess the type of each fields: numbers, string,
 booleans. Indeed, numbers are defined with digits, strings are surrounded by quotes, and boolean are specific words. This behavior is called **type detection**.
 
 But, what if we want this behavior to be a little different ? Several options are set by Elasticsearch to customize the type detection.  For example,
@@ -147,15 +147,15 @@ The data you need to send are the following:
 
 {% highlight json %}
 {
-  "acknowledged" : true
+  "acknowledged": true
 }
 {% endhighlight %}
 
 As you can see, there is nothing special in the response. It looks like every other response from the server, when you are creating an index. So the question that might come to
-your mind is the following : How can you check that the **numeric detection** has been turned on for a given field ?
+your mind is the following: How can you check that the **numeric detection** has been turned on for a given field ?
 
 Actually, it is very simple. You can request your cluster about its settings. I don't want this article to be too much, so I won't talk much about it right here. I'd rather let
-you have a look here, on the official documentation : [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/indices-get-settings.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/indices-get-settings.html).
+you have a look here, on the official documentation: [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/indices-get-settings.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/indices-get-settings.html).
 
 **Full example**
 
@@ -163,7 +163,7 @@ Let's say that we want to build an index, indexing all cities and places in *Wes
 I will have time to talk about it in the articles to come. Anyway, we want to index the *Westeros* places. For that, let's say that our index would contain the population count
 of each cities we are indexing. The index would be `game_of_thrones_place` and the type for cities, `city`. Of course, we want to enable **numeric detection** for the `city` type.
 
-Our curl request would be :
+Our curl request would be:
 
 {% highlight sh %}
 $> curl –XPUT http://localhost:9200/game_of_thrones_place?pretty -d '{"city": {"numeric_detection": true }}'
@@ -190,7 +190,7 @@ Considering that, your request would looks like this:
 
 Replacing `format_1` and `format_2` with the date format, at the ISO 8601 standard, will give you a correct request.
 
-For example, let's say that we want to enable **date detection** on a type, and allow the two following date format : `yyyy-MM-dd hh:mm` and `dd-MM-yyyy hh:mm`. The forged request
+For example, let's say that we want to enable **date detection** on a type, and allow the two following date format: `yyyy-MM-dd hh:mm` and `dd-MM-yyyy hh:mm`. The forged request
 would be the following:
 
 {% highlight json %}
@@ -212,7 +212,7 @@ be disabled. With **dynamic type guessing** turned on, every unknown field (fiel
 the document. This can lead to undesired behaviour of your application. Disabling **dynamic type guessing** allows you to completely control the shape of your document,
 the fields, and the format they should have.
 
-**Be careful : Disabling dynamic type guessing leads you to define your entire mapping; without defining it, unknown field will be ignored.**
+**Be careful: Disabling dynamic type guessing leads you to define your entire mapping; without defining it, unknown field will be ignored.**
 
 **The request**
 
@@ -236,8 +236,8 @@ The request will have two parts:
 As you might guess, `"dynamic": false` turns the type guessing off. On the other hand, `"properties": { ... }` contains your mapping (we will see it later).
 
 Mapping could be either really simple, or really complex. Elasticsearch allows you to precisely define the format of each fields, and the way it will be handled
-by Apache Lucene. To read more about the available options of each field type, you can take a look here : [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/mapping-core-types.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/mapping-core-types.html).
-This page is talking about `Core Types`, which are the *basic* types : *Integer*, *String*, *float / double*, ... But even more types are available in Elasticsearch, such as `Array`,
+by Apache Lucene. To read more about the available options of each field type, you can take a look here: [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/mapping-core-types.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/mapping-core-types.html).
+This page is talking about `Core Types`, which are the *basic* types: *Integer*, *String*, *float / double*, ... But even more types are available in Elasticsearch, such as `Array`,
 `Object`, `IP`, `Geo Point` and `Geo Shape` (two types I'd like to write an article about).
 
 I could write a hundred pages article about types, as they have hundred of options, but I don't think it would be relevant here. So that I let you read the official documentation,
@@ -252,7 +252,7 @@ I hope you do remember, I talked a bit about **Tokenizers** and **Token filters*
 Today, I'm in the mood, so let me refresh your memory about them.
 
 > Using Elasticsearch, data and queries can be analyzed, with the precious help of **analyzers**. **Analyzers** is the word we use to talk about both **Tokenizers** and **Token filters**.
-**Tokenizers** stand to split a string into several **tokens**, which are processed by one or more **Token filters**. The role of **Token filters** is to modify tokens : lowercasing,
+**Tokenizers** stand to split a string into several **tokens**, which are processed by one or more **Token filters**. The role of **Token filters** is to modify tokens: lowercasing,
 uppercasing, removing some tokens, ...
 
 Anyway, you should remember that an **analyzer** is composed of a **tokenizer** and one or more **token filters** (and some other stuff, like a **character filter**).
@@ -323,162 +323,162 @@ And now, let's see the result.
 
 {% highlight json %}
 {
-  "tokens" : [ {
-    "token" : "jon",
-    "start_offset" : 0,
-    "end_offset" : 3,
-    "type" : "<ALPHANUM>",
-    "position" : 1
+  "tokens": [ {
+    "token": "jon",
+    "start_offset": 0,
+    "end_offset": 3,
+    "type": "<ALPHANUM>",
+    "position": 1
   }, {
-    "token" : "snow",
-    "start_offset" : 4,
-    "end_offset" : 8,
-    "type" : "<ALPHANUM>",
-    "position" : 2
+    "token": "snow",
+    "start_offset": 4,
+    "end_offset": 8,
+    "type": "<ALPHANUM>",
+    "position": 2
   }, {
-    "token" : "15",
-    "start_offset" : 10,
-    "end_offset" : 12,
-    "type" : "<NUM>",
-    "position" : 3
+    "token": "15",
+    "start_offset": 10,
+    "end_offset": 12,
+    "type": "<NUM>",
+    "position": 3
   }, {
-    "token" : "is",
-    "start_offset" : 14,
-    "end_offset" : 16,
-    "type" : "<ALPHANUM>",
-    "position" : 4
+    "token": "is",
+    "start_offset": 14,
+    "end_offset": 16,
+    "type": "<ALPHANUM>",
+    "position": 4
   }, {
-    "token" : "the",
-    "start_offset" : 17,
-    "end_offset" : 20,
-    "type" : "<ALPHANUM>",
-    "position" : 5
+    "token": "the",
+    "start_offset": 17,
+    "end_offset": 20,
+    "type": "<ALPHANUM>",
+    "position": 5
   }, {
-    "token" : "bastard",
-    "start_offset" : 21,
-    "end_offset" : 28,
-    "type" : "<ALPHANUM>",
-    "position" : 6
+    "token": "bastard",
+    "start_offset": 21,
+    "end_offset": 28,
+    "type": "<ALPHANUM>",
+    "position": 6
   }, {
-    "token" : "son",
-    "start_offset" : 29,
-    "end_offset" : 32,
-    "type" : "<ALPHANUM>",
-    "position" : 7
+    "token": "son",
+    "start_offset": 29,
+    "end_offset": 32,
+    "type": "<ALPHANUM>",
+    "position": 7
   }, {
-    "token" : "of",
-    "start_offset" : 33,
-    "end_offset" : 35,
-    "type" : "<ALPHANUM>",
-    "position" : 8
+    "token": "of",
+    "start_offset": 33,
+    "end_offset": 35,
+    "type": "<ALPHANUM>",
+    "position": 8
   }, {
-    "token" : "eddard",
-    "start_offset" : 36,
-    "end_offset" : 42,
-    "type" : "<ALPHANUM>",
-    "position" : 9
+    "token": "eddard",
+    "start_offset": 36,
+    "end_offset": 42,
+    "type": "<ALPHANUM>",
+    "position": 9
   }, {
-    "token" : "stark",
-    "start_offset" : 43,
-    "end_offset" : 48,
-    "type" : "<ALPHANUM>",
-    "position" : 10
+    "token": "stark",
+    "start_offset": 43,
+    "end_offset": 48,
+    "type": "<ALPHANUM>",
+    "position": 10
   }, {
-    "token" : "the",
-    "start_offset" : 50,
-    "end_offset" : 53,
-    "type" : "<ALPHANUM>",
-    "position" : 11
+    "token": "the",
+    "start_offset": 50,
+    "end_offset": 53,
+    "type": "<ALPHANUM>",
+    "position": 11
   }, {
-    "token" : "lord",
-    "start_offset" : 54,
-    "end_offset" : 58,
-    "type" : "<ALPHANUM>",
-    "position" : 12
+    "token": "lord",
+    "start_offset": 54,
+    "end_offset": 58,
+    "type": "<ALPHANUM>",
+    "position": 12
   }, {
-    "token" : "of",
-    "start_offset" : 59,
-    "end_offset" : 61,
-    "type" : "<ALPHANUM>",
-    "position" : 13
+    "token": "of",
+    "start_offset": 59,
+    "end_offset": 61,
+    "type": "<ALPHANUM>",
+    "position": 13
   }, {
-    "token" : "winterfell",
-    "start_offset" : 62,
-    "end_offset" : 72,
-    "type" : "<ALPHANUM>",
-    "position" : 14
+    "token": "winterfell",
+    "start_offset": 62,
+    "end_offset": 72,
+    "type": "<ALPHANUM>",
+    "position": 14
   }, {
-    "token" : "he",
-    "start_offset" : 74,
-    "end_offset" : 76,
-    "type" : "<ALPHANUM>",
-    "position" : 15
+    "token": "he",
+    "start_offset": 74,
+    "end_offset": 76,
+    "type": "<ALPHANUM>",
+    "position": 15
   }, {
-    "token" : "is",
-    "start_offset" : 77,
-    "end_offset" : 79,
-    "type" : "<ALPHANUM>",
-    "position" : 16
+    "token": "is",
+    "start_offset": 77,
+    "end_offset": 79,
+    "type": "<ALPHANUM>",
+    "position": 16
   }, {
-    "token" : "the",
-    "start_offset" : 80,
-    "end_offset" : 83,
-    "type" : "<ALPHANUM>",
-    "position" : 17
+    "token": "the",
+    "start_offset": 80,
+    "end_offset": 83,
+    "type": "<ALPHANUM>",
+    "position": 17
   }, {
-    "token" : "half",
-    "start_offset" : 84,
-    "end_offset" : 88,
-    "type" : "<ALPHANUM>",
-    "position" : 18
+    "token": "half",
+    "start_offset": 84,
+    "end_offset": 88,
+    "type": "<ALPHANUM>",
+    "position": 18
   }, {
-    "token" : "brother",
-    "start_offset" : 89,
-    "end_offset" : 96,
-    "type" : "<ALPHANUM>",
-    "position" : 19
+    "token": "brother",
+    "start_offset": 89,
+    "end_offset": 96,
+    "type": "<ALPHANUM>",
+    "position": 19
   }, {
-    "token" : "of",
-    "start_offset" : 97,
-    "end_offset" : 99,
-    "type" : "<ALPHANUM>",
-    "position" : 20
+    "token": "of",
+    "start_offset": 97,
+    "end_offset": 99,
+    "type": "<ALPHANUM>",
+    "position": 20
   }, {
-    "token" : "arya",
-    "start_offset" : 100,
-    "end_offset" : 104,
-    "type" : "<ALPHANUM>",
-    "position" : 21
+    "token": "arya",
+    "start_offset": 100,
+    "end_offset": 104,
+    "type": "<ALPHANUM>",
+    "position": 21
   }, {
-    "token" : "sansa",
-    "start_offset" : 106,
-    "end_offset" : 111,
-    "type" : "<ALPHANUM>",
-    "position" : 22
+    "token": "sansa",
+    "start_offset": 106,
+    "end_offset": 111,
+    "type": "<ALPHANUM>",
+    "position": 22
   }, {
-    "token" : "bran",
-    "start_offset" : 113,
-    "end_offset" : 117,
-    "type" : "<ALPHANUM>",
-    "position" : 23
+    "token": "bran",
+    "start_offset": 113,
+    "end_offset": 117,
+    "type": "<ALPHANUM>",
+    "position": 23
   }, {
-    "token" : "rickon",
-    "start_offset" : 119,
-    "end_offset" : 125,
-    "type" : "<ALPHANUM>",
-    "position" : 24
+    "token": "rickon",
+    "start_offset": 119,
+    "end_offset": 125,
+    "type": "<ALPHANUM>",
+    "position": 24
   }, {
-    "token" : "and",
-    "start_offset" : 126,
-    "end_offset" : 129,
-    "type" : "<ALPHANUM>",
-    "position" : 25
+    "token": "and",
+    "start_offset": 126,
+    "end_offset": 129,
+    "type": "<ALPHANUM>",
+    "position": 25
   }, {
-    "token" : "robb",
-    "start_offset" : 130,
-    "end_offset" : 134,
-    "type" : "<ALPHANUM>",
-    "position" : 26
+    "token": "robb",
+    "start_offset": 130,
+    "end_offset": 134,
+    "type": "<ALPHANUM>",
+    "position": 26
   } ]
 }
 {% endhighlight %}
@@ -499,7 +499,7 @@ I won't give you a full example here, because the query is almost the same (only
 ###### The Snowball analyzer
 
 The last analyzer I want to talk about is the **snowball analyzer**. This analyzer is like the ugly duckling of ready-to-use analyzers. It is using a stemming algorithm, and the token
-stream resulting is made with root words. Let's take an example. Analyzing `King's Landing` with the **snowball analyzer** will result in a stream of two tokens : `king` and
+stream resulting is made with root words. Let's take an example. Analyzing `King's Landing` with the **snowball analyzer** will result in a stream of two tokens: `king` and
 `land`. What we have here is a loss of data. Indeed, `landing` has been transformed into `land`, its root word. 
 
 ##### Configuring Indices Mapping with Analyzers
@@ -569,7 +569,7 @@ As this process step in the index creation process, the response will be the cla
 
 {% highlight json %}
 {
-  "acknowledged" : true
+  "acknowledged": true
 }
 {% endhighlight %}
 
@@ -661,15 +661,15 @@ characters. Yet, the `-d` option we were used to use with *curl* **doesn't prese
 
 {% highlight json %}
 {
-  "took" : 39,
-  "errors" : false,
-  "items" : [ {
-    "create" : {
-      "_index" : "nameOfTheIndex",
-      "_type" : "nameOfTheType",
-      "_id" : "ID",
-      "status" : 200,
-      "error" : "SomeError"
+  "took": 39,
+  "errors": false,
+  "items": [ {
+    "create": {
+      "_index": "nameOfTheIndex",
+      "_type": "nameOfTheType",
+      "_id": "ID",
+      "status": 200,
+      "error": "SomeError"
     }
   },
   ...
@@ -853,45 +853,45 @@ Let's take a closer look at the response, which should looks like the following 
 
 {% highlight json %}
 {
-  "took" : 78,
-  "timed_out" : false,
-  "_shards" : {
-    "total" : 5,
-    "successful" : 5,
-    "failed" : 0
+  "took": 78,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "failed": 0
   },
-  "hits" : {
-    "total" : 5,
-    "max_score" : 1.4054651,
-    "hits" : [ {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Robb Stark",
-      "_score" : 1.4054651,
+  "hits": {
+    "total": 5,
+    "max_score": 1.4054651,
+    "hits": [ {
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Robb Stark",
+      "_score": 1.4054651,
       "_source":{"house": "Stark","gender": "male","age":"22","biography": "Robb Stark is the eldest son of Eddard and Catelyn Stark and the heir to Winterfell. His dire wolf is called Grey Wind. Robb becomes involved in the war against the Lannisters after his father, Ned Stark, is arrested for treason. Robb summons his bannermen for war against House Lannister and marches to the Riverlands. Eventually, crossing the river at the Twins becomes strategically necessary. To win permission to cross, Robb agrees to marry a daughter of Walder Frey, Lord of the Twins. Robb leads the war effort against the Lannisters and successfully captures Jaime. After Ned is executed, the North and the Riverlands declare their independence from the Seven Kingdoms and proclaim Robb as their new King, The King in The North. He wins a succession of battles in Season 2, earning him the nickname the Young Wolf. However, he feels that he botched the political aspects of war. He sends Theon to the Iron Islands hoping that he can broker an alliance with Balon Greyjoy, Theon's father. In exchange for Greyjoy support, Robb as King in the North will recognize the Iron Islands' independence. He also sends his mother Catelyn to deal with Stannis Baratheon and Renly Baratheon, both of whom are fighting to be the rightful king. Theon and Catelyn fail in their missions, and Balon launches an invasion of the North. Robb falls in love with Talisa Maegyr, a healer from Volantis due to her kindness and spirit. Despite his mother's protest, Robb breaks his engagement with the Freys and marries Talisa in the 2nd season finale. On news of his grandfather, Lord Hoster Tully's, death, Robb and his party travel north to Riverrun for the funeral, where the young king is reunited with his great-uncle, Brynden Blackfish, and his uncle, Edmure Tully, the new lord of Riverrun. While at Riverrun, Robb makes the decision to execute Lord Rickard Karstark for the murders of two teenage squires related to the Lannisters, a decision that loses the support of the Karstarks and leads Robb to make the ultimately fatal decision to ask the Freys for their alliance. He is killed in the Red Wedding Massacre, after witnessing the murder of his pregnant wife and their child. Lord Bolton personally executes Robb, stabbing him through the heart while taunting that the Lannisters send their regards, in fact a promise made to Jaime (who had no knowledge of Bolton's impending treason) when leaving for the Twins. His corpse is later decapitated and Grey Wind's head is sewn on and paraded around as the Stark forces are slaughtered by the Freys and the Boltons.","tags": ["stark","king of the north"]}
     }, {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Arya Stark",
-      "_score" : 1.2231436,
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Arya Stark",
+      "_score": 1.2231436,
       "_source":{"house": "Stark","gender": "female","age":"17","biography": "Arya Stark is the younger daughter and third child of Lord Eddard and Catelyn Stark of Winterfell. Ever the tomboy, Arya would rather be training to use weapons than sewing with a needle. Her direwolf is called Nymeria. When Ned is arrested for treason, her dancing master Syrio Forel helps her escape the Lannisters. She is later disguised as an orphan boy by Yoren, a Night's Watch recruiter, in hopes of getting her back to Winterfell. From then on, she takes the name Arry. During Season 2, Yoren's convoy is attacked by the Lannisters who are under orders by King Joffrey to find and kill Robert's bastard children. Before she is captured, she releases the prisoner Jaqen H'ghar and two others, saving their lives. She and the rest of the captured recruits are sent to Harrenhal under Gregor Clegane who cruelly tortures and kills prisoners everyday. At the same time, she follows the advice of the late Yoren and makes a list of those she wants dead like a prayer. When Tywin Lannister arrives at Harrenhal, he orders the killing of prisoners stopped and makes Arya his cup bearer after figuring out she is a girl. Tywin forms an unlikely friendship with Arya due to her intelligence while remaining unaware of her true identity. Arya reunites with Jaqen who offers to kill three lives in exchange for the three lives she saved. The first two she picks, the Tickler, Harrenhal's torturer and Ser Amory Lorch, after he catches Arya reading one of Tywin's war plans and tries to inform Tywin. After she fails to find Jaqen to kill Tywin, after he heads out to face Robb's forces, she forces Jaqen to help her, Gendry and Hot Pie escape Harrenhal after choosing Jaqen as her third name, for which she promises to unname him if he helps them. After successfully escaping, Jaqen gives her an iron coin and tells her to give it to any Braavosi and say Valar morghulis if she ever needs to find him. Arya, Gendry and Hot Pie head north for Riverrun and Arya's mother Lady Stark, but are captured by the Brotherhood Without Banners and taken to the Inn of the Kneeling Man. There, Arya is horrified to be reunited with the vile Sandor Clegane, one of the Brotherhood's prisoners. Arya and Gendry travel with the Brotherhood to meet their leader, now friends with them as they know Arya is Ned Stark's daughter. She escapes them after the Brotherhood acquits Sandor Clegane of murder after a trial by combat and selling Gendry to Melisandre to be sacrificed. Captured by Sandor, she is taken to the Twins to be ransomed to her brother, only to see his wolf and forces slaughtered and her brother paraded headless on a horse. Sandor knocks her unconscious and saves her from the ensuing slaughter, and she subsequently kills her first man when falling upon a party of Freys, boasting of how they mutilated her brother's corpse. In season 4, Sandor decides to ransom her to her Aunt Lysa Arryn in the Vale. With Sandor's help, Arya later retrieves her sword, Needle (a gift from Jon Snow), and kills the sadistic soldier Polliver, who stole it from her. Along the way, Arya slowly begins to bond with Sandor, helping to heal one of his wounds when they are attacked. They eventually arrive at the Vale, but are told that Lysa Arryn killed herself three days prior. Arya laughs with disbelief. Later, Arya and Sandor are found by Brienne of Tarth and Podrick Payne. Arya refuses to leave with Brienne, assuming her to be an agent of the Lannisters. In the ensuing fight between Brienne and Sandor, Arya flees and manages to catch a boat to Braavos, befriending the Braavosi captain by showing him the coin Jaqen gave her outside Harrenhal. In Season 5 Arya arrives in Braavos, and the ship's captain, Ternesio takes her to the House of Black and White. She is turned away by the doorman, even after showing the iron coin given to her by Jaqen H'ghar. After spending the night sitting in front of the House, she throws the coin into the water and leaves. Later, after killing a pigeon, Arya is confronted by a group of thieves in the street. Arya prepares to fight them, but the thieves flee when the doorman appears. He walks her back to the House of Black and White, and gives her the iron coin. He then changes his face to Jaqen, and informs Arya that she must become no one before taking her inside the House. Arya's training progresses, during which she gets better and better at lying about her identity. Jaqen eventually gives her her first new identity, as Lana, a girl who sells oysters on the streets of Braavos. She eventually encounters Meryn Trant, who she tortures and executes in retaliation for Syrio's death, revealing her identity and motive in the process. When she returns to the House of Black and White she is confronted by Jaqen H'ghar and the Waif, who tell her that Meryn's life was not hers to take and that a debt must be paid. Arya screams as she begins to lose her eyesight.","tags": ["stark","needle","faceless god"]}
     }, {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Bran Stark",
-      "_score" : 1.2231436,
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Bran Stark",
+      "_score": 1.2231436,
       "_source":{"house": "Stark","gender": "male","age":"11","biography": "Brandon Bran Stark is the second son and fourth child of Eddard and Catelyn Stark. He was named after his deceased uncle, Brandon. His dire wolf is called Summer. During the King's visit to Winterfell, he accidentally came across Cersei and Jaime Lannister engaging in sex, following which Bran is shoved from the window by Jaime, permanently crippling his legs. An assassin tries to kill Bran, but Summer, the direwolf companion, kills the assassin. Bran, when he awakens, finds that he is crippled from the waist down, forced to be carried everywhere by Hodor, and he cannot remember the events immediately before his fall. Slowly, he realizes that he has gained the ability to assume Summer's consciousness, making him a warg or a skinchanger. After his older brother, Robb, is crowned King in the North, Bran becomes Robb's heir and the Lord of Winterfell. After Theon Greyjoy captures Winterfell, Bran goes into hiding. To cement his claim on Winterfell, Theon kills two orphan boys and tells the people of Winterfell that Bran, and his younger brother Rickon Stark, are dead. After Theon's men betray him and Winterfell is sacked, Bran, Rickon, Hodor, Osha and their direwolves head north to find his older brother Jon Snow for safety. They ultimately stumble upon Jojen and Meera Reed, two siblings who aid them in their quest. After coming close to the wall, Osha departs with Rickon for Last Hearth while Bran insists on following his visions beyond the Wall. He also encounters Sam and Gilly, who tries to persuade him not to, but Bran claims it is his destiny and leaves through the gate with Hodor and the Reeds. Along the way, Bran and the others stumble across Craster's Keep, where they are captured and held hostage by the Night's Watch mutineers led by Karl. Night's Watch rangers led by Jon eventually attack Craster's Keep to kill the mutineers, but Locke, a new recruit but secretly a spy for Roose Bolton, attempts to take Bran away and kill him elsewhere. Bran wargs into Hodor and kills Locke by snapping his neck, but Bran and his group are forced to continue on their journey without alerting Jon, whom Jojen claims would stop them. They eventually reach the three-eyed raven in a cave, who claims he cannot restore Bran's legs, but will make him fly instead.","tags": ["stark","disable","crow"]}
     }, {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Jon Snow",
-      "_score" : 1.2231436,
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Jon Snow",
+      "_score": 1.2231436,
       "_source":{"house": "Stark","gender": "male","age":"19","biography": "Jon Snow is the bastard son of Ned Stark who joins the Night's Watch. Jon is a talented fighter, but his sense of compassion and justice brings him into conflict with his harsh surroundings. Ned claims that Jon's mother was a wet nurse named Wylla. His dire wolf is called Ghost due to his albinism and quiet nature. Jon soon learns that the Watch is no longer a glorious order, but is now composed mostly of society's rejects, including criminals and exiles. Initially, he has only contempt for his low-born brothers of the Watch, but he puts aside his prejudices and befriends his fellow recruits, especially Sam Tarly, after they unite against the cruel master-at-arms. He chooses to take his vows before the Old God of the North, and to his disappointment he is made steward to Lord Commander Jeor Mormont rather than a ranger. He eventually realizes that he is being groomed for command. He saves Mormont's life by slaying a wight, a corpse resurrected by the White Walkers. In return, he receives Longclaw, the ancestral blade of House Mormont. When Eddard is arrested for treason, Jon is torn between his family and his vows. After Eddard's execution, he tries to join Robb's army but is convinced to come back by his friends. Shortly after, he joins the large force Mormont leads beyond the Wall. Jon is part of a small scouting party in Season 2. When the party is overtaken by wildlings, Jon is ordered to appear to defect and join the wildlings so he can discover their plans. On affirming his loyalty to the King-Beyond-the-Wall, Mance Rayder, he travels toward the Wall with the wildlings and is seduced by one, the flame-haired Ygritte. Upon crossing the wall, he refuses to behead a farmer whose escape might alert the Night's Watch of their coming, and is subsequently branded an enemy of the wildlings. Ygritte shields him from her comrades but ultimately confronts and injures Jon when he stops to drink. He manages to escape back to the wall, injured by three arrows, where he reunites with his comrades and informs the commanders of Mance Rayder's plans. Jon subsequently resumes his training at the Wall and suggests an expedition to Craster's Keep in order to kill the Night's Watch mutineers who may tell Mance of the Wall's weak defences if caught. Jon's request is granted and he bands together a group of rangers to aid him, among them the new recruit Locke, who has actually come to kill Jon on Roose Bolton's orders. Jon successfully attacks Craster's Keep and kills the mutineers, while Locke is killed by Hodor during an attempt to kill Bran, who was captive at Craster's Keep. However, Jon's proposal to barricade the entrance to Castle Black to stop the wildlings from entering is denied. He survives the wildling attack on Castle Black, personally killing Styr and taking Tormund Giantsbane prisoner. In the aftermath, he departs Castle Black to hunt down Mance Rayder, giving his sword to Sam. He quickly locates Mance on the pretence of parleying, but he is found out. Before he is killed, however, Jon is saved by the timely arrival by Stannis Baratheon, who places Mance and his men under arrest, and accompanies Jon back to Castle Black. Jon later burns Ygritte's body in the woods. In Season 5, Stannis attempts to use Jon as an intermediary between himself and Mance, hoping to rally the wildling army to help him retake the North from Roose Bolton and gain Jon's support in avenging his family. Jon fails to convince Mance, and when Mance is burned at the stake by Stannis' red priestess Melisandre, Jon shoots him from afar to give him a quick death. After that Jon is chastised by Stannis for showing mercy to Mance. Stannis shows Jon a letter he received from Bear Island, stating that former Lord Commander Jeor Mormont's relatives will only recognize a Stark as their King. Ser Davos tells Jon that the Night's Watch will elect a new Lord Commander that night, and that it is almost assured that Ser Alliser will win. Stannis asks Jon to kneel before him and pledge his life to him, and in exchange he will legitimize Jon, making him Jon Stark, and giving him Winterfell. In the great hall, Jon tells Sam that he will refuse Stannis's offer, as he swore an oath to the Night's Watch. After Ser Alliser and Denys Mallister are announced as possible candidates, Sam gives a speech imploring his brothers to vote for Jon, reminding them all how he led the mission to Craster's Keep to avenge Commander Mormont's death and how he led the defense of Castle Black. After the voting is complete, the ballots are tallied and show a tie between Jon and Ser Alliser. Maester Aemon casts the deciding vote in favor of Jon, making him the new Lord Commander of the Night's Watch. To lessen the animosity between the two, Jon makes Ser Alliser First Ranger. Melisandre takes an interest in Jon, visiting him in his quarters and trying to have sex with him. Jon refuses, out of respect for Ygritte and his Night's Watch vows. Jon makes plans to give the wildlings the lands south of the wall, known as the gift. He wants the Night's Watch and the wildlings to unite against the threat of the White Walkers. These more liberal views are not taken well by the men of the Night's Watch, in particular Ser Alliser and a young boy named Olly, whose village was massacred by wildlings. Jon then makes a trip north of the Wall to the wildling village of Hardhome, where he hopes to get the wildlings to join his cause. However, before many of them can get on boats to leave, a massive group of White Walkers arrives on the scene. A massive battle ensues, in which many wildlings are killed. The last remaining Night's Watchmen and wildlings, including Jon, depart from Hardhome, defeated. As they return to the Wall, they are let in by Ser Alliser Thorne, who disapproves of his drastic action of joining forces with the wildlings. Shorty after, Jon sends Sam and Gilly to safety in Oldtown, approving of their relationship and Sam's motives of keeping her safe. He is later approached by Davos asking for men, and later Melisandre, whose silence confirms Stannis's defeat. That evening, Jon is met by Olly who claims that a range has arrived with knowledge of Jon's uncle Benjen. However, Jon discovers that he has been fooled and a mutinee, led by Ser Alliser Thorne, stab Jon repeatedly, with Olly dealing the final blow to Jon's heart, leaving him to die in the snow.","tags": ["stark","night's watch","brother","snow"]}
     }, {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Sansa Stark",
-      "_score" : 1.0,
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Sansa Stark",
+      "_score": 1.0,
       "_source":{"house": "Stark","gender": "female","age":"25","biography": "Sansa Stark is the first daughter and second child of Eddard and Catelyn Stark. She was also the future bride of Prince Joffrey, and thus the future Queen of the Seven Kingdoms as well. Her direwolf is called Lady, she is the smallest of the pack. Sansa is naive and wants to live the life of a fairy tale princess and is unwilling to see the harsh realities of the kingdom's politics and rivalries. Her fantasy begins to shatter when Lady is killed, and the situation continues to worsen when her father is arrested for treason. She becomes a hostage to the Lannisters in order for them to have a legitimate claim for the North. Her naivete is finally shattered when King Joffrey executes her father despite promising her that he would spare him. Sansa is forced to put up an act or endure Joffrey's cruelty. Throughout Season 2, she suffers under Joffrey's abuse until Tyrion puts a stop to it. By the Season 2 finale, Joffrey breaks his engagement with Sansa to marry Margaery Tyrell. However, she is still a hostage; but Petyr Baelish promises to help her return to Winterfell. In Season 3, she is married to Tyrion to secure the Lannisters the North should Robb Stark die. The marriage is unhappy and yet to be consummated, and after Robb's death – upon which Joffrey insists to be given his head to present to Sansa, a request coldly ignored by his grandfather – she is unable to speak to him. In Season 4, Sansa has been mourning her family for weeks and is starving herself in depression. She attends Joffrey's wedding with Tyrion and witnesses Joffrey's death. Dontos Hollard immediately spirits her away from the wedding, moments ahead of Cersei's orders to have her and Tyrion arrested. Dontos brings Sansa to a ship concealed in fog, and she is greeted by Petyr Baelish. Under the guise of making payment, Petyr has the fool killed by his archers, with Petyr explaining that killing Dontos was the only way to ensure his silence - her disappearance when Joffrey died, the execution of her father, deaths of her family and years of torment at the king's hand, will all be considerable motive for Sansa helping Tyrion murder Joffrey. Currently, a thousand of the City Watch are searching for her, Cersei thirsts for vengeance, and Tyrion himself stands trial. Sansa is assured she has finally escaped King's Landing and is safe with Lord Baelish, who takes her to her Aunt Lysa for shelter. Lysa takes Sansa in warmly and has her betrothed to her son, Robin. However, Sansa realises the worst is far from over when Lysa, who is smitten with Petyr, accuses Sansa of trying to seduce him, and she discovers that Robin is a spoiled and rude child, slapping him at one point. When Petyr unexpectedly kisses Sansa, Lysa becomes enraged and nearly pushes Sansa through the castle's Moon Door, but Petyr intervenes by pacifying Lysa and then pushing her through the Moon Door to her death before Sansa's eyes, making Sansa realise that Petyr may have romantic or lustful feelings for her. Sansa speaks up for Petyr when he is questioned about his involvement in Lysa's death, but Sansa reaffirms Petyr's claim that Lysa killed herself due to her own instability and insecurities. Afterward she told Petyr that her reason to protect him in the hearing was because she knew he was the only person she could count on to protect her, demonstrated by his initiative in getting her out of King's Landing while everyone else in power there only wanted to use her as a pawn. In Season 5, she and Petyr leave the Eyrie for a place Petyr promises where Cersei will never find her. At an In, Brienne of Tarth materializes unexpectedly and declares herself for Sansa. Petyr doubts that Sansa would want a sworn shield who let both of her previous masters die, even when Brienne reveals the true, somewhat unbelievable circumstances of Renly's death. Sansa seems inclined to agree, pointing out that Brienne was present at Joffrey's wedding, to which the warrior replies that neither of them wanted to be there. Sansa rejects Brienne's offer of service and watches as she handily defeats the guards and escapes. Petyr tells her that he has arranged for her to be married to Ramsay Bolton, the son of Lord Roose Bolton. This will put her back in Winterfell, which the Boltons now occupy as a reward for their role in the deaths of Robb and Catelyn. Though Ramsay initially seems interested in Sansa, his psychopathic nature quickly shows through, and Sansa is disgusted. She is also antagonized by Myranda, the kennelmaster's daughter, who is in a sexual relationship with Ramsay. Myranda frequently makes veiled threats to Sansa, and shows her what has become of Theon Greyjoy, who was Eddard Stark's ward and whom she grew up with. Sansa is horrified to find that after Ramsay emasculated him, he has taken on a submissive, sullen persona called Reek. After Sansa and Ramsay are wed, he brutally rapes her while forcing Reek to watch. Later, Sansa attempts to talk to Reek, who is unresponsive to her attempts to make him act like his old self by repeatedly calling him Theon instead of Reek. At one point, Reek mistakenly lets slip that her younger brothers, Bran and Rickon, are alive, when she had assumed that they were dead. This realization gives Sansa hope in the midst of her unfortunate situation. As Stannis Baratheon's army sneaks up on Winterfell and is greeted by the bulk of the Bolton forces, Sansa manages to escape her chamber but is stopped by Myranda, who threatens her with a bow. Reminding Sansa that she has nothing left to live for in Ramsay's custody, she is unexpectedly saved by Reek, who breaks his spell of subjugation by throwing Myranda over the bannister. In terror, the couple flees to the wall, where they make the jump off the ledge.","tags": ["stark","wife","dead father"]}
     } ]
   }
@@ -931,23 +931,23 @@ After executing the query as we did above, we obtained the following JSON respon
 
 {% highlight json %}
 {
-  "took" : 28,
-  "timed_out" : false,
-  "_shards" : {
-    "total" : 5,
-    "successful" : 5,
-    "failed" : 0
+  "took": 28,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "failed": 0
   },
-  "hits" : {
-    "total" : 1,
-    "max_score" : 1.4054651,
-    "hits" : [ {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Daenerys Targaryen",
-      "_score" : 1.4054651,
-      "fields" : {
-        "age" : [ "18" ]
+  "hits": {
+    "total": 1,
+    "max_score": 1.4054651,
+    "hits": [ {
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Daenerys Targaryen",
+      "_score": 1.4054651,
+      "fields": {
+        "age": [ "18" ]
       }
     } ]
   }
@@ -1037,23 +1037,23 @@ The response would look like this:
 {% highlight json %}
 {
   [...]
-  "hits" : {
+  "hits": {
     [...]
-    "hits" : [ {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Robb Stark",
-      "_score" : 1.4054651,
-      "fields" : {
-        "future_age" : [ 38 ]
+    "hits": [ {
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Robb Stark",
+      "_score": 1.4054651,
+      "fields": {
+        "future_age": [ 38 ]
       }
     }, {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Arya Stark",
-      "_score" : 1.2231436,
-      "fields" : {
-        "future_age" : [ 33 ]
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Arya Stark",
+      "_score": 1.2231436,
+      "fields": {
+        "future_age": [ 33 ]
       }
     },
     [...]
@@ -1124,14 +1124,14 @@ We got the response from the server:
 {% highlight json %}
 {
   [...]
-  "hits" : {
-    "total" : 1,
-    "max_score" : 1.4054651,
-    "hits" : [ {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Daenerys Targaryen",
-      "_score" : 1.4054651,
+  "hits": {
+    "total": 1,
+    "max_score": 1.4054651,
+    "hits": [ {
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Daenerys Targaryen",
+      "_score": 1.4054651,
       "_source":{
             "house": "Targaryen",
             "gender": "female",
@@ -1194,14 +1194,14 @@ And the result will be the following:
 {% highlight json %}
 {
   [...]
-  "hits" : {
-    "total" : 2,
-    "max_score" : 0.83837724,
-    "hits" : [ {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Jon Snow",
-      "_score" : 0.83837724,
+  "hits": {
+    "total": 2,
+    "max_score": 0.83837724,
+    "hits": [ {
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Jon Snow",
+      "_score": 0.83837724,
       "_source":{
             "house": "Stark",
             "gender": "male",
@@ -1210,10 +1210,10 @@ And the result will be the following:
             "tags": ["stark","night's watch","brother","snow"]
             }
     }, {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Ramsay Bolton",
-      "_score" : 0.614891,
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Ramsay Bolton",
+      "_score": 0.614891,
       "_source":{
             "house": "Bolton",
             "gender": "male",
@@ -1274,14 +1274,14 @@ And the result is:
 {% highlight json %}
 {
   [...]
-  "hits" : {
-    "total" : 13,
-    "max_score" : 0.17795758,
-    "hits" : [ {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Bran Stark",
-      "_score" : 0.17795758,
+  "hits": {
+    "total": 13,
+    "max_score": 0.17795758,
+    "hits": [ {
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Bran Stark",
+      "_score": 0.17795758,
       "_source":{
             "house": "Stark",
             "gender": "male",
@@ -1289,10 +1289,10 @@ And the result is:
             "biography": "Brandon Bran Stark [...] instead.",
             "tags": ["stark","disable","crow"]}
     }, {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Jon Snow",
-      "_score" : 0.10023197,
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Jon Snow",
+      "_score": 0.10023197,
       "_source":{
             "house": "Stark",
             "gender": "male",
@@ -1354,14 +1354,14 @@ Requesting the cluster with this query would return the following result:
 {% highlight json %}
 {
   [...]
-  "hits" : {
-    "total" : 1,
-    "max_score" : 0.1779576,
-    "hits" : [ {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Bran Stark",
-      "_score" : 0.1779576,
+  "hits": {
+    "total": 1,
+    "max_score": 0.1779576,
+    "hits": [ {
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Bran Stark",
+      "_score": 0.1779576,
       "_source":{
             "house": "Stark",
             "gender": "male",
@@ -1404,14 +1404,14 @@ The result returned by the cluster:
 {% highlight json %}
 {
   [...]
-  "hits" : {
-    "total" : 8,
-    "max_score" : 0.29372954,
-    "hits" : [ {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Jaime Lannister",
-      "_score" : 0.29372954,
+  "hits": {
+    "total": 8,
+    "max_score": 0.29372954,
+    "hits": [ {
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Jaime Lannister",
+      "_score": 0.29372954,
       "_source":{
             "house": "Lannister",
             "gender": "male",
@@ -1419,10 +1419,10 @@ The result returned by the cluster:
             "biography": "Ser Jaime Lannister [...]",
             "tags": ["lannister","king slayer","golden hand","ser","blond"]}
     }, {
-      "_index" : "game_of_thrones",
-      "_type" : "character",
-      "_id" : "Cersei Lannister",
-      "_score" : 0.21208765,
+      "_index": "game_of_thrones",
+      "_type": "character",
+      "_id": "Cersei Lannister",
+      "_score": 0.21208765,
       "_source":{
             "house": "Lannister",
             "gender": "female",
