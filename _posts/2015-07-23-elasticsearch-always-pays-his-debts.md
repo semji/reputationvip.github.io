@@ -1437,3 +1437,9 @@ The result returned by the cluster:
 
 As you can see, from the same request, with `and` operator and `fuzziness` set to `2`, we got **8 results**.
 
+## What's coming next ?
+
+With this article, I just started to scratch the surface of Elasticsearch's possibilities concerning full-text search.
+
+In the next article, I would like to talk about tree-like document structure, scoring (because there is several way for scoring to be calculated).
+Also, I think I will introduce you to scripting with MVEL and other languages that can be used to perform scripting with Elasticsearch.
