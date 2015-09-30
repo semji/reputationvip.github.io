@@ -893,6 +893,12 @@ Our query will be the following:
 }
 {% endhighlight %}
 
+The query is available at `queries/DSL/query_string.json`, let's launch it:
+
+{% highlight sh %}
+$>curl –XGET 'http://localhost:9200/game_of_thrones/character/_search?pretty' --data-binary @query_string.json
+{% endhighlight %}
+
 Let's take a closer look at the response, which should looks like the following JSON document:
 
 {% highlight json %}
