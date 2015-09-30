@@ -19,7 +19,6 @@ image:
 - :
 - Insert data into indexing json highlighter
 - Check mapping in Search > mapping corresponds to the Github repo's mapping.
-- Check that all "-X...." are set
 
 # ELASTICSEARCH ALWAYS PAYS HIS DEBTS
 
