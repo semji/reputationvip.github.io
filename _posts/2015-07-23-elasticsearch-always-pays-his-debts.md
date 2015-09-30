@@ -2,7 +2,7 @@
 layout: post
 author: quentin_fayet
 title: "Elasticsearch Always Pays His Debts"
-excerpt: "Our second article about Elasticsearch"
+excerpt: "This second article about Elasticsearch goes through mapping and the basic of full-text search"
 modified: 2015-07-23
 tags: [elasticsearch, fullt-text research, apache, lucene]
 comments: true
