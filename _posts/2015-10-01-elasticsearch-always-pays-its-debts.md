@@ -36,10 +36,10 @@ article, I will talk mainly about two points:
 From now, I can tell you that we won't talk about all the query types available in Elasticsearch in this article. There are two reasons to that: the first one is that there are
 plenty of query types, and the second one is that most of them are not an everyday use.
 
-1. [Indexing is back!](/elasticsearch-always-pays-his-debts/#indexing-is-back)
-2. [Mapping](/elasticsearch-always-pays-his-debts/#mapping)
-3. [Batch Indexing](/elasticsearch-always-pays-his-debts/#batch-indexing)
-4. [Searching](/elasticsearch-always-pays-his-debts/#searching)
+1. [Indexing is back!](/elasticsearch-always-pays-its-debts/#indexing-is-back)
+2. [Mapping](/elasticsearch-always-pays-its-debts/#mapping)
+3. [Batch Indexing](/elasticsearch-always-pays-its-debts/#batch-indexing)
+4. [Searching](/elasticsearch-always-pays-its-debts/#searching)
 
 ***
 
