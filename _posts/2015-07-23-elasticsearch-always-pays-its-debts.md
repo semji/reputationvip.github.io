@@ -7,7 +7,7 @@ modified: 2015-07-23
 tags: [elasticsearch, fullt-text research, apache, lucene, mapping]
 comments: true
 image:
-  feature: elastic-is-coming-ban.jpg
+  feature: elastic-always-pays-its-debts-ban.jpg
   credit: Alban Pommeret
   creditlink: http://reputationvip.io
 ---
@@ -21,7 +21,7 @@ image:
 Welcome back! First of all, if you're new to Elasticsearch and/or you don't feel comfortable with the basics of Elasticsearch,
 I advise you to read our first article about Elasticsearch. You can find it here: [http://reputationvip.io/elasticsearch-is-coming](http://reputationvip.io/elasticsearch-is-coming).
 
-From the title, you may have guessed that this set of article if following a guideline: Game Of Thrones. In this article, there is no spoilers about the TV show nor the books.
+From the title, you may have guessed that this set of article if following a guideline: Game Of Thrones. In this article, there are no spoilers about the TV show nor the books.
 
 **Well, let's go!**
 
@@ -31,14 +31,14 @@ If you've read the first article, then you've learned all the basics required to
 behind Elasticsearch ; we've also seen a bit about the basic architecture Elasticsearch is based on ; then, we've talked about the basics *CRUD* operations, and a bit about
 **indexing**; finally, we've talked about some Elasticsearch plugins: **Head** and **Marvel**
 
-Well, I'm keeping in mind that Elasticsearch is a full-text search engine above all. In the first article, we didn't really have fun with full-text search features. In this
+Well, keeping in mind that Elasticsearch is a full-text search engine above all. In the first article, we didn't really have fun with full-text search features. In this
 article, I will talk mainly about two points:
 
 - Indexing operations: **Mappings configuration** and **Batch Indexing**
 - Searching operations: **Querying** and **Filtering** the results.
 
-From now, I can tell you that we won't talk about all the query types available in Elasticsearch in this article. There is two reasons to that: the first one is that there is
-plenty of query types, and the second one is that most of them are not everyday-use
+From now, I can tell you that we won't talk about all the query types available in Elasticsearch in this article. There are two reasons to that: the first one is that there are
+plenty of query types, and the second one is that most of them are not an everyday use.
 
 1. [Indexing is back!](/elasticsearch-always-pays-his-debts/#indexing-is-back)
 2. [Mapping](/elasticsearch-always-pays-his-debts/#mapping)
@@ -57,11 +57,11 @@ speed of your queries directly depend on the structure of your index.
 Here, I want to deal with two operations of the indexing: **Mapping** and **Batch Indexing**. They are not the only operations of indexing, however I won't talk about the other ones
 in this article, but in the next one.
 
-The first operation we'll talk about is: **Mapping**. **Mapping** means to describe the schema of your data. As Elasticsearch is **schemaless** (it doesn't care about the schema
-of the data you're giving to it), I think it is better to define the schema. There is many reasons why you should describe your data schema as far as practical. Schemaless has a
+The first operation we'll talk about is: **Mapping**. **Mapping** means the description of the schema of your data. As Elasticsearch is **schemaless** (it doesn't care about the schema
+of the data you're giving to it), I think it is better to define the schema. There are many reasons why you should describe your data schema as far as practical. Schemaless has a
 lot of advantages, **on the database layer** (easy to go with autoscaling, for example). But on the application layer, data has a schema most often.
 
-The second operation we'll make concerns **Batch Indexing**. Currently, we know how to index a single document into Elasticsearch. However, there is ways to index multiple documents
+The second operation we'll make concerns **Batch Indexing**. Currently, we know how to index a single document into Elasticsearch. However, there are ways to index multiple documents
 at the same time, being efficient and fast.
 
 ### Mapping
@@ -104,7 +104,7 @@ for indices' names beginning with "game_of" (*+game_of*), and finally, the `-*` 
 
 Before we dive into defining our own mapping, it is important to understand **dynamic mapping**, how it works, and what we can configure.
 
-**Be careful: The parameters shown bellow can only be set when creating the index. If you want to modify the mapping of an existing index, there is some tricks
+**Be careful: The parameters shown below can only be set when creating the index. If you want to modify the mapping of an existing index, there is some tricks
 involving aliases.**
 
 ##### Type detection
@@ -151,7 +151,7 @@ The data you need to send are the following:
 As you can see, there is nothing special in the response. It looks like every other response from the server, when you are creating an index. So the question that might come to
 your mind is the following: How can you check that the **numeric detection** has been turned on for a given field?
 
-Actually, it is very simple. You can request your cluster about its settings. I don't want this article to be too much, so I won't talk much about it right here. I'd rather let
+Actually, it is very simple. You can request your cluster about its settings. I don't want this article to go on too much, so I won't talk much about it right here. I'd rather let
 you have a look here, on the official documentation: [https://www.elastic.co/guide/en/elasticsearch/reference/1.6/indices-get-settings.html](https://www.elastic.co/guide/en/elasticsearch/reference/1.6/indices-get-settings.html).
 
 **Full example**
@@ -209,7 +209,7 @@ be disabled. With **dynamic type guessing** turned on, every unknown field (fiel
 the document. This can lead to undesired behaviour of your application. Disabling **dynamic type guessing** allows you to completely control the shape of your document,
 the fields, and the format they should have.
 
-**Be careful: Disabling dynamic type guessing leads you to define your entire mapping; without defining it, unknown field will be ignored.**
+**Be careful: Disabling dynamic type guessing leads you to define your entire mapping; without defining it, unknown fields will be ignored.**
 
 **The request**
 
@@ -237,12 +237,12 @@ by Apache Lucene. To read more about the available options of each field type, y
 This page is talking about `Core Types`, which are the *basic* types: *Integer*, *String*, *float / double*, ... But even more types are available in Elasticsearch, such as `Array`,
 `Object`, `IP`, `Geo Point` and `Geo Shape` (two types I'd like to write an article about).
 
-I could write a hundred pages article about types, as they have hundred of options, but I don't think it would be relevant here. So that I let you read the official documentation,
+I could write a hundred page article about types, as they have hundreds of options, but I don't think it would be relevant here. So that I let you read the official documentation,
 which is complete and clear.
 
 #### Analyzers
 
-Wow, wow, wow! It has been a long way till there. Right now will be our first talk about **full-text search**, and more precisely, **text analysis** with Elasticsearch's **Analyzers**.
+Wow, wow, wow! It has been a long way until we got here. Right now will be our first talk about **full-text search**, and more precisely, **text analysis** with Elasticsearch's **Analyzers**.
 
 I hope you do remember, I talked a bit about **Tokenizers** and **Token filters** in the first article, when I gave you an overview of what is behind Elasticsearch, and how text is processed by Elasticsearch.
 
@@ -257,7 +257,7 @@ Anyway, you should remember that an **analyzer** is composed of a **tokenizer** 
 As Elasticsearch's developers are cool guys, they already provided you some ready-to-use **analyzers**. Nowadays, there are 8 **analyzers**, but the amazing point is that, using
 **tokenizer** and **token filters**, you can to define your own **analyzers**.
 
-First, let's talk about the ready-to-use **analyzers**, how to use it, and finally, how to define your owns.
+First, let's talk about the ready-to-use **analyzers**, how to use it, and finally, how to define your own.
 
 ##### Ready-to-use Analyzers
 
@@ -480,7 +480,7 @@ And now, let's see the result.
 }
 {% endhighlight %}
 
-Well, we got pretty lot of data here. There is several interesting points. The first one, as I told you, **lowercase token filter** has been used, and you can see that proper names,
+Well, we have got a lot of data here. There is several interesting points. The first one, as I told you, **lowercase token filter** has been used, and you can see that proper names,
 such as *Arya*, or *Rickon* has been divest of their uppercased first letter. Second point, parts of the original string have been removed; it is the case for parenthesis, and
 final point. If you take a look at the `type` field, you may notice something. Here, I haven't disabled **dynamic type guessing**, and the only number (`15`) in the string has
 been recognized as such (`<NUM>`).
@@ -600,17 +600,17 @@ That's it! You just defined your own analyzer! And since you also can create you
 
 ##### More analyzers
 
-The handful of ready-to-use analyzers defined by Elasticsearch might not be enough. Fortunately, Elasticsearch developpers are maintaining several Github repositories, with custom
-analyzers. To use them, you just have to install them the classic way you install plugins. For examples, you can find a **phonetic analyzer**, a **smart chinese analyzer**, and so on.
+The handful of ready-to-use analyzers defined by Elasticsearch might not be enough. Fortunately, Elasticsearch developers are maintaining several Github repositories, with custom
+analyzers. To use them, you just have to install them the classic way you install plugins. For example, you can find a **phonetic analyzer**, a **smart chinese analyzer**, and so on.
 
 If you don't remember how to install plugins, you can take a look at the end of [the first article's introduction to plugin](http://reputationvip.io/elasticsearch-is-coming/#introduction-to-plugins).
 
 ### Batch Indexing
 
-Wel, I must admit that... There is still some little things that I'd like to talk about, before we dive into full-text search. In the first
+Wel, I must admit that... There are still some little things that I'd like to talk about, before we dive into full-text search. In the first
 article, I talked about indexing a single document. But now, let's imagine that you have to put one million of documents into an index. At this
-point, you got two choices: The first one, you can do it all by yourself, indexing them one after another... But honestly, I don't recommend you
-to do so; the second choice, and probably the reasonable one, is to use **batch indexing**.
+point, you have got two choices: The first one, you can do it all by yourself, indexing them one after another... But honestly, I don't recommend you
+to do so; the second choice is probably the most reasonable one, to use **batch indexing**.
 
 #### Request format
 
@@ -624,7 +624,7 @@ the following:
 
 The principle is simple: Elasticsearch assumes that **each line of your request's data is a JSON object**, containing the type of query you are making
 (*index*, *create*, *delete*), and information about it, such as index's name, type's name, etc. **The following line must contain the data you are
-indexing or creating.** In the case of a *delete*, no data are required (and thus, Elasticsearch assumes that for *delete*, the following line is
+indexing or creating.** In the case of a *delete*, no data is required (and thus, Elasticsearch assumes that for *delete*, the following line is
 a new set of instructions).
 
 For example, the following data could be used to batch index some Game Of Thrones' characters:
@@ -635,7 +635,7 @@ For example, the following data could be used to batch index some Game Of Throne
 {% endhighlight %}
 
 The bad news is that **there is a default limitation about the size of the data you are passing through the API.** This limitation is of **100 Mb**...
-But, we are working here with Elasticsearch, and quite nothing is impossible. It means that, of course, you can configure this limitation!
+But, we are working here with Elasticsearch, and nothing is impossible. It means that, of course, you can configure this limitation!
 The corresponding line in the configuration file of your node is `http.max_content_length`.
 
 #### Bulk index request
@@ -684,8 +684,8 @@ went wrong, the object should contain an `error` field, describing the error.
 
 #### UDP Bulk Request
 
-**First of all, you should know that this way to make request is deprecated, and will be removed in Elasticsearch 2.0. Anyway, I thought this
-was worth to talk about, and I want to give you some information about it.**
+**First of all, you should know that this way is to make deprecated request, and it will be removed in Elasticsearch 2.0. Anyway, I thought this
+was worth talking about, and I want to give you some information about it.**
 
 I told you many times that Elasticsearch wishes you the best. Bulk requests throughout API are quick. But if you are looking for an even more
 efficient way to make bulk queries, then the **UDP** bulk operations are here for you. As a reminder, **UDP** stands for **User Datagram Protocol**.
@@ -699,7 +699,7 @@ Well, well, you got me, I'll show you how to use it.
 ##### Configuring the cluster for UDP bulk
 
 Yes, nothing comes without a bit of configuration. In the Elasticsearch configuration file, some fields stand to configure **UDP** API. `bulk.udp.host`
-indicates the host (default is the same than the standard API's host). `bulk.udp.port` indicates the port on which the UDP API can be requested.
+indicate the host (default is the same than the standard API's host). `bulk.udp.port` indicates the port on which the UDP API can be requested.
 
 ##### Requesting
 
@@ -716,12 +716,12 @@ $> cat queries.json | nc -u localhost 9700
 
 WOOOOOW! Can you believe it?! We are finally there, talking about the most important and valuable feature of Elasticsearch: **The full-text search**!!
 
-But first, I need to be honest with you. There is still plenty of things that need to be said about other features of Elasticsearch. I am thinking about routing, Segment merging,
-and so on. Nevertheless, I don't want this article to be boring, so I decided to talk about full-text search now, since routing & cie are not essentials to practice full-text search.
+But first, I need to be honest with you. There are still plenty of things that need to be said about other features of Elasticsearch. I am thinking about routing, Segment merging,
+and so on. Nevertheless, I don't want this article to be boring, so I decided to talk about full-text search now, since routing & co. are not essential to practice full-text search.
 
 Before we start making full-text search queries, we should have something on what to search... Which is actually not the case. As my objective right now is not to introduce you
-to high-performances full-text search, we won't need a big as hell database. In my infinite kindness, **I provided you a JSON document you can find in the `dataset` folder of the
-Github repositories that comes with this article**. Okey, you won, I give you the address: [https://github.com/quentinfayet/elasticsearch/tree/v2.0](https://github.com/quentinfayet/elasticsearch/tree/v2.0). This document, named as `game_of_thrones_dataset.json` contains a hand-made
+to high-performance full-text search, we won't need a big database. In my infinite kindness, **I provided you a JSON document you can find in the `dataset` folder of the
+Github repositories that comes with this article**. Okay, you won, I give you the address: [https://github.com/quentinfayet/elasticsearch/tree/v2.0](https://github.com/quentinfayet/elasticsearch/tree/v2.0). This document, named as `game_of_thrones_dataset.json` contains a hand-made
 (yes, I said hand-made) dataset of Game of Thrones characters, along with their biographies.
 
 #### The mapping
@@ -800,7 +800,7 @@ The action, `_search` indicates to Elasticsearch that we are willing to perform 
 
 **The response**
 
-The response from the server will contains each **whole document** that matches your query.
+The response from the server will contain each **whole document** that matches your query.
 
 **Full example**
 
@@ -857,7 +857,7 @@ $>curl –XGET 'http://localhost:9200/game_of_thrones/character/_search?q=house:
 }
 {% endhighlight %}
 
-That's it! You will get each document that matches `house:Stark` (and some more informations, I will detail it right after).
+That's it! You will get each document that matches `house:Stark` (and some more information, I will detail it right after).
 
 ##### The DSL Query
 
@@ -870,12 +870,12 @@ The request type is `GET`.
 
 <div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">/index/type</span><span style="color: chartreuse">/_search</span></code></pre></div>
 
-As you might guess, we will use either `-d` option of curl, providing then our JSON query, or the `--data-binary` query, by indicating it the path
+As you might guess, we will either use `-d` option of curl, providing then our JSON query, or the `--data-binary` query, by indicating the path
 to the file that contains the JSON query.
 
 **The response**
 
-The response depends on your DSL query, and is composed of a document. All Along this article, I will detail separately each response. 
+The response depends on your DSL query, and is composed of a document. Along this article, I will separately detail each response.
 
 **Full example**
 
@@ -950,7 +950,7 @@ Let's take a closer look at the response, which should looks like the following 
 
 This JSON document, more than just giving your the results, also provides some data about the way the query has been handled. The `took` field
 tells you **how long (in milliseconds) the request took to be executed.** `_shards` gives you **information about the shards involved in the processing
-of the query.** Finally, `hits` provides information about the results: `total` is the **total number of documents that matches the query**, `max_score`
+of the query.** Finally, `hits` provides information about the results: `total` which is the **total number of documents that matches the query**, `max_score`
 is the **maximum relevance score found among the matching documents**, and finally, `hits` is an array that **contains JSON objects**. Inside these objects,
 your document can be found in the `_source` field.
 
@@ -1015,7 +1015,7 @@ Note that if you give an empty array to the `fields` field, all fields will be r
 
 #### Scripting
 
-Yes, Elasticsearch **allows you to do scripting!** I told you, what an amazing tool! Actually, we are talking here about **fields that value is
+Yes, Elasticsearch **allows you to do scripting!** I told you, what an amazing tool it was! Actually, we are talking here about **fields that value is
 calculated by the cluster.**
 
 The first thing to do, is to **turn scripting on.** Indeed, **by default, this module is disabled, because it may cause security issues on not well configured
@@ -1027,10 +1027,10 @@ on search request (we will need that right after), the need is just to put this 
 Fortunately, **if you are using the pre-configured docker-based Elasticsearch cluster I provided you in the Github repository, this configuration
 is already set.**
 
-So, for example, let's say that we want to know how old the character of the "Stark" house will be in 16 years. What we need to do, is to create
+So, for example, let's say that we want to know how old the character of the "Stark" house will be in 16 years. What we need to do, is create
 a script-evaluated field, named `future_age`, calculated from the `age` field. All we have to do, is to add `16` to the `age` field.
 
-With scripting, there is two ways to select a field from an existing document.
+With scripting, there are two ways to select a field from an existing document.
 
 - Using `doc['name_of_the_field'].value`, is **faster but has a higher memory usage**, and is **limited to fields that have a single value**, and **single terms.**
 For us, that would mean that we cannot use the `doc` notation on fields such as `tags` (it is an array), or `biography` (it is not single term field).
@@ -1151,7 +1151,7 @@ query is quite simple:
 `nameOfTheField` should be replaced with the field's name that contain the term you are looking for, and `valueToBeSearched` represents its value.
 
 For example, if we want to retrieve all characters that belongs to the `Targaryen` house. `house` field would then be set to `Targaryen`. Please note that, once again, only
-the **exact** term will be searched. Therefore, terms such à `targaryen` (whithout first capital letter), or `TaRgArYEN` won't not match anything.
+the **exact** term will be searched. Therefore, terms such as `targaryen` (without first capital letter), or `TaRgArYEN` will not match anything.
 
 Our query is the following (available at `queries/DSL/query_term.json`):
 
@@ -1435,7 +1435,7 @@ fields, fuzziness **will be interpreted as a range.** On string, an algorithm, k
 
 The fuzziness value must be set between 0.0 and 2.0, or `AUTO`. Also, fuzziness depends on the length of the terms. The more longer the term is, the more "edits" will be allowed.
 
-Let's try the previous query (with the `operator` parameter), but with setting the `fuzziness` parameter to `2`.
+Let's try the previous query (with the `operator` parameter), but by setting the `fuzziness` parameter to `2`.
 
 The format of the query (available at `queries/DSL/query_match_fuzziness.json`):
 
@@ -1495,5 +1495,5 @@ As you can see, from the same request, with `and` operator and `fuzziness` set t
 
 With this article, I just started to scratch the surface of Elasticsearch's possibilities concerning full-text search.
 
-In the next article, I would like to talk about tree-like document structure, scoring (because there is several way for scoring to be calculated).
+In the next article, I would like to talk about tree-like document structures, scoring (because there are several way for scoring to be calculated).
 Also, I think I will introduce you to scripting with MVEL and other languages that can be used to perform scripting with Elasticsearch.
