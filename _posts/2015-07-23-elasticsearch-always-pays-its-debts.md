@@ -12,10 +12,6 @@ image:
   creditlink: http://reputationvip.io
 ---
 
-# TODO
-
-- Set the proper date (modified: xxxx)
-
 # ELASTICSEARCH ALWAYS PAYS ITS DEBTS
 
 Welcome back! First of all, if you're new to Elasticsearch and/or you don't feel comfortable with the basics of Elasticsearch,
