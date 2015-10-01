@@ -12,7 +12,7 @@ image:
   creditlink: http://reputationvip.io
 ---
 
-# ELASTICSEARCH ALWAYS PAYS ITS DEBTS
+# ELASTICSEARCH ALWAYS PAYS ITS DEBTS [http://vidlis.fr/share/5YU1TMazV3c](For your convenience)
 
 Welcome back! First of all, if you're new to Elasticsearch and/or you don't feel comfortable with the basics of Elasticsearch,
 I advise you to read our first article about Elasticsearch. You can find it here: [http://reputationvip.io/elasticsearch-is-coming](http://reputationvip.io/elasticsearch-is-coming).
