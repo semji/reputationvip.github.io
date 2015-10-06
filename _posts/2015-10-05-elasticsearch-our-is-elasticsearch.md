@@ -76,3 +76,30 @@ I did talk a bit about the way Elasticsearch is handling queries. Actually, the 
 So with the default routing configuration, Elasticsearch will have to query **each shard** that compose your index (the query actually involve the
 score of the document). Once Elasticsearch gets the score, it will **re-query the shards considered as relevant** (shards that contains documents that
 match the query). Finally, Elasticsearch will merge the results, and send it back to you.
+
+## Routing Value
+
+### Manually defining the routing value
+
+The first way we can go with **routing** is to manually define a **routing value**. **Routing value** is a value that indicates Elasticsearch  on which
+shard to index a document (and thus, which shard to query).
+
+Defining a routing value makes you indicate this value **each time you are querying the index**.
+
+To index a document by providing its routing value, the request would looks like this:
+
+//TODO check it...
+The query type is `PUT` OR `POST`
+
+<div class="highlight"><pre><code>http://localhost:9200<span style="color: chartreuse">/index/type/ID?routing=routingValue</span></code></pre></div>
+
+In the query above, of course, `index`, `type`, and `ID` should be replaced with the document's index, type and ID. What's interesting is the
+`routing` parameter. Here, `routingValue` stands as its value, and should be replaced by the value of your choice. Note that this value could
+either be digits (integer, long, float, ...) or a string
+
+Using this method, you will also need to **provide the routing value**, under a HTTP GET parameter, on **each query you are making** to the cluster.
+
+Elasticsearch may store documents that have **different routing values on the same shard**. As a result, if you don't provide the routing value
+each time you query Elasticsearch, you may have **results that come from totally different shards**.
+
+That is why this method **is not the most convenient**.
