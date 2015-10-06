@@ -1,15 +1,11 @@
 ---
 layout: post
-author: olivier_balais
 title: "Slides of the Elastic Search internal review"
-excerpt: ""
+author: olivier_balais
 modified: 2015-10-05
+excerpt: "These are the slides used as support by Quentin in our last technical workshop at Reputation VIP."
 tags: [elasticsearch, fullt-text research, apache, lucene, mapping, slides, technical, review]
 comments: true
-image:
-  feature: 
-  credit: Alban Pommeret
-  creditlink: http://reputationvip.io
 ---
 
 At Reputation VIP, we organize regularly internal technical presentations and reviews. It's the ideal moment for us to grow our skills and to share them accros our entire team.
