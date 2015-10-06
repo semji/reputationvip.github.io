@@ -19,6 +19,8 @@ image:
 - Write conclusion
 - Charlotte review
 - Re-check queries (execute them in term)
+- check //TODOS
+- check !, :, ?
 
 # OUR IS ELASTICSEARCH
 
