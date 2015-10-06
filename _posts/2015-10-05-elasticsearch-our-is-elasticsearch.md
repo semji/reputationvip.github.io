@@ -21,6 +21,7 @@ image:
 - Re-check queries (execute them in term)
 - check //TODOS
 - check !, :, ?
+- Complete introduction with blabla about the github repository containing the docker cluster (v3)
 
 # OUR IS ELASTICSEARCH
 
@@ -103,3 +104,39 @@ Elasticsearch may store documents that have **different routing values on the sa
 each time you query Elasticsearch, you may have **results that come from totally different shards**.
 
 That is why this method **is not the most convenient**.
+
+### Semi-automated routing value
+
+Routing stands to **group the documents that have something in common**. For example, in my previous article, I stored document that are Game of Thrones'
+characters. I could use their house as a routing value. That would result in documents that have the same `house` value to be stored on the same
+shard.
+
+Semi-automated routing value is about that: **find a common ground** (a common field for each document that should be stored together, that would
+have the same value).
+
+And using this field that documents have in common, we can **indicates the cluster to use it as a routing value**.
+
+Indicating it to the cluster is done when defining the **mapping**. I've talked about mapping in the previous article ([Elasticsearch Always Pays Its Debts - Mapping](http://reputationvip.io/elasticsearch-always-pays-its-debts/#mapping).
+
+When defining the mapping for a given type, you can add the `_routing` value, which is a JSON object that describes your routing rule. This JSON object
+is composed of two fields: the `path` field contains **the name of the document's field** containing what should be used as the routing value. The
+`required` field that says whether or not the routing value is **required when performing index operation**.
+
+For example, considering the `elasticsearch` index with `character` type, I could have add this to my JSON mapping object:
+
+{% highlight json %}
+{
+    "mappings": {
+        "character": {
+            "_routing": {
+                "required": true,
+                "path": "house"
+            }
+        }
+    }
+}
+{% endhighlight %}
+
+The above JSON object tells Elasticsearch to use the `house` field of my `character` type document as the routing value.
+
+//TODO Slides: indicate that difficulties may show up when using parent/child structure
