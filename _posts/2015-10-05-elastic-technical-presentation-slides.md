@@ -2,7 +2,7 @@
 layout: post
 title: "Slides of the Elastic Search internal review"
 author: olivier_balais
-modified: 2015-10-05
+modified: 2015-10-06
 excerpt: "These are the slides used as support by Quentin in our last technical workshop at Reputation VIP."
 tags: [elasticsearch, fullt-text research, apache, lucene, mapping, slides, technical, review]
 comments: true
