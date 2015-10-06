@@ -47,3 +47,32 @@ the way your data are spread among the cluster.
 - **Scripting** will be at the end of this article... And honestly, I can't wait to talk about it!
 
 Ok, Elasticsearch fans, get ready to dive even deeper in the fabulous world of Elasticsearch!
+
+# Routing
+
+Here we are, back in some theoretical notions for a while.
+
+The first notion I will talk about is **routing**.
+
+## The "classical" routing
+
+In a "classical" normal configuration, Elasticsearch would evenly **dispatch the indexed documents among all shards** that compose
+an **index**.
+
+> You can notice that I used "all shards that compose your **index**", and not "**cluster**". Indeed, each node of the cluster
+**may** represents a shard for a given index, but an index may not be "sharded" on each nodes.
+
+With this configuration, **documents are spread on all shards**, and **each time you query an index**, then the cluster has to **query all the shards
+that compose it**, which may not be the desired behavior. Imagine now that we could **tell the cluster, for each index, where to store the data**,
+according the **routing value** we give it. The **performances** of an index using this configuration may be higher.
+
+This mechanism - to chose where to store documents - is called **routing**.
+
+Well, you may ask yourself how Elasticsearch decides where to store a document. By default, Elasticsearch calculates the **hash value of each
+document's ID**, and on the basis of this hash, it will decide on which **primary shard** the document will be stored. Then, the shard redistributes
+the document **over the replicas**.
+
+I did talk a bit about the way Elasticsearch is handling queries. Actually, the way it handles queries **depends on the routing configuration**.
+So with the default routing configuration, Elasticsearch will have to query **each shard** that compose your index (the query actually involve the
+score of the document). Once Elasticsearch gets the score, it will **re-query the shards considered as relevant** (shards that contains documents that
+match the query). Finally, Elasticsearch will merge the results, and send it back to you.
