@@ -140,3 +140,18 @@ For example, considering the `elasticsearch` index with `character` type, I coul
 The above JSON object tells Elasticsearch to use the `house` field of my `character` type document as the routing value.
 
 //TODO Slides: indicate that difficulties may show up when using parent/child structure
+
+### Limits of routing
+
+Well, maybe the title is a little exaggerated. There are no real "limits" to the routing features, just some facts that you should
+take care about.
+
+The most important among them, is called **hotspot**. A **hotspot** is a shard that **handles way more documents than other shards**. Using the classical
+routing, Elasticsearch will distribute the documents evenly among the shards, so hotspots won't show up easily. But when using manual or semi-automated
+routing, then the documents **may not be spread evenly** among the shards. That could result in some shards to handle a lot of documents.
+
+Unfortunately, there are **no ways to automatically handle** these hotspots.
+
+The solution stands on the client side. Indeed, your application (or whatever indexes documents on your index) has to identify routing values
+that will support too much documents. A solution may be to create a special index for these documents, and then using aliases to make it transparent
+to your application.
