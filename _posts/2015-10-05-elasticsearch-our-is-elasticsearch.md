@@ -155,3 +155,13 @@ Unfortunately, there are **no ways to automatically handle** these hotspots.
 The solution stands on the client side. Indeed, your application (or whatever indexes documents on your index) has to identify routing values
 that will support too much documents. A solution may be to create a special index for these documents, and then using aliases to make it transparent
 to your application.
+
+# Parent-child relationships and nested objects
+
+Through the two previous articles, I talked a lot about *indexing*, *mapping*, how to fill your database with documents, how to update them,
+how to perform CRUD operations on them, and finally, how to use basic full-text search features.
+
+However, a question might have come to your mind: **How to manage relations between documents?**
+
+In this chapter, I will go through the main principles of indexing more complex documents, and how to define the relations that bind them
+together. Also, I will introduce you with the **nested types** of Elasticsearch, and how to index non-flat data.
