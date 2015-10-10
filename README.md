@@ -14,7 +14,7 @@ we provide a basic Vagrantfile to get you started in just a few commands:
 ```
 # on your host
 git clone https://github.com/ReputationVIP/reputationvip.github.io.git
-cd reputationvip.github.io.git
+cd reputationvip.github.io
 vagrant up
 vagrant ssh
 
