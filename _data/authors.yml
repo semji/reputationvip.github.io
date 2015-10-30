@@ -48,3 +48,9 @@ quentin_fayet:
   avatar: avatars/quentinfayet.jpeg
   github: quentinfayet
   linkedin: quentin-fayet
+
+reputation_vip:
+  name: Reputation VIP
+  web: http://reputationvip.com
+  avatar: avatars/reputationvip.png
+  github: https://github.com/ReputationVIP
