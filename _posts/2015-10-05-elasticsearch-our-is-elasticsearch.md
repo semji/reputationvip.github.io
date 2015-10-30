@@ -165,3 +165,10 @@ However, a question might have come to your mind: **How to manage relations betw
 
 In this chapter, I will go through the main principles of indexing more complex documents, and how to define the relations that bind them
 together. Also, I will introduce you with the **nested types** of Elasticsearch, and how to index non-flat data.
+
+## Parent-child relationships
+
+I think we have a perfect topic to talk about parent-child relationships in Elasticsearch. Indeed, as we are indexing Game of Throne's characters,
+each of them has parents, naturally resulting in a parent-child relationship.
+
+Parent-child relationships in Elasticsearch allows you to bind some documents together, by indicating a parent document, and a some child documents.
