@@ -2,7 +2,7 @@
 layout: post
 title: "Blend Web Mix 2015 : On y était !"
 author: reputation_vip
-modified: 2015-10-31
+modified: 2015-11-02
 excerpt: "L'équipe R&D de ReputationVIP s'est rendue au Blend Web Mix 2015. Voici ce que nous en avons pensé !"
 tags: [blend, blendwebmix, conférence, lyon]
 comments: true

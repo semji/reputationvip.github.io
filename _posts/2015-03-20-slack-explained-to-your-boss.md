@@ -3,7 +3,7 @@ layout: post
 author: olivier_balais
 title: Slack explained to your boss
 excerpt: "How Slack will boost your team's productivity"
-modified: 2015-03-26
+modified: 2015-11-02
 tags: [intro, beginner, slack, tutorial]
 comments: true
 redirect_from: /slack/

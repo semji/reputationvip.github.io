@@ -3,9 +3,10 @@ layout: post
 author: quentin_fayet
 title: "Keep calm and use Gitlab"
 excerpt: "Gitlab is a web-based collaborative platform"
-modified: 2015-04-09
+modified: 2015-11-02
 tags: [gitlab, git]
 comments: true
+redirect_from: /gitlab/
 image:
   feature: bandeau-gitlab.jpg
   credit: Alban Pommeret
