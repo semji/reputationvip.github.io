@@ -6,6 +6,7 @@ modified: 2015-10-31
 excerpt: "L'équipe R&D de ReputationVIP s'est rendue au Blend Web Mix 2015. Voici ce que nous en avons pensé !"
 tags: [blend, blendwebmix, conférence, lyon]
 comments: true
+redirect_from: /blend/
 image:
   feature: blend-reputationvipio.jpg
   credit: Alban Pommeret
