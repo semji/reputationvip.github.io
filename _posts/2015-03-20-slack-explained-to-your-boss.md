@@ -6,7 +6,7 @@ excerpt: "How Slack will boost your team's productivity"
 modified: 2015-03-26
 tags: [intro, beginner, slack, tutorial]
 comments: true
-redirect_from: /slack
+redirect_from: /slack/
 image:
   feature: bandeau-slack.jpg
   credit: Alban Pommeret
