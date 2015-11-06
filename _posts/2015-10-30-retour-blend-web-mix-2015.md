@@ -122,7 +122,7 @@ que je vais profiter du week-end pour faire des essais.
 (voir les slides de Raphaël Goetter ([@goetter](https://twitter.com/goetter)) : [https://speakerdeck.com/goetter/flexrox](https://speakerdeck.com/goetter/flexrox))
 - la conférence Python par Lionel Barret de Nazaris ([@LBdN](https://twitter.com/LBdN)) (me parler de dev et de 3D...
 c'était certain que j'allais accrocher) m'a beaucoup intéressé ! Dommage que ça ait été si court !
-- la présentation de Meteor par Benjamin Richard ([@Lobz](https://twitter.com/Lobz)) ([http://slides.com/rebolon/aller-plus-vite-avec-meteorjs](http://slides.com/rebolon/aller-plus-vite-avec-meteorjs)) était très bien aussi mais encore une fois trop rapide.
+- la présentation de Meteor par Benjamin Richard ([@rebolon](https://twitter.com/rebolon)) ([http://slides.com/rebolon/aller-plus-vite-avec-meteorjs](http://slides.com/rebolon/aller-plus-vite-avec-meteorjs)) était très bien aussi mais encore une fois trop rapide.
 
 ---
 
