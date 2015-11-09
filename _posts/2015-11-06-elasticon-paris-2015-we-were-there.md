@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Elasticon Paris 2015: We were there !"
-author: reputation_vip
+title: "Elasticon Paris 2015: We were there!"
+author: quentin_fayet
 modified: 2015-11-09
 excerpt: "Reputation VIP were present at the Elasticon Paris 2015, here is what we thought about it!"
 tags: [elastic, elasticsearch, paris, conference, kibana, elk, logstash]
@@ -21,7 +21,7 @@ Elastic set up a stage where different figures of the company came to talk about
 The festivities began with this very first conference, held in the late morning, for Elastic staff to talk about
 the future of their main products: Elasticsearch, Logstash and Kibana (the famous ELK stack).
 
-First, as an introduction, the master of ceremony introduced a number: 15 035. This, in dollar, is the amount of money
+First, as an introduction, the master of ceremony introduced a number: 15,035. This, in dollar, is the amount of money
 that will be given to a French association, ["Docteur Souris"](www.docteursouris.fr) (computer mouse doctor, Ed.). In
 a few words, this association helps the children in hospital to keep in touch with their family, and to carry on
 studying. Also, "Docteur Souris" was looking for Elasticsearch experts to work as volunteers on the projects.
@@ -39,23 +39,23 @@ has nearly 120 user groups, spread around the world's biggest cities. All projec
 count more than 32,000 commits! Until now, Elasticsearch has been downloaded more than 35 million times!
 
 Then began the list of the biggest organization and companies that are using Elastic products. Wikimedia foundation
-(Wikipedia) is having a transition to work run under Elasticsearch. Also, Mozilla is using the ELK stack on their
-security tool, named as MozDef. The NASA also use the ELK stack to collect and analyze data from martian rovers.
+(Wikipedia) is having a transition to run under Elasticsearch. Also, Mozilla is using the ELK stack on their
+security tool, named as MozDef. NASA also uses the ELK stack to collect and analyze data from martian rovers.
 
 Finally, Shay Banon told us about a funny fact, his first customer on Elastic's IRC channel, Clinton Gormley. As Shay
 was dreaming of his first customer, he imagined amazing projects would use "sexy" language in Elasticsearch, came along
-Clinton, working on a project about funerals, with Perl. As the time goes, Clinton became an priceless member
+Clinton, working on a project about funerals, with Perl. As the time goes, Clinton became a priceless member
 of Elasticsearch community, and nowadays, he works for Elastic.
 
 And so, the next member of Elastic's staff to be on stage was Clinton Gormley, here to tell us about Elasticsearch new
 features.
 
-First, about resiliency, Elasticsearch 2.0 have much more faster recovery times (in case of temporary disconnection, for
+First, about resiliency, Elasticsearch 2.0 has much more faster recovery times (in case of temporary disconnection, for
 example). A new feature, known as "durable writes" also appeared, ensuring that each node of the cluster has written
 the document on the disk before returning "OK" to the client.
 
 Elastic engineers also improved the global performances of the different operations available on the cluster. For
-example, when calling the "state" feature (which formerly responded with a complete document that summarize the whole
+example, when calling the "state" feature (which formerly responded with a complete document that summarizes the whole
 state of the cluster), a diff between the former state and the current state of the cluster is returned to the client,
 which is much lighter than returning the whole document. Also, an important feature, multiple compression algorithms are
 available, allowing the user to choose between a good compression rate, and a fast compression algorithm. About the
@@ -90,10 +90,10 @@ the process they went through with Docker, to maximise the performances of the s
 gave us is that, to retrieve a lot of documents from Elasticsearch, they use two different queries: A first one to get
 the IDs of the documents they are interested in, and a second one, based on these IDs, to retrieve the documents.
 
-The second talk was from Vladislav P., working at ERDF ("Electricité Réseau Distribution France", the company that manage
-the electricity network in France, Ed.). They are using the ELK stack to merge and monitor the logs coming from around
-9,000 servers. Their database contains more than 1 billion documents, resulting in only 290Go of data, thanks to the
-compression algorithm. Their ingesting rate is 8,000 logs per second! To parse these logs, they are using Grok.
+The second talk was from Vladislav P., working at ERDF ("Electricité Réseau Distribution France", the company that
+manages the electricity network in France, Ed.). They are using the ELK stack to merge and monitor the logs coming from
+around 9,000 servers. Their database contains more than 1 billion documents, resulting in only 290Go of data, thanks to
+the compression algorithm. Their ingesting rate is 8,000 logs per second! To parse these logs, they are using Grok.
 
 Some other speakers, from Natixis and PSA ("PSA Peugeot Citroën", french automobile manufacturer, Ed.), came to talk
 about their usage of Elasticsearch, but I won't talk about it, or this article might become really long.
