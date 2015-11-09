@@ -12,9 +12,6 @@ image:
   creditlink: http://reputationvip.io
 ---
 
-//TODO
-- Excerpt "on vous raconte"
-
 On November 5th, in Paris, was held the [Elastic{ON}](https://www.elastic.co/elasticon) 2015, the conference organised
 by Elastic to allow Elastic users to keep in touch. In the Bois de Boulogne, at the Pavillon d'Armenoville,
 Elastic set up a stage where different figures of the company came to talk about the future of Elastic's products.
