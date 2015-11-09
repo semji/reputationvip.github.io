@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "Elasticon Paris 2015 : We were there !"
+title: "Elasticon Paris 2015: We were there !"
 author: reputation_vip
-modified: 2015-11-06
-excerpt: "ReputationVIP were present at the Elasticon Paris 2015, here is what we thought about it!"
-tags: [blend, blendwebmix, conférence, lyon]
+modified: 2015-11-09
+excerpt: "Reputation VIP were present at the Elasticon Paris 2015, here is what we thought about it!"
+tags: [elastic, elasticsearch, paris, conference, kibana, elk, logstash]
 comments: true
 image:
   feature: elasticon.jpg
