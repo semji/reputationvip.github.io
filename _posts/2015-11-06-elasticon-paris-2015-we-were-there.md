@@ -31,7 +31,7 @@ Right after, the creator and CTO of Elastic himself, Shay Banon, got on the stag
 application. His idea was to simply have a search bar, where his wife could type the name of a dish, or an
 ingredient, and get detailed information about it. At that time, the few available APIs where low-level,
 and so he decided to build an abstraction layer on top of it. Elasticsearch was born. Fun facts, when he released the
-first version of Elasticsearch (still in development), Shay Banon decided to tag it as the version 0.4, unstead of
+first version of Elasticsearch (still in development), Shay Banon decided to tag it as the version 0.4, instead of
 0.1, to give credit to his product.
 
 And so came some more numbers. 35,000 is the total number of users who are part of the Elastic community. Elastic
