@@ -121,11 +121,20 @@ nicolas_viennot:
 
 david_dragesco:
   name: David Dragesco
-  avatar: avatars/no-name.jpg
+  avatar: avatars/david-dragesco.jpg
+  web: http://www.ninjalinker.com
+  bio: "SEO & Netlinker"
+  twitter: NinjaLinker
+  linkedin: david-dragesco-46145293
 
 aymen_loukil:
   name: Aymen Loukil
-  avatar: avatars/no-name.jpg
+  avatar: avatars/aymen-loukil.jpg
+  web: http://www.aymen-loukil.com
+  bio: "Agile web engineer,  Search lover and coffee-made blood"
+  twitter: LoukilAymen
+  github: AymenLoukil
+  linkedin: aymenloukil
 
 autonin_duroy:
   name: Autonin Duroy
