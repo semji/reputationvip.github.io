@@ -10,7 +10,7 @@ olivier_balais:
 
 alban_pommeret:
   name: Alban Pommeret
-  bio: 'Alban Pommeret is Lead developper in our team, specialized in PHP and Javascript, he likes painting and cats'
+  bio: 'Alban Pommeret is Lead developer in our team, specialized in PHP and Javascript, he likes painting and cats'
   avatar: avatars/alban-pommeret.jpg
   github: Neverdane
 
@@ -45,7 +45,7 @@ cyril_perraud:
   avatar: avatars/no-name.jpg
   bio: "Cyril would like root access but Adrien won't"
   web: http://vidlis.fr
-  avatar: avatars/no-name.jpg
+  avatar: avatars/cyril-perraud.png
   github: pCyril
   twitter: PerraudCyril
   linkedin: cyrilperraud
@@ -53,7 +53,7 @@ cyril_perraud:
 
 quentin_fayet:
   name: Quentin Fayet
-  bio: "Quentin Fayet is one of our full-stack web developper. He doesn't like coffee, but he's very interested in planes"
+  bio: "Quentin Fayet is one of our full-stack web developer. He doesn't like coffee, but he's very interested in planes"
   web: http://www.quentinfayet.com/
   avatar: avatars/quentinfayet.jpeg
   github: quentinfayet
@@ -90,7 +90,11 @@ david_guignier:
 
 cedric_moretti:
   name: Cedric Moretti
-  avatar: avatars/no-name.jpg
+  avatar: avatars/cedric-moretti.jpg
+  bio: "Love to find bugs and be hated by developers"
+  email: cedric.moretti@reputationvip.com
+  twitter: cedricmoretti
+  linkedin: cedricmoretti
 
 zoe_thivet:
   name: Zoé Thivet
@@ -125,7 +129,11 @@ aymen_loukil:
 
 autonin_duroy:
   name: Autonin Duroy
-  avatar: avatars/no-name.jpg
+  avatar: avatars/antonin-duroy.jpg
+  bio: "Python and data lover"
+  email: antonin.duroy@reputationvip.com
+  github: aduroy
+  linkedin: antoninduroyd
 
 dimitra_politaki:
   name: Dimitra Politaki
