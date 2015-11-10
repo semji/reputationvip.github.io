@@ -742,3 +742,17 @@ article {
 #goog-wm-sb {
 	@extend .btn;
 }
+
+.team {
+    #index {
+      .person {
+          display: inline-block;
+          vertical-align: top;
+          width: 45%;
+          margin: 0px 2% 20px;
+          img.bio-photo {
+              width: 100%;
+          }
+      }
+    }
+}

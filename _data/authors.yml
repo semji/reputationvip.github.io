@@ -23,8 +23,10 @@ guilhem_bourgoin:
   name: Guilhem Bourgoin
   avatar: avatars/guilhem-bourgoin.jpg
   web: http://www.guilhembourgoin.com
-  bio: Windows lover!
+  bio: "Behat lover"
+  twitter: GuilhemBourgoin
   github: guilhemVB
+  email: contact@guilhembourgoin.com
 
 laurent_aubertin:
   name: Laurent Aubertin
@@ -33,13 +35,21 @@ laurent_aubertin:
 
 thomas_lelievre:
   name: Thomas Lelievre
-  avatar: avatars/no-name.jpg
+  avatar: avatars/thomas-lelievre.png
+  twitter: tomalelievre
   github: tomlelievre
+  linkedin: tomalelievre
 
 cyril_perraud:
   name: Cyril Perraud
   avatar: avatars/no-name.jpg
+  bio: "Cyril would like root access but Adrien won't"
+  web: http://vidlis.fr
+  avatar: avatars/no-name.jpg
   github: pCyril
+  twitter: PerraudCyril
+  linkedin: cyrilperraud
+  email: perraud.cyril@gmail.com
 
 quentin_fayet:
   name: Quentin Fayet
@@ -47,6 +57,7 @@ quentin_fayet:
   web: http://www.quentinfayet.com/
   avatar: avatars/quentinfayet.jpeg
   github: quentinfayet
+  twitter: LimonPies
   linkedin: quentin-fayet
 
 reputation_vip:
@@ -54,3 +65,68 @@ reputation_vip:
   web: http://reputationvip.com
   avatar: avatars/reputationvip.png
   github: ReputationVIP
+
+adrien_chielly:
+  name: Adrien Chielly
+  web: http://www.chielly.net
+  bio: "Adrien Chielly is one of our craziest #SysOps. Some words to define him : Geek, AWS Addict, TV Shows fan, WoW Lover. And of course a joke : So, an orc walks into a bar with a parrot on his shoulder. The bartender says 'Hey, where'd you get that?' The parrot says 'Durotar. They've got them all over the place!"
+  avatar: avatars/adrien-chielly.jpg
+  twitter: progz_fr
+  github: progz
+  linkedin: adrienchielly
+
+romain_etchegoyhen:
+  name: Romain Etchegoyhen
+  avatar: avatars/romain-etchegoyhen.jpg
+  web: http://www.romainetchegoyhen.com
+  bio: "I would like to work on a Mac but Adrien won't let me"
+  twitter: snapeuh
+  github: snapeuh
+  linkedin: retchegoyhen
+
+david_guignier:
+  name: David Guignier
+  avatar: avatars/no-name.jpg
+
+cedric_moretti:
+  name: Cedric Moretti
+  avatar: avatars/no-name.jpg
+
+zoe_thivet:
+  name: Zoé Thivet
+  avatar: avatars/zoe-thivet.jpg
+  bio: "Zoé Thivet is one of our software testers. She automates our test cases and when we're sleepy she sings us lullabies in selenese."
+  twitter: Zoe_Thivet
+  linkedin: zo%C3%A9-thivet-45796083
+
+nicolas_couet:
+  name: Nicolas Couet
+  bio: "Nicolas Couet is one of our software engineer. He loves Star Wars, Lego bricks and Star Wars Lego bricks."
+  avatar: avatars/no-name.jpg
+  twitter: tejerka
+  github: tejerka
+  linkedin: nicolascouet
+
+nicolas_viennot:
+  name: Nicolas Viennot
+  avatar: avatars/nicolas-viennot.jpg
+  twitter: nico_69003
+  github: nicolasviennot
+  linkedin: viennotnicolas
+
+
+david_dragesco:
+  name: David Dragesco
+  avatar: avatars/no-name.jpg
+
+aymen_loukil:
+  name: Aymen Loukil
+  avatar: avatars/no-name.jpg
+
+autonin_duroy:
+  name: Autonin Duroy
+  avatar: avatars/no-name.jpg
+
+dimitra_politaki:
+  name: Dimitra Politaki
+  avatar: avatars/no-name.jpg
