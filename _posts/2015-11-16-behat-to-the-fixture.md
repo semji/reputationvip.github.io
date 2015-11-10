@@ -102,7 +102,7 @@ Gherkin language is more readable than yml format. Even if you are not a develop
 
 ## Translate Gherkin language to data
 
-If you are already using behat on your projet, "Given" steps definitions are certainly already defined in one of your Context.
+If you are already using behat on your project, "Given" steps should already have been defined in one of your Context.
 Example of steps corresponding to fixtures above :
 
 {% highlight php startinline=true %}
@@ -137,7 +137,7 @@ public function givenBooks(TableNode $tableBooks)
 
 ## Behat3 settings
 
-Behat test use test databases, but fixtures have to use dev database. Create *behat_fixtures.yml* file in the root of your project as below :
+Behat test uses test databases, but fixtures have to uses dev database. Create *behat_fixtures.yml* file in the root of your project as below :
 
 {% highlight gherkin %}
 default:
@@ -156,7 +156,7 @@ default:
                 - ...
 {% endhighlight %}
 
-First you have to define the environment who have to be used : *dev* (default value is *test*) :
+First you have to define the environment that should be used: *dev* (default value is *test*):
 
 {% highlight gherkin %}
 default:
@@ -166,7 +166,7 @@ default:
                 env: dev
 {% endhighlight %}
 
-Next, specify the folder with fixtures files,  here *src/AppBundle/DataFixtures/* :
+Next, specify the folder that holds fixtures files, here *src/AppBundle/DataFixtures/*:
 
 {% highlight gherkin %}
 default:
@@ -179,7 +179,7 @@ default:
 Context class list is the same as behat test. Just add FixturesContext (see below).
 
 
-## Manage data bases before to load fixtures
+## Manage databases before to load fixtures
 
 {% highlight php startinline=true %}
 class FixturesContext implements Context
@@ -215,7 +215,7 @@ Next, delete database schema, then re-create the schema from doctrine entities. 
 
 ## Write fixtures
 
-Fixtures format is Gherkin language, as behat scenarios. Example :
+Fixtures format is Gherkin language, as behat scenarios. Example:
 
 {% highlight gherkin %}
 Feature: fixtures library
@@ -240,11 +240,11 @@ Feature: fixtures library
 {% endhighlight %}
 
 Put your fixtures files **.feature* on the folder defined in *behat_fixtures.yml* (here *src/AppBundle/DataFixtures/*).
-Behat process files in alphabetical order. If you prefix the name of fixtures with a number, you can control the execution order.
+Behat processes files in alphabetical order. If you prefix the name of fixtures with a number, you can control the execution order.
 
 ## Load fixtures
 
-To load fixtures, execute the script below in your root's project, and wait some seconds !
+To load fixtures, execute the script below in your root's project, and wait a few seconds !
 
 {% highlight sh %}
 bin/behat --config behat_fixtures.yml
