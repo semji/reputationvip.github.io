@@ -3,7 +3,7 @@ layout: post
 author: guilhem_bourgoin
 title: "Behat to the Fixture"
 excerpt: "How to use Behat to write Fixtures in Symfony2"
-modified: 2015-08-14
+modified: 2015-11-16
 tags: [behat, symfony2, fixtures]
 comments: true
 image:
@@ -35,24 +35,22 @@ class LoadUserAndBookData implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-         $userJames = new User();
-         $userJames->setName('james');
-         $userJames->setPassword('pwd');
-         $manager->persist($userJames);
+         $userJKR = new Author();
+         $userJKR->setName('JK Rowling');
+         $manager->persist($userJKR);
      
-         $userJohn = new User();
-         $userJohn->setName('john');
-         $userJohn->setPassword('pwd'); 
-         $manager->persist($userJohn); 
+         $userDB = new Author();
+         $userDB->setName('Dan Brown');
+         $manager->persist($userDB); 
      
          $book1 = new Book();
          $book1->setTitle('Lord of the ring');
-         $book1->setOwner($userJames); 
+         $book1->setAuthor($userJKR); 
          $manager->persist($book1);
      
          $book2 = new Book();
-         $book2->setTitle('Harry Potter 1');
-         $book2->setOwner($userJohn); 
+         $book2->setTitle('Da Vinci Code');
+         $book2->setAuthor($userDB); 
          $manager->persist($book2);
      
          $manager->flush();
@@ -64,21 +62,19 @@ class LoadUserAndBookData implements FixtureInterface
 Or use yml format (with hautelook/alice-bundle) :
 
 {% highlight gherkin %}
-AppBundle\Entity\User:
-    user1: 
-        name: james
-        password: pwd
-    user2:
-        name: john
-        password: pwd
+AppBundle\Entity\Author:
+    author1: 
+        name: JK Rowling
+    author2:
+        name: Dan Brown
 
 AppBundle\Entity\Book:
     book1: 
         title: Lord of the ring
-        owner: @user1
+        author: @author1
     book2:
-        title: Harry Potter 1
-        owner: @user2
+        title: Da Vinci Code
+        author: @author2
 {% endhighlight %}
 
 
@@ -90,14 +86,14 @@ I propose here a third way, based on Gherkin language and interpreted by behat :
 Feature: Load data.
 
     Scenario: fixture 1
-        Given users :
-            | name  | password |
-            | james | pwd      |
-            | john  | pwd      |
+        Given authors :
+            | name       |
+            | JK Rowling |
+            | Dan Brown  |
         Given books :
-            | title            | user  |
-            | Lord of the ring | james |
-            | Harry Potter 1   | john  |
+            | title            | author     |
+            | Lord of the ring | JK Rowling |
+            | Da Vinci Code    | Dan Brown  |
 
 {% endhighlight %}
 
@@ -111,15 +107,14 @@ Example of steps corresponding to fixtures above :
 
 {% highlight php startinline=true %}
 /**
- * @Given users :
+ * @Given authors :
  */
-public function users(TableNode $tableUsers)
+public function givenAuthors(TableNode $tableAuthors)
 {
-    foreach ($tableUsers as $userRow) {
-        $user = new User();
-        $user->setName($userRow['name']);
-        $user->setPassword($userRow['password']);
-        $this->em->persist($user);
+    foreach ($tableAuthors as $authorRow) {
+        $author = new Author();
+        $author->setName($authorRow['name']);
+        $this->em->persist($author);
     }
     $this->em->flush();
 }
@@ -127,12 +122,12 @@ public function users(TableNode $tableUsers)
 /**
  * @Given books :
  */
-public function books(TableNode $tableBooks)
+public function givenBooks(TableNode $tableBooks)
 {
     foreach ($tableBooks as $bookRow) {
         $book = new Book();
         $book->setTitle($bookRow['title']);
-        $book->setOwner($this->findUserByName($bookRow['owner']));
+        $book->setAuthor($this->findAuthorByName($bookRow['author']));
         $this->em->persist($book);
     }
     $this->em->flush();
@@ -226,7 +221,7 @@ Fixtures format is Gherkin language, as behat scenarios. Example :
 Feature: fixtures library
 
     Scenario: fixture writers
-        Given writers :
+        Given authors :
             | name             | birth date |
             | JK Rowling       | 1965-07-31 |
             | Dan Brown        |            |
