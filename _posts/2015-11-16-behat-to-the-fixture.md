@@ -14,13 +14,13 @@ image:
 
 ## What is a fixture ?
 
-[DoctrineFixturesBundle documentation](http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html) :
+[DoctrineFixturesBundle documentation](http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html):
 
->Fixtures are used to load a controlled set of data into a database. This data can be used for testing or could be the initial data required for the application to run smoothly. Symfony2 has no built in way to manage fixtures but Doctrine2 has a library to help you write fixtures.
+>Fixtures are used to load a controlled set of data into a database. This data can be used for testing or could be the initial data required for the application to run smoothly. Symfony2 was no built in a manner that manages fixtures but Doctrine2 has a library to help you write fixtures.
 
-The goal of this article is to propose a new method based on Gherkin language and behat 3 to write and load fixtures on Symfony2.
+The goal of this article is to give a new method based on Gherkin language and Behat 3 to write and load fixtures on Symfony2.
 
-For further information about behat test, refer to this article : [BDD, Behaviour Driven Development](/bdd-behat-driven-development) 
+For further information about Behat test, refer to the following articles: [BDD, Behaviour Driven Development](/bdd-behat-driven-development) 
 
 ***
 
@@ -28,7 +28,7 @@ For further information about behat test, refer to this article : [BDD, Behaviou
 
 There are two main ways to write symfony2 fixtures.
 
-Write your entities directly in PHP :
+Write your entities directly in PHP:
 
 {% highlight php startinline=true %}
 class LoadUserAndBookData implements FixtureInterface
@@ -59,7 +59,7 @@ class LoadUserAndBookData implements FixtureInterface
 {% endhighlight %}
 
 
-Or use yml format (with hautelook/alice-bundle) :
+Or use yml format (with hautelook/alice-bundle):
 
 {% highlight gherkin %}
 AppBundle\Entity\Author:
@@ -80,34 +80,34 @@ AppBundle\Entity\Book:
 
 ## Fixtures in Gherkin language
 
-I propose here a third way, based on Gherkin language and interpreted by behat :
+Here, I am offering you a third way, based on Gherkin language and interpreted by Behat:
 
 {% highlight gherkin %}
 Feature: Load data.
 
     Scenario: fixture 1
-        Given authors :
+        Given authors:
             | name       |
             | JK Rowling |
             | Dan Brown  |
-        Given books :
+        Given books:
             | title            | author     |
             | Lord of the ring | JK Rowling |
             | Da Vinci Code    | Dan Brown  |
 
 {% endhighlight %}
 
-Gherkin language is more readable than yml format. Even if you are not a developer, you can write it.
+Gherkin language is more condensed and less verbose than yml format, whiwh makes it more readable. So, even if you are not a developer, you can write it.
 
 
 ## Translate Gherkin language to data
 
-If you are already using behat on your project, "Given" steps should already have been defined in one of your Context.
-Example of steps corresponding to fixtures above :
+If you already use Behat on your project, "Given" steps should already have been defined in one of your Context.
+Example of steps corresponding to fixtures above:
 
 {% highlight php startinline=true %}
 /**
- * @Given authors :
+ * @Given authors:
  */
 public function givenAuthors(TableNode $tableAuthors)
 {
@@ -120,7 +120,7 @@ public function givenAuthors(TableNode $tableAuthors)
 }
 
 /**
- * @Given books :
+ * @Given books:
  */
 public function givenBooks(TableNode $tableBooks)
 {
@@ -137,7 +137,7 @@ public function givenBooks(TableNode $tableBooks)
 
 ## Behat3 settings
 
-Behat test uses test databases, but fixtures have to uses dev database. Create *behat_fixtures.yml* file in the root of your project as below :
+Behat test uses test databases, but fixtures have to use dev databases. Create *behat_fixtures.yml* file in the root of your project as shown below:
 
 {% highlight gherkin %}
 default:
@@ -151,12 +151,12 @@ default:
             bundle: 'AppBundle'
             paths:
                 - src/AppBundle/DataFixtures/
-            contexts :
+            contexts:
                 - AppBundle\Features\Context\FixturesContext
                 - ...
 {% endhighlight %}
 
-First you have to define the environment that should be used: *dev* (default value is *test*):
+First you have to define the environment that you will you: *dev* (default value is *test*):
 
 {% highlight gherkin %}
 default:
@@ -166,7 +166,7 @@ default:
                 env: dev
 {% endhighlight %}
 
-Next, specify the folder that holds fixtures files, here *src/AppBundle/DataFixtures/*:
+Then, specify the folder that holds fixtures files, here *src/AppBundle/DataFixtures/*:
 
 {% highlight gherkin %}
 default:
@@ -176,7 +176,7 @@ default:
                 - src/AppBundle/DataFixtures/
 {% endhighlight %}
 
-Context class list is the same as behat test. Just add FixturesContext (see below).
+Context class list is the same as Behat test. Just add FixturesContext (see below).
 
 
 ## Manage databases before to load fixtures
@@ -210,29 +210,29 @@ class FixturesContext implements Context
 
 {% endhighlight %}
 
-First, check database host is *localhost* (on a vagrant for example), to avoid to clear wrong databases.
+First, check the database host is *localhost* (on a vagrant for example), to avoid to clear wrong databases.
 Next, delete database schema, then re-create the schema from doctrine entities. You can also use a migration script like DoctrineMigration.
 
 ## Write fixtures
 
-Fixtures format is Gherkin language, as behat scenarios. Example:
+Fixtures format is Gherkin language, as Behat scenarios. Example:
 
 {% highlight gherkin %}
 Feature: fixtures library
 
     Scenario: fixture writers
-        Given authors :
+        Given authors:
             | name             | birth date |
             | JK Rowling       | 1965-07-31 |
             | Dan Brown        |            |
             | J. R. R. Tolkien | 1892-01-03 |
 
     Scenario: fixture books
-        Given literary genres :
+        Given literary genres:
             | name            |
             | science fiction |
             | comedy          |
-        Given books :
+        Given books:
             | title                 | author     | literary genres | publication year |
             | The Lord of the Rings | JK Rowling | science fiction | 1954             |
             | Da Vinci Code         | Dan Brown  |                 | 2003             |
@@ -244,7 +244,7 @@ Behat processes files in alphabetical order. If you prefix the name of fixtures 
 
 ## Load fixtures
 
-To load fixtures, execute the script below in your root's project, and wait a few seconds !
+To load fixtures, execute the script below in your root's project and wait a few seconds !
 
 {% highlight sh %}
 bin/behat --config behat_fixtures.yml
@@ -255,13 +255,13 @@ bin/behat --config behat_fixtures.yml
 
 ## To conclude
 
-There are many benefits to using behat 3 to load fixtures :
+There are many benefits to using Behat 3 to load fixtures:
 
 * Fixtures are more readable and easy to write
-* If you already use behat 3, your current steps definitions can be reused
-* If you add a column on one of your table, you need to modify only one piece of code to make evolve behat tests and fixtures
-* In your steps definitions, you can easily defined defaults values (example: users password could be "pwd" by default)
+* If you already use Behat 3, your current steps definitions can be reused
+* If you add a column on one of your table, you need to modify only one piece of the code to make evolve Behat tests and fixtures
+* In your steps definitions, you can easily define default values (example: users password could be "pwd" by default)
 
 The only negative point is that the execution time is greater than classical Symfony2 fixtures.
 
-If you like Behat, you will love write fixtures with it !
+If you like Behat, you will love writing fixtures with it !
