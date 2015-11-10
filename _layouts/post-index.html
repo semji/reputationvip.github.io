@@ -50,7 +50,13 @@
         {% if post.link %}
           <h2 class="link-post"><a href="{{ site.url }}{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a> <a href="{{ post.link }}" target="_blank" title="{{ post.title }}"><i class="fa fa-link"></i></a></h2>
         {% else %}
-          <h2><a href="{{ site.url }}{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a></h2>
+          <a href="{{ site.url }}{{ post.url }}" title="{{ post.title }}">
+              <img src="/images/{{ post.image.feature }}" alt="{{ post.title }}">
+          </a>
+          {% if post.author %}
+          {% assign author = site.data.authors[post.author] %}{% else %}{% assign author = site.owner %}
+          {% endif %}
+          <h2><a href="{{ site.url }}{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a> <div class="date">{{ post.modified }} |  {{ author.name }}</div></h2>
           <p>{{ post.excerpt | strip_html | truncate: 160 }}</p>
         {% endif %}
       </article>
