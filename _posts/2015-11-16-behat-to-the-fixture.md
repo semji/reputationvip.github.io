@@ -259,8 +259,8 @@ There are many benefits to using behat 3 to load fixtures :
 
 * Fixtures are more readable and easy to write
 * If you already use behat 3, your current steps definitions can be reused
-* If you add a column on one of your table, you have to modify only one piece of code to make evolve behat tests and fixtures
-* In your steps definitions, you can easily defined defaults values (example : users password could be "pwd" by default)
+* If you add a column on one of your table, you need to modify only one piece of code to make evolve behat tests and fixtures
+* In your steps definitions, you can easily defined defaults values (example: users password could be "pwd" by default)
 
 The only negative point is that the execution time is greater than classical Symfony2 fixtures.
 
