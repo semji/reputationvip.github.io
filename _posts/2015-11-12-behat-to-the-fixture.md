@@ -1,13 +1,13 @@
 ---
 layout: post
 author: guilhem_bourgoin
-title: "Symfony2 - Load fixtures thanks to Behat"
+title: "Behat to the Fixture"
 excerpt: "How to use Behat to write Fixtures in Symfony2"
 modified: 2015-08-14
 tags: [behat, symfony2, fixtures]
 comments: true
 image:
-  feature: elastic-is-coming-ban.jpg
+  feature: behat-to-the-fixture.jpg
   credit: Alban Pommeret
   creditlink: http://reputationvip.io
 ---
@@ -67,10 +67,10 @@ Or use yml format (with hautelook/alice-bundle) :
 AppBundle\Entity\User:
     user1: 
         name: james
-        password: pdw
+        password: pwd
     user2:
         name: john
-        password: pdw
+        password: pwd
 
 AppBundle\Entity\Book:
     book1: 
