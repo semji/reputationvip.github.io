@@ -97,7 +97,7 @@ Feature: Load data.
 
 {% endhighlight %}
 
-Gherkin language is more condensed and less verbose than yml format, whiwh makes it more readable. So, even if you are not a developer, you can write it.
+Gherkin language is more condensed and less verbose than yml format, which makes it more readable. So, even if you are not a developer, you can write it.
 
 
 ## Translate Gherkin language to data
