@@ -210,7 +210,7 @@ class FixturesContext implements Context
 
 {% endhighlight %}
 
-First, ensure that the database host is *localhost* (on a vagrant for example), in order to avoid to clearing wrong databases.
+First, ensure that the database host is *localhost* (on a vagrant for example), in order to avoid clearing wrong databases.
 Next, delete database schema, then re-create the schema from doctrine entities. You can also use a migration script like DoctrineMigration.
 
 ## Write fixtures
