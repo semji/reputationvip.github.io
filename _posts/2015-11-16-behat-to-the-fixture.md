@@ -179,7 +179,7 @@ default:
 Context class list is the same as Behat test. Just add FixturesContext (see below).
 
 
-## Manage databases before to loading fixtures
+## Manage databases before loading fixtures
 
 {% highlight php startinline=true %}
 class FixturesContext implements Context
