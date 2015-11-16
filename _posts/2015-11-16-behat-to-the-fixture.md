@@ -16,7 +16,7 @@ image:
 
 [DoctrineFixturesBundle documentation](http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html):
 
->Fixtures are used to load a controlled set of data into a database. This data can be used for testing or could be the initial data required for the application to run smoothly. Symfony2 has no built in way to manages fixtures but Doctrine2 has a library to help you write fixtures.
+>Fixtures are used to load a controlled set of data into a database. This data can be used for testing or could be the initial data required for the application to run smoothly. Symfony2 has no built in way to manage fixtures but Doctrine2 has a library to help you write fixtures.
 
 The goal of this article is to give a new method based on Gherkin language and Behat 3 to write and load fixtures on Symfony2.
 
