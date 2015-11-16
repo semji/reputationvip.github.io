@@ -12,11 +12,11 @@ image:
   creditlink: http://reputationvip.io
 ---
 
-## What is a fixture ?
+## What is a fixture?
 
 [DoctrineFixturesBundle documentation](http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html):
 
->Fixtures are used to load a controlled set of data into a database. This data can be used for testing or could be the initial data required for the application to run smoothly. Symfony2 was no built in a manner that manages fixtures but Doctrine2 has a library to help you write fixtures.
+>Fixtures are used to load a controlled set of data into a database. This data can be used for testing or could be the initial data required for the application to run smoothly. Symfony2 has no built in way that manages fixtures but Doctrine2 has a library to help you write fixtures.
 
 The goal of this article is to give a new method based on Gherkin language and Behat 3 to write and load fixtures on Symfony2.
 
@@ -26,7 +26,7 @@ For further information about Behat test, refer to the following articles: [BDD,
 
 ## Current ways to write fixtures on Symfony2
 
-There are two main ways to write symfony2 fixtures.
+There are two main ways to write Symfony2 fixtures.
 
 Write your entities directly in PHP:
 
@@ -194,16 +194,17 @@ class FixturesContext implements Context
     
         $application = new Application($kernel);
         $application->setAutoExit(false);
-        FixturesContext::runConsole($application, "doctrine:schema:drop", ["--force" => true, "--full-database" => true]);
-        FixturesContext::runConsole($application, "doctrine:schema:create");
+        FixturesContext::runConsole($application, 'doctrine:schema:drop', ['--force' => true, '--full-database' => true]);
+        FixturesContext::runConsole($application, 'doctrine:schema:create');
         $kernel->shutdown();
     }
     
-    private static function runConsole($application, $command, $options = array())
+    private static function runConsole($application, $command, $options = [])
     {
-        $options["-e"] = "dev";
-        $options["-q"] = null;
-        $options = array_merge($options, array('command' => $command));
+        $options['-e'] = 'dev';
+        $options['-q'] = null;
+        $options = array_merge($options, ['command' => $command]);
+        
         return $application->run(new ArrayInput($options));
     }
 }
@@ -244,7 +245,7 @@ Behat processes files in alphabetical order. If you prefix the name of fixtures 
 
 ## Load fixtures
 
-To load fixtures, execute the script below in your project root and wait a few seconds !
+To load fixtures, execute the script below in your project root and wait a few seconds!
 
 {% highlight sh %}
 bin/behat --config behat_fixtures.yml
@@ -259,9 +260,9 @@ There are many benefits to using Behat 3 to load fixtures:
 
 * Fixtures are more readable and easy to write
 * If you already use Behat 3, your current steps definitions can be reused
-* If you add a column on one of your table, you need to modify only one piece of code to make evolve Behat tests and fixtures
+* If you add a column on one of your table, you need to modify only one piece of code to make Behat tests and fixtures evolve
 * In your steps definitions, you can easily define default values (example: users password could be "pwd" by default)
 
-The only negative point is that the execution time is greater than classical Symfony2 fixtures.
+For me, the only negative point is that the execution time is greater than classical Symfony2 fixtures.
 
-If you like Behat, you will love writing fixtures with it !
+If you like Behat, you will love writing fixtures with it!
