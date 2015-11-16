@@ -35,22 +35,22 @@ class LoadUserAndBookData implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-         $userJKR = new Author();
-         $userJKR->setName('JK Rowling');
-         $manager->persist($userJKR);
+         $authorJKR = new Author();
+         $authorJKR->setName('JK Rowling');
+         $manager->persist($authorJKR);
      
-         $userDB = new Author();
-         $userDB->setName('Dan Brown');
-         $manager->persist($userDB); 
+         $authorDB = new Author();
+         $authorDB->setName('Dan Brown');
+         $manager->persist($authorDB); 
      
          $book1 = new Book();
-         $book1->setTitle('Lord of the ring');
-         $book1->setAuthor($userJKR); 
+         $book1->setTitle('Harry Potter');
+         $book1->setAuthor($authorJKR); 
          $manager->persist($book1);
      
          $book2 = new Book();
          $book2->setTitle('Da Vinci Code');
-         $book2->setAuthor($userDB); 
+         $book2->setAuthor($authorDB); 
          $manager->persist($book2);
      
          $manager->flush();
@@ -70,7 +70,7 @@ AppBundle\Entity\Author:
 
 AppBundle\Entity\Book:
     book1: 
-        title: Lord of the ring
+        title: Harry Potter
         author: @author1
     book2:
         title: Da Vinci Code
@@ -91,9 +91,9 @@ Feature: Load data.
             | JK Rowling |
             | Dan Brown  |
         Given books:
-            | title            | author     |
-            | Lord of the ring | JK Rowling |
-            | Da Vinci Code    | Dan Brown  |
+            | title         | author     |
+            | Harry Potter  | JK Rowling |
+            | Da Vinci Code | Dan Brown  |
 
 {% endhighlight %}
 
@@ -137,7 +137,7 @@ public function givenBooks(TableNode $tableBooks)
 
 ## Behat3 settings
 
-Behat test uses test databases, but fixtures have to use dev databases. Create *behat_fixtures.yml* file in the root of your project as shown below:
+Behat test uses test databases, but fixtures have to use dev databases. Create *behat_fixtures.yml* file in the root directory of your project as shown below:
 
 {% highlight gherkin %}
 default:
@@ -156,7 +156,7 @@ default:
                 - ...
 {% endhighlight %}
 
-First you have to define the environment that you will you: *dev* (default value is *test*):
+First you have to define the environment that you need: *dev* (default value is *test*):
 
 {% highlight gherkin %}
 default:
@@ -179,7 +179,7 @@ default:
 Context class list is the same as Behat test. Just add FixturesContext (see below).
 
 
-## Manage databases before to load fixtures
+## Manage databases before to loading fixtures
 
 {% highlight php startinline=true %}
 class FixturesContext implements Context
@@ -210,7 +210,7 @@ class FixturesContext implements Context
 
 {% endhighlight %}
 
-First, check the database host is *localhost* (on a vagrant for example), to avoid to clear wrong databases.
+First, ensure that the database host is *localhost* (on a vagrant for example), in order to avoid to clearing wrong databases.
 Next, delete database schema, then re-create the schema from doctrine entities. You can also use a migration script like DoctrineMigration.
 
 ## Write fixtures
@@ -233,10 +233,10 @@ Feature: fixtures library
             | science fiction |
             | comedy          |
         Given books:
-            | title                 | author     | literary genres | publication year |
-            | The Lord of the Rings | JK Rowling | science fiction | 1954             |
-            | Da Vinci Code         | Dan Brown  |                 | 2003             |
-            | Angels and Demons     | Dan Brown  |                 | 2000             |
+            | title             | author     | literary genres | publication year |
+            | Harry Potter      | JK Rowling | science fiction | 1954             |
+            | Da Vinci Code     | Dan Brown  |                 | 2003             |
+            | Angels and Demons | Dan Brown  |                 | 2000             |
 {% endhighlight %}
 
 Put your fixtures files **.feature* on the folder defined in *behat_fixtures.yml* (here *src/AppBundle/DataFixtures/*).
@@ -244,7 +244,7 @@ Behat processes files in alphabetical order. If you prefix the name of fixtures 
 
 ## Load fixtures
 
-To load fixtures, execute the script below in your root's project and wait a few seconds !
+To load fixtures, execute the script below in your project root and wait a few seconds !
 
 {% highlight sh %}
 bin/behat --config behat_fixtures.yml
@@ -259,7 +259,7 @@ There are many benefits to using Behat 3 to load fixtures:
 
 * Fixtures are more readable and easy to write
 * If you already use Behat 3, your current steps definitions can be reused
-* If you add a column on one of your table, you need to modify only one piece of the code to make evolve Behat tests and fixtures
+* If you add a column on one of your table, you need to modify only one piece of code to make evolve Behat tests and fixtures
 * In your steps definitions, you can easily define default values (example: users password could be "pwd" by default)
 
 The only negative point is that the execution time is greater than classical Symfony2 fixtures.
