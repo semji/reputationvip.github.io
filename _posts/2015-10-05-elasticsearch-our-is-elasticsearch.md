@@ -165,6 +165,91 @@ However, a question might have come to your mind: **How to manage relations betw
 In this chapter, I will go through the main principles of indexing more complex documents, and how to define the relations that bind them
 together. Also, I will introduce you with the **nested types** of Elasticsearch, and how to index non-flat data.
 
+## Nested types
+
+The definition of the *nested type* is quite simple: It is an **array of objects** that lives inside a document.
+
+As you know, Elasticsearch works on top of Apache Lucene. Yet, Apache Lucene doesn't know anything about inner
+objects, so that the job of Elasticsearch is to flatten them.
+
+In other words, if you try to index a document that contains an array of objects, by default, each field of each object
+of the array will be inserted in a field in your top document that contain an array of each value that correspond to
+this field's name in the objects of the array. Is that clear ? I think it is not. Let me give you an example:
+
+Let's assume that our *character* type documents have a field, named `weapons` that contains an array of objects,
+each of them would be a weapon, as following:
+
+{% highlight json %}
+{
+    "_id": "Arya Stark"
+    "house": "Stark",
+    "gender": "female",
+    "age":17,
+    "biography": "Arya Stark is the younger daughter and third child [...]",
+    "tags": ["stark","needle","faceless god"],
+    "weapons": [
+        {
+            "type": "sword",
+            "name": "Needle"
+        },
+        {
+            "type": "axe",
+            "name": "My beloved Axe"
+        }
+    ]
+}
+{% endhighlight %}
+
+As you can see, the document `Arya Stark` has a field named `weapons`, that contains two objects. The first one is a
+sword (the famous sword named "Needle"), and the second one is an axe named "My beloved Axe" (thanks to my imagination
+for this name).
+
+If you index this document in the cluster, without precising in the mapping that the field `weapons` is *nested* type,
+then the indexed document will look like this:
+
+{% highlight json %}
+{
+    "_id": "Arya Stark"
+    "house": "Stark",
+    "gender": "female",
+    "age":17,
+    "biography": "Arya Stark is the younger daughter and third child [...]",
+    "tags": ["stark","needle","faceless god"],
+    "weapons.type": ["sword", "axe"],
+    "weapons.name": ["Needle", "My beloved Axe"]
+}
+{% endhighlight %}
+
+As you can see, each field of the objects contained in the array of objects has been inserted into an array of values,
+which field's name is composed of the array object's field name. The two field named `type`, of the `weapons`array
+for example, result into a new field named `weapons.type`, which is an array of the former values contained in the
+`type` field of the `weapons` array.
+
+Here, we lost any relation between the fields, because the objects have been flatten.
+
+The solution to this problem is, in the mapping, to define the field `weapon` as a *nested* type field:
+
+{% highlight json %}
+{
+    "mappings": {
+        "character": {
+            "dynamic": "false",
+            "properties": {
+                "id": {"type": "string"},
+                "house": {"type": "string", "index": "not_analyzed"},
+                "gender": {"type": "string", "index": "not_analyzed"},
+                "age": {"type":"integer"},
+                "biography": {"type": "string", "term_vector": "with_positions_offsets", "index": "analyzed"},
+                "tags": {"type": "string"},
+                "weapons": {"type": "nested"}
+            }
+        }
+    }
+}
+{% endhighlight %}
+
+And, with this mapping, the nested object will not be altered.
+
 ## Parent-child relationships
 
 Well, in the context we have (Game of Thrones' characters), you might think that parent-child relationships could be
