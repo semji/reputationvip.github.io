@@ -252,10 +252,17 @@ And, with this mapping, the nested object will not be altered.
 
 ## Parent-child relationships
 
-Well, in the context we have (Game of Thrones' characters), you might think that parent-child relationships could be
-applied to parent-child relationships between the characters (for example, Aria is the child of Catelyn and Eddard
-Stark).
+As we just saw, *nested* type is a way for a document to embed one or more "sub-documents". But with nested documents,
+each sub-document lives in its parents. In other words, you cannot change one of the sub-documents without reindexing
+the parent. Also, if you have a large amount of sub-documents, it might become tricky to add documents, update them
+or delete them.
 
-But, if we stop and think for a second, we can notice that both parents and children belong to *character* type. In
- Elasticsearch, the parent-child relationship can be compared to a 1-n relation in relational database.
+Here comes the parent-child relationship. With this relationship, a document is bound to another, but it still remains
+a single entity.
+
+Take cre though, if the parent document has a routing defined in its mapping, the child has to follow the same routing.
+Indeed, Elasticsearch maintains a map of parent-child relationships to make search faster, but it implies for the
+parents and the children to be indexed on the same shard. What it means is that if you try to index a orphan child
+document, Elasticsearch will require you to precise the routing value.
+
 
