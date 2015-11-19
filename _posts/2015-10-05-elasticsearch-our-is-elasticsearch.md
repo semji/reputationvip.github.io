@@ -40,7 +40,7 @@ If you don't remember well about these notions, I recommend you to read the prev
 
 As I just said, this article adds itself to the two previous ones. Without no more waiting, let's take a look at the menu.
 
-- **Routing** will be the first subject I will be talking about in this article. I will detail you why and how your can configure
+- **Routing** will be the first subject I will talk about in this article. I will detail you why and how your can configure
 the way your data are spread among the cluster.
 - **Tree-like index structures** and **nested objects** will be my second subject. Indeed, we haven't go through every Elasticsearch data types yet.
 - **Scoring** will be my third theoretical subject. I will detail you how much the choice of a scoring function is important.
@@ -89,8 +89,7 @@ Defining a routing value makes you indicate this value **each time you are query
 
 To index a document by providing its routing value, the request would looks like this:
 
-//TODO check it...
-The query type is `PUT` OR `POST`
+The query type is `PUT`
 
 <div class="highlight"><pre><code>http://localhost:9200<span style="color: chartreuse">/index/type/ID?routing=routingValue</span></code></pre></div>
 
@@ -114,7 +113,7 @@ shard.
 Semi-automated routing value is about that: **find a common ground** (a common field for each document that should be stored together, that would
 have the same value).
 
-And using this field that documents have in common, we can **indicates the cluster to use it as a routing value**.
+And using this field that documents have in common, we can **indicate the cluster to use it as a routing value**.
 
 Indicating it to the cluster is done when defining the **mapping**. I've talked about mapping in the previous article ([Elasticsearch Always Pays Its Debts - Mapping](http://reputationvip.io/elasticsearch-always-pays-its-debts/#mapping).
 
