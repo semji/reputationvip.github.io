@@ -42,7 +42,7 @@ As I just said, this article adds itself to the two previous ones. Without no mo
 
 - **Routing** will be the first subject I will talk about in this article. I will detail you why and how your can configure
 the way your data are spread among the cluster.
-- **Tree-like index structures** and **nested objects** will be my second subject. Indeed, we haven't go through every Elasticsearch data types yet.
+- **Parent-child relationships  ** and **nested objects** will be my second subject. Indeed, we haven't go through every Elasticsearch data types yet.
 - **Scoring** will be my third theoretical subject. I will detail you how much the choice of a scoring function is important.
 - **Compound Queries** are some more complicated queries //TODO COMPLETE THIS EXCERPT ABOUT COMPOUND QUERIES
 - **Scripting** will be at the end of this article... And honestly, I can't wait to talk about it!
