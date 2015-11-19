@@ -167,7 +167,10 @@ together. Also, I will introduce you with the **nested types** of Elasticsearch,
 
 ## Parent-child relationships
 
-I think we have a perfect topic to talk about parent-child relationships in Elasticsearch. Indeed, as we are indexing Game of Throne's characters,
-each of them has parents, naturally resulting in a parent-child relationship.
+Well, in the context we have (Game of Thrones' characters), you might think that parent-child relationships could be
+applied to parent-child relationships between the characters (for example, Aria is the child of Catelyn and Eddard
+Stark).
 
-Parent-child relationships in Elasticsearch allows you to bind some documents together, by indicating a parent document, and a some child documents.
+But, if we stop and think for a second, we can notice that both parents and children belong to *character* type. In
+ Elasticsearch, the parent-child relationship can be compared to a 1-n relation in relational database.
+
