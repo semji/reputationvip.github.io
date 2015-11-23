@@ -260,9 +260,8 @@ or delete them.
 Here comes the parent-child relationship. With this relationship, a document is bound to another, but it still remains
 a single entity.
 
-Take cre though, if the parent document has a routing defined in its mapping, the child has to follow the same routing.
+Pay attention though, if the parent document has a routing defined in its mapping, the child has to follow the same routing.
 Indeed, Elasticsearch maintains a map of parent-child relationships to make search faster, but it implies for the
 parents and the children to be indexed on the same shard. What it means is that if you try to index a orphan child
 document, Elasticsearch will require you to precise the routing value.
-
 
