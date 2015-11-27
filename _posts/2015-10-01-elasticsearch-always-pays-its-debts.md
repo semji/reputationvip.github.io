@@ -19,6 +19,8 @@ I advise you to read our first article about Elasticsearch. You can find it here
 
 From the title, you may have guessed that this set of article if following a guideline: Game Of Thrones. In this article, there are no spoilers about the TV show nor the books.
 
+The corresponding Github repository with examples can be found here: [https://github.com/quentinfayet/elasticsearch/tree/v2.0.1](https://github.com/quentinfayet/elasticsearch/tree/v2.0.1).
+
 **Well, let's go!**
 
 ## ROADMAP
@@ -717,7 +719,7 @@ and so on. Nevertheless, I don't want this article to be boring, so I decided to
 
 Before we start making full-text search queries, we should have something on what to search... Which is actually not the case. As my objective right now is not to introduce you
 to high-performance full-text search, we won't need a big database. In my infinite kindness, **I provided you a JSON document you can find in the `dataset` folder of the
-Github repositories that comes with this article**. Okay, you won, I give you the address: [https://github.com/quentinfayet/elasticsearch/tree/v2.0](https://github.com/quentinfayet/elasticsearch/tree/v2.0). This document, named as `game_of_thrones_dataset.json` contains a hand-made
+Github repositories that comes with this article**. Okay, you won, I give you the address: [https://github.com/quentinfayet/elasticsearch/tree/v2.0.1](https://github.com/quentinfayet/elasticsearch/tree/v2.0.1). This document, named as `game_of_thrones_dataset.json` contains a hand-made
 (yes, I said hand-made) dataset of Game of Thrones characters, along with their biographies.
 
 #### The mapping
