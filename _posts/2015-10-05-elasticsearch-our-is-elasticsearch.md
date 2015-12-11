@@ -42,7 +42,7 @@ As I just said, this article adds itself to the two previous ones. Without no mo
 
 - **Routing** will be the first subject I will talk about in this article. I will detail you why and how your can configure
 the way your data are spread among the cluster.
-- **Parent-child relationships  ** and **nested objects** will be my second subject. Indeed, we haven't go through every Elasticsearch data types yet.
+- **Parent-child relationships** and **nested objects** will be my second subject. Indeed, we haven't go through every Elasticsearch data types yet.
 - **Scoring** will be my third theoretical subject. I will detail you how much the choice of a scoring function is important.
 - **Compound Queries** are some more complicated queries //TODO COMPLETE THIS EXCERPT ABOUT COMPOUND QUERIES
 - **Scripting** will be at the end of this article... And honestly, I can't wait to talk about it!
@@ -235,12 +235,7 @@ The solution to this problem is, in the mapping, to define the field `weapon` as
         "character": {
             "dynamic": "false",
             "properties": {
-                "id": {"type": "string"},
-                "house": {"type": "string", "index": "not_analyzed"},
-                "gender": {"type": "string", "index": "not_analyzed"},
-                "age": {"type":"integer"},
-                "biography": {"type": "string", "term_vector": "with_positions_offsets", "index": "analyzed"},
-                "tags": {"type": "string"},
+                [...]
                 "weapons": {"type": "nested"}
             }
         }
@@ -265,3 +260,232 @@ Indeed, Elasticsearch maintains a map of parent-child relationships to make sear
 parents and the children to be indexed on the same shard. What it means is that if you try to index a orphan child
 document, Elasticsearch will require you to precise the routing value.
 
+### Define the mapping
+
+First thing to do when we want to introduce a parent-child relationship is to write the mapping of both the parent
+and the child. In our case, the parent (which is `character` type)is already defined, so that we just have to define
+the child's mapping.
+
+For example, let's say that we want to store the animals that company our characters. We would store them in the same
+index, `game_of_thrones`, but under the `animal` type. What we need to do is to update our mapping to include the new
+type, and define the relationship between `character` and `animal`:
+
+{% highlight json %}
+{
+    "mappings": {
+        "character": {
+                [...]
+            }
+        },
+        "animal": {
+            "_parent": {
+                "type": "character"
+            },
+            "dynamic": "false",
+            "properties": {
+                "type": {"type": "string"},
+                "name": {"type": "string"}
+            }
+        }
+    }
+}
+{% endhighlight %}
+
+As you can see, under the mapping of the `character` type, I added a new type, which is `animal`. I would like to draw
+your attention on the `"_parent"` field. As you can see, I defined the `"type"` field inside it to "character", which
+tells Elasticsearch that the parent type for `animal` is `character`.
+
+You should already know the other fields, such as `"dynamic"` and `"properties"`, so I will not tell anything about it
+now.
+
+The `animal` type will carry two fields:
+
+- `type` which represents the type of the animal
+- `name` which represents the name of the animal
+
+### Index a child
+
+Well, know that the mappings are defined, let's index some children. For my example, I will talk about two famous
+animals in Game of Thrones: Nymeria, which is Arya's direwolf, and Ghost which is Robb's direwolf.
+
+To index a child and build the relationship with its parents, you need to specify its parent's ID in the `POST`
+request:
+
+Request type is `POST`
+
+<div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">/index/type</span><span style="color: chartreuse">/?parent=ID</span></code></pre></div>
+
+The `parent` parameter specifies the parent's ID.
+
+#### The tricky case of routing
+
+Previously, we activated routing on our `game_of_throne` `character` type, by using `house` as the routing value. And,
+maybe you remember, I told you that when it comes to parent-child relationships and routing, the things might get
+delicate. Indeed, both parents and children have to be stored on the same shard. When default routing is used, everything
+is simple, because Elasticsearch uses a hash of the parent's ID to build the routing value, resulting into the children
+and the parents to be stored on the same shard.
+
+Because we defined `house` as the routing value, we need to use it when indexing children, by specifying the `routing`
+parameter in the request's URL.
+
+Now, let's index Arya and Jon's direwolves:
+
+{% highlight sh %}
+$>curl -XPOST 'http://localhost:9200/game_of_thrones/animal/?routing=Stark&parent=Arya%20Stark' -d '{"type":"direwolf", "name":"Nymeria"}'
+{% endhighlight %}
+
+{% highlight sh %}
+$>curl -XPOST 'http://localhost:9200/game_of_thrones/animal/?routing=Stark&parent=Jon%20Snow' -d '{"type":"direwolf", "name":"Ghost"}'
+{% endhighlight %}
+
+You may have notive that I've used `%20` in the URL. That's because the IDs of my parent documents are the character's
+names. Thus, there is a space between the first and last name, which is represented by `%20` in the URL.
+
+### Query a document with children
+
+Elasticsearch created two special filters, which are `has_child`, to query a document by searching data into its
+children, and `has_parents` to query a document by searching data into its parents. Note that while `has_child` will
+give you the parent document, `has_parent` will give you the child document.
+
+#### Retrieve the parent document
+
+Let's start by retrieving the parent document, with the `has_child` filter.
+
+As a single type of parent document can have several types of children documents, the `has_child` query has to know
+the type of child you are interested searching data into.
+
+For example, let's say that we want to get the character which animal is Nymeria (so, we are looking for Arya Stark).
+
+Our query will be the following:
+
+{% highlight json %}
+{
+    "query": {
+        "has_child": {
+            "type": "animal",
+            "query" : {
+                "term": {
+                    "name": "Nymeria"
+                }
+            }
+        }
+    }
+}
+{% endhighlight %}
+
+It is a simple query, with the `has_child` filter on a `term` query based on the `name` field of the `animal` type.
+
+The query is available at `queries/DSL/query_has_child.json`, let's run it:
+
+{% highlight sh %}
+$>curl -XPOST 'http://localhost:9200/game_of_thrones/_search?pretty' -d @queries/DSL/query_has_child.json
+{% endhighlight %}
+
+As the answer, we got the following JSON:
+
+{% highlight json %}
+{
+  "took" : 3,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 5,
+    "successful" : 5,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 1,
+    "max_score" : 1.0,
+    "hits" : [ {
+      "_index" : "game_of_thrones",
+      "_type" : "character",
+      "_id" : "Arya Stark",
+      "_score" : 1.0,
+      "_source":{
+        "house": "Stark",
+        "gender": "female",
+        "age":17,
+        "biography": "Arya Stark is the younger daughter and [...] lose her eyesight.",
+        "tags": [
+            "stark",
+            "needle",
+            "faceless god"
+        ],
+        "weapons": [
+            {
+             "type": "sword",
+             "name": "needle"
+            },
+            {
+             "type": "axe"
+             }
+         ]
+        }
+    } ]
+  }
+}
+{% endhighlight %}
+
+As you can see, we successfully retrieved `Arya Stark` from her direwolf, `Nymeria`.
+
+#### Retrieve the child document
+
+On the other hand, we can retrieve the children documents by querying the parent's data. For example, let's say
+that we want to retrieve every `animal` that is a child of a `character` document which `house` field is "Stark".
+
+{% highlight json %}
+{
+    "query": {
+        "has_parent": {
+            "type": "character",
+            "query" : {
+                "term": {
+                    "house": "Stark"
+                }
+            }
+        }
+    }
+}
+{% endhighlight %}
+
+You should recognize that the structure is the same than the previous query, except that the filter we used is
+`has_parent`. We set the type to `character`, and the query is still a simple `term` query on the `house` field.
+
+Let's run the query:
+
+{% highlight sh %}
+$>curl -XPOST 'http://localhost:9200/game_of_thrones/_search?pretty' -d @queries/DSL/query_has_parent.json
+{% endhighlight %}
+
+As the answer, we got the following JSON:
+
+{% highlight json %}
+{
+  "took" : 6,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 5,
+    "successful" : 5,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 2,
+    "max_score" : 1.0,
+    "hits" : [ {
+      "_index" : "game_of_thrones",
+      "_type" : "animal",
+      "_id" : "AVE6LZwmGZdMVtWmkP-D",
+      "_score" : 1.0,
+      "_source":{"genre":"direwolf", "name":"Nymeria"}
+    }, {
+      "_index" : "game_of_thrones",
+      "_type" : "animal",
+      "_id" : "AVE6NLBzGZdMVtWmkP-E",
+      "_score" : 1.0,
+      "_source":{"genre":"direwolf", "name":"Ghost"}
+    } ]
+  }
+}
+{% endhighlight %}
+
+We got two documents, corresponding to the two `animal` documents we indexed earlier. Indeed, both of them belong to
+a `character` document which `house` field is set two "Stark".
