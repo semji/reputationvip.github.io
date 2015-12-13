@@ -138,8 +138,6 @@ For example, considering the `elasticsearch` index with `character` type, I coul
 
 The above JSON object tells Elasticsearch to use the `house` field of my `character` type document as the routing value.
 
-//TODO Slides: indicate that difficulties may show up when using parent/child structure
-
 ### Limits of routing
 
 Well, maybe the title is a little exaggerated. There are no real "limits" to the routing features, just some facts that you should
