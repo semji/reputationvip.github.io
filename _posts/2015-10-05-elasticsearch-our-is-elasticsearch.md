@@ -171,7 +171,7 @@ As you know, Elasticsearch works on top of Apache Lucene. Yet, Apache Lucene doe
 objects, so that the job of Elasticsearch is to flatten them.
 
 In other words, if you try to index a document that contains an array of objects, by default, each field of each object
-of the array will be inserted in a field in your top document that contain an array of each value that correspond to
+of the array will be inserted in a field in your top document that contains an array of each value that correspond to
 this field's name in the objects of the array. Is that clear ? I think it is not. Let me give you an example:
 
 Let's assume that our *character* type documents have a field, named `weapons` that contains an array of objects,
@@ -487,3 +487,65 @@ As the answer, we got the following JSON:
 
 We got two documents, corresponding to the two `animal` documents we indexed earlier. Indeed, both of them belong to
 a `character` document which `house` field is set two "Stark".
+
+## The Scoring
+
+Great. With everything we talked about, I think you are ready to start using Elasticsearch. However, using Elasticsearch
+in its basics features might not be enough.
+
+That's why I am going to talk a bit about the scoring. Remember, we already talked about it in the very first article,
+and also in the second one. Scoring is the way Elasticsearch (and thus Apache Lucene) determines the relevance of a document
+against a given query.
+
+If your goal is to use Elasticsearch at the very best of its capabilities, then you should know about scoring. I am now
+going to talk about the Apache Lucene scoring mechanism and the TF/IDF algorithm (though we already did talk about it).
+
+### Scoring factors
+
+So the question is simple: How does Elasticsearch (Apache Lucene) calculate the score of a document against a query ?
+
+Well, there is a lot of factor that has a influence on the final score. The score depends on the documents, but also on
+the query (and so, comparing scores of documents on different queries doesn't make much sense).
+
+Before I talk about the factors, I want you to know that I have never talked about much of the things that I am going to
+talk about now in my previous articles.
+
+Last warning, this part will be a bit mathematical and theoretical ; however, it is totally fine that you don't perfectly
+understand what I will go through now. For me, it took a bit of time to understand it.
+
+#### Inverse Document Frequency
+
+**Inverse Document Frequency** first. Maybe you remember that I've already talked about it in the first article. The
+**inverse document frequency**, IDF in the short way, is a formula, based on terms, that give a factor about how rare
+a term is. The higher the IDF is, the rarer is the term in the document.
+
+Let's have a look to the formula.
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=idf_{i}&space;=&space;log(\frac{\left&space;|&space;D&space;\right&space;|}{\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?idf_{i}&space;=&space;log(\frac{\left&space;|&space;D&space;\right&space;|}{\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|})" title="idf_{i} = log(\frac{\left | D \right |}{\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right |})" /></a>
+
+Here, <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;D&space;\right&space;|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;D&space;\right&space;|" title="\left | D \right |" /></a>
+represents the total number of documents for a given type *type*
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|" title="\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right |" /></a>
+simply is a complicated way to represent the number of documents in which the term appears.
+
+Oh... I see you ! You'd like an example ! Well, I'm in a good mood today, so let's go !
+
+Let's consider the 3 following documents:
+
+- **Document 1**: "Hello, my name is Arya"
+- **Document 2**: "Arya is part of the Stark family"
+- **Document 3**: "The Stark family really has no chance..."
+
+Also, we will consider that a *term* is a word. For example, "Hello" is a term. We want to calculate the IDF value of
+the term **"Arya"** against the 3 documents.
+
+In this case, <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;D&space;\right&space;|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;D&space;\right&space;|" title="\left | D \right |" /></a>
+is 3 (indeed, we have 3 documents).
+
+Also, <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|" title="\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right |" /></a>
+is equal to 2, because the term **"Arya"** can be find in 2 documents (**Document 1** and **Document 2**).
+
+So, the IDF value for the term **"Arya"** against these documents is <a href="https://www.codecogs.com/eqnedit.php?latex=idf_{arya}&space;=&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?idf_{arya}&space;=&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})" title="idf_{arya} = log(\frac{\left | 3 \right |}{\left | 2 \right |})" /></a>
+
+And that's it ! Quite simple, isn't it ?!
