@@ -523,13 +523,22 @@ Let's have a look to the formula.
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=idf_{i}&space;=&space;log(\frac{\left&space;|&space;D&space;\right&space;|}{\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?idf_{i}&space;=&space;log(\frac{\left&space;|&space;D&space;\right&space;|}{\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|})" title="idf_{i} = log(\frac{\left | D \right |}{\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right |})" /></a>
 
+With <a href="https://www.codecogs.com/eqnedit.php?latex=i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?i" title="i" /></a> the term.
+
 Here, <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;D&space;\right&space;|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;D&space;\right&space;|" title="\left | D \right |" /></a>
 represents the total number of documents for a given type *type*
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|" title="\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right |" /></a>
 simply is a complicated way to represent the number of documents in which the term appears.
 
-Oh... I see you ! You'd like an example ! Well, I'm in a good mood today, so let's go !
+But this is only the *theoretical* formula. In practice, this formula has a weakness : What if <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;=&space;0" title="\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right | = 0" /></a> ?
+In other words, what if the term doesn't appear in any document? It would result in dividing by zero, and this is simply... Not possible.
+
+So in practice, we add 1 to this value. The final formula is:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=idf_{i}&space;=&space;log(\frac{\left&space;|&space;D&space;\right&space;|}{\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;&plus;&space;1})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?idf_{i}&space;=&space;log(\frac{\left&space;|&space;D&space;\right&space;|}{\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;&plus;&space;1})" title="idf_{i} = log(\frac{\left | D \right |}{\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right | + 1})" /></a>
+
+Oh... I see you ! You'd like an example! Well, I'm in a good mood today, so let's go!
 
 Let's consider the 3 following documents:
 
@@ -549,3 +558,120 @@ is equal to 2, because the term **"Arya"** can be find in 2 documents (**Documen
 So, the IDF value for the term **"Arya"** against these documents is <a href="https://www.codecogs.com/eqnedit.php?latex=idf_{arya}&space;=&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?idf_{arya}&space;=&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})" title="idf_{arya} = log(\frac{\left | 3 \right |}{\left | 2 \right |})" /></a>
 
 And that's it ! Quite simple, isn't it ?!
+
+#### Term Frequency
+
+The IDF by itself is not enough. Indeed, IDF gives a score for a term against **all** documents, so the score is not relevant
+without a moderation. Here comes the **term frequency** (TF). That's why we are talking of **TF/IDF**, and not only of
+**TF** or **IDF**.
+
+The **term frequency** of a term, as it name suggests, is the frequency of the term in a given document. Some scientists
+invented a complicated formula to describe it, which is:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=tf_{i,d}&space;=&space;\frac{n_{i,d}}{\sum&space;_{k}&space;n_{k,d}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{i,d}&space;=&space;\frac{n_{i,d}}{\sum&space;_{k}&space;n_{k,d}}" title="tf_{i,d} = \frac{n_{i,d}}{\sum _{k} n_{k,d}}" /></a>
+
+Behind this *complicated* formula, it is simply a frequency calculation: The number of times the term appears in the document,
+divided by the total number of terms in the document.
+
+With <a href="https://www.codecogs.com/eqnedit.php?latex=i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?i" title="i" /></a> the term,
+<a href="https://www.codecogs.com/eqnedit.php?latex=d" target="_blank"><img src="https://latex.codecogs.com/gif.latex?d" title="d" /></a> the document.
+
+So, <a href="https://www.codecogs.com/eqnedit.php?latex=n_{i,d}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?n_{i,d}" title="n_{i,d}" /></a> is
+the number of times the term appears in the document, and <a href="https://www.codecogs.com/eqnedit.php?latex=\sum&space;_{k}&space;n_{k,d}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sum&space;_{k}&space;n_{k,d}" title="\sum _{k} n_{k,d}" /></a>
+is the sum of occurrences of each single term in the document (thus, the total number of terms in the document).
+
+Let's resume with the 3 documents we used to calculate IDF. Our query still is **"Arya"**.
+
+- **Document 1**: "Hello, my name is Arya" : <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;1}&space;=&space;\frac{1}{5}&space;=&space;0,20" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;1}&space;=&space;\frac{1}{5}&space;=&space;0,20" title="tf_{arya, Document 1} = \frac{1}{5} = 0,20" /></a> (We don't consider a coma as a term)
+- **Document 2**: "Arya is part of the Stark family" : <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;2}&space;=&space;\frac{1}{7}&space;\approx&space;0,14" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;2}&space;=&space;\frac{1}{7}&space;\approx&space;0,14" title="tf_{arya, Document 2} = \frac{1}{7} \approx 0,14" /></a>
+- **Document 3**: "The Stark family really has no chance..." : <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;3}&space;=&space;\frac{0}{7}&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;3}&space;=&space;\frac{0}{7}&space;=&space;0" title="tf_{arya, Document 3} = \frac{0}{7} = 0" /></a>
+
+From now, we can even calculate the **TF/IDF** for each document, as the **TF/IDF** is simply the following:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{i,d}&space;=&space;tf_{i,d}&space;\cdot&space;idf_{i}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{i,d}&space;=&space;tf_{i,d}&space;\cdot&space;idf_{i}" title="tfidf_{i,d} = tf_{i,d} \cdot idf_{i}" /></a>
+
+- **Document 1**: "Hello, my name is Arya" : <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;1}&space;=&space;0,20&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,04" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;1}&space;=&space;0,20&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,04" title="tfidf_{Arya,Document 1} = 0,20 \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) \approx 0,04" /></a>
+- **Document 2**: "Arya is part of the Stark family" : <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;2}&space;=&space;\frac{1}{7}&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,03" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;2}&space;=&space;\frac{1}{7}&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,03" title="tfidf_{Arya,Document 2} = \frac{1}{7} \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) \approx 0,03" /></a>
+- **Document 3**: "The Stark family really has no chance..." : <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;3}&space;=&space;0&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;3}&space;=&space;0&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;=&space;0" title="tfidf_{Arya,Document 3} = 0 \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) = 0" /></a>
+
+#### Document Boost
+
+**Document Boost** is something that I never talked about. This is an artificial way to influence the scoring value for
+a document. The **Document Boost** is simply a boost value that can be given to a document during indexing.
+
+#### Field Boost
+
+In the same idea as the *Document Boost*, the **Field Boost** is a boost value that can be given to a specific field
+during indexing.
+
+#### Coordination Factor
+
+The **coordination factor** is quite simple: The more searched terms the document contains, the higher the **coordination
+factor** is. Without the **coordination factor**, the combined weight value of the matching terms in a document
+would evolve in a linear way. With the **coordination factor**, the weight value is being multiplied by the number of matching
+terms in the document, and then divided by the number of terms in the query. Let's reconsider our documents. Let's imagine that
+our query would be **"Arya Stark family"**. Also, we consider each term has a weight of 1.
+
+- **Document 1**: "Hello, my name is Arya"
+- **Document 2**: "Arya is part of the Stark family"
+- **Document 3**: "The Stark family really has no chance..."
+
+Without the **coordination factor**, the weight scores would be:
+
+- **Document 1**: "Hello, my name is Arya" : Weight Score = 1
+- **Document 2**: "Arya is part of the Stark family" : Weight Score = 3
+- **Document 3**: "The Stark family really has no chance..." : Weight Score = 2
+
+As you can see, the weight score is just the addition of the score of each term of the query that is present in the
+document.
+
+Now, with the **coordination factor**:
+
+- **Document 1**: "Hello, my name is Arya" : Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=1&space;*&space;\frac{1}{3}&space;=&space;\frac{1}{3}&space;\approx&space;0,33" target="_blank"><img src="https://latex.codecogs.com/gif.latex?1&space;*&space;\frac{1}{3}&space;=&space;\frac{1}{3}&space;\approx&space;0,33" title="1 * \frac{1}{3} = \frac{1}{3} \approx 0,33" /></a>
+- **Document 2**: "Arya is part of the Stark family" : Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=3&space;*&space;\frac{3}{3}&space;=&space;3" target="_blank"><img src="https://latex.codecogs.com/gif.latex?3&space;*&space;\frac{3}{3}&space;=&space;3" title="3 * \frac{3}{3} = 3" /></a>
+- **Document 3**: "The Stark family really has no chance..." : Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=2&space;*&space;\frac{2}{3}&space;=&space;\approx&space;1,33" target="_blank"><img src="https://latex.codecogs.com/gif.latex?2&space;*&space;\frac{2}{3}&space;=&space;\approx&space;1,33" title="2 * \frac{2}{3} = \approx 1,33" /></a>
+
+As you can see, the evolution of the score is not linear anymore. Indeed, the **Document 2** has a score of *3*, while
+the **Document 1** has a score of around 0,33.
+
+#### Query Normalization Factor
+
+As I said, it is a non-sense to compare the scoring value of a document against a given query to the scoring value
+of the same document against another query.
+
+But, the **query normalization factor** is an attempt from Elasticsearch to "normalize" a query, so that the score of a
+given document can be compared against different queries.
+
+Careful though, the **query normalization factor** is not really relevant, and still, you have to be really careful when
+comparing the score of a document against different queries.
+
+As it is not really important, I won't talk about it here.
+
+#### Field-length norm
+
+Basically, it is the length of the field we are searching in. The shorter the field, the higher the weight. In other words,
+a term found in a little field will be given more weight than the same term found in a longer field.
+
+The calculation is quite simple:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=norm_{d}&space;=&space;\frac{1}{\sqrt{\sum&space;_{k}&space;n_{k,d}}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{d}&space;=&space;\frac{1}{\sqrt{\sum&space;_{k}&space;n_{k,d}}}" title="norm_{d} = \frac{1}{\sqrt{\sum _{k} n_{k,d}}}" /></a>
+
+With <a href="https://www.codecogs.com/eqnedit.php?latex=d" target="_blank"><img src="https://latex.codecogs.com/gif.latex?d" title="d" /></a> the document.
+
+As you can see, the calculation doesn't depend on the term, but on the document (on the field, actually).
+
+Let's calculate the **field-length norm** for our 3 documents:
+
+- **Document 1**: "Hello, my name is Arya" : <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;1}&space;=&space;\frac{1}{\sqrt{5}}&space;\approx&space;0,45" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;1}&space;=&space;\frac{1}{\sqrt{5}}&space;\approx&space;0,45" title="norm_{Document 1} = \frac{1}{\sqrt{5}} \approx 0,45" /></a>
+- **Document 2**: "Arya is part of the Stark family" : <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" title="norm_{Document 2} = \frac{1}{\sqrt{7}} \approx 0,38" /></a>
+- **Document 3**: "The Stark family really has no chance..." : <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" title="norm_{Document 2} = \frac{1}{\sqrt{7}} \approx 0,38" /></a>
+
+As you can notice, the more term in the document, the lower the **field-norm length**.
+
+### The final scoring function
+
+With all of this, we can finally build the scoring function, which is:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=score_{q,d}&space;=&space;queryNormalizationFactor_{q}&space;\cdot&space;coordinationFactor_{q,d}&space;\cdot&space;\sum&space;(tf_{i,d}&space;\cdot&space;idf_{i}^{2}&space;\cdot&space;boost_{i}&space;\cdot&space;fieldLengthNorm_{i,d})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?score_{q,d}&space;=&space;queryNormalizationFactor_{q}&space;\cdot&space;coordinationFactor_{q,d}&space;\cdot&space;\sum&space;(tf_{i,d}&space;\cdot&space;idf_{i}^{2}&space;\cdot&space;boost_{i}&space;\cdot&space;fieldLengthNorm_{i,d})" title="score_{q,d} = queryNormalizationFactor_{q} \cdot coordinationFactor_{q,d} \cdot \sum (tf_{i,d} \cdot idf_{i}^{2} \cdot boost_{i} \cdot fieldLengthNorm_{i,d})" /></a>
+
+Basically, the function is not really complicated.
