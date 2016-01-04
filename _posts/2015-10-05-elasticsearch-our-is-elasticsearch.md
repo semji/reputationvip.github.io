@@ -2,9 +2,9 @@
 layout: post
 author: quentin_fayet
 title: "Our is the Elasticsearch"
-excerpt: "This third article about Elasticsearch will go with //TODO FINISH IT"
+excerpt: "This third article about Elasticsearch will go through routing, relationships, scoring methods and scripting."
 modified: 2015-10-05
-tags: [elasticsearch, fullt-text research, apache, lucene, routing]
+tags: [elasticsearch, fullt-text research, apache, lucene, routing, relationships, scoring, scripting]
 comments: true
 image:
   feature: elastic-always-pays-its-debts-ban.jpg
@@ -14,14 +14,12 @@ image:
 
 #TODOS
 
-- Complete excerpt with the content of the article
-- Complete tags
 - Write conclusion
 - Charlotte review
 - Re-check queries (execute them in term)
 - check //TODOS
-- check !, :, ?
 - Complete introduction with blabla about the github repository containing the docker cluster (v3)
+- Correct reviews
 
 # OUR IS ELASTICSEARCH
 
@@ -172,7 +170,7 @@ objects, so that the job of Elasticsearch is to flatten them.
 
 In other words, if you try to index a document that contains an array of objects, by default, each field of each object
 of the array will be inserted in a field in your top document that contains an array of each value that correspond to
-this field's name in the objects of the array. Is that clear ? I think it is not. Let me give you an example:
+this field's name in the objects of the array. Is that clear? I think it is not. Let me give you an example:
 
 Let's assume that our *character* type documents have a field, named `weapons` that contains an array of objects,
 each of them would be a weapon, as following:
@@ -502,7 +500,7 @@ going to talk about the Apache Lucene scoring mechanism and the TF/IDF algorithm
 
 ### Scoring factors
 
-So the question is simple: How does Elasticsearch (Apache Lucene) calculate the score of a document against a query ?
+So the question is simple: How does Elasticsearch (Apache Lucene) calculate the score of a document against a query?
 
 Well, there is a lot of factor that has a influence on the final score. The score depends on the documents, but also on
 the query (and so, comparing scores of documents on different queries doesn't make much sense).
@@ -531,14 +529,14 @@ represents the total number of documents for a given type *type*
 <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|" title="\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right |" /></a>
 simply is a complicated way to represent the number of documents in which the term appears.
 
-But this is only the *theoretical* formula. In practice, this formula has a weakness : What if <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;=&space;0" title="\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right | = 0" /></a> ?
+But this is only the *theoretical* formula. In practice, this formula has a weakness: What if <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;=&space;0" title="\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right | = 0" /></a>?
 In other words, what if the term doesn't appear in any document? It would result in dividing by zero, and this is simply... Not possible.
 
 So in practice, we add 1 to this value. The final formula is:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=idf_{i}&space;=&space;log(\frac{\left&space;|&space;D&space;\right&space;|}{\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;&plus;&space;1})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?idf_{i}&space;=&space;log(\frac{\left&space;|&space;D&space;\right&space;|}{\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;&plus;&space;1})" title="idf_{i} = log(\frac{\left | D \right |}{\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right | + 1})" /></a>
 
-Oh... I see you ! You'd like an example! Well, I'm in a good mood today, so let's go!
+Oh... I see you! You'd like an example! Well, I'm in a good mood today, so let's go!
 
 Let's consider the 3 following documents:
 
@@ -557,7 +555,7 @@ is equal to 2, because the term **"Arya"** can be find in 2 documents (**Documen
 
 So, the IDF value for the term **"Arya"** against these documents is <a href="https://www.codecogs.com/eqnedit.php?latex=idf_{arya}&space;=&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?idf_{arya}&space;=&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})" title="idf_{arya} = log(\frac{\left | 3 \right |}{\left | 2 \right |})" /></a>
 
-And that's it ! Quite simple, isn't it ?!
+And that's it! Quite simple, isn't it?!
 
 #### Term Frequency
 
@@ -582,17 +580,17 @@ is the sum of occurrences of each single term in the document (thus, the total n
 
 Let's resume with the 3 documents we used to calculate IDF. Our query still is **"Arya"**.
 
-- **Document 1**: "Hello, my name is Arya" : <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;1}&space;=&space;\frac{1}{5}&space;=&space;0,20" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;1}&space;=&space;\frac{1}{5}&space;=&space;0,20" title="tf_{arya, Document 1} = \frac{1}{5} = 0,20" /></a> (We don't consider a coma as a term)
-- **Document 2**: "Arya is part of the Stark family" : <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;2}&space;=&space;\frac{1}{7}&space;\approx&space;0,14" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;2}&space;=&space;\frac{1}{7}&space;\approx&space;0,14" title="tf_{arya, Document 2} = \frac{1}{7} \approx 0,14" /></a>
-- **Document 3**: "The Stark family really has no chance..." : <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;3}&space;=&space;\frac{0}{7}&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;3}&space;=&space;\frac{0}{7}&space;=&space;0" title="tf_{arya, Document 3} = \frac{0}{7} = 0" /></a>
+- **Document 1**: "Hello, my name is Arya": <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;1}&space;=&space;\frac{1}{5}&space;=&space;0,20" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;1}&space;=&space;\frac{1}{5}&space;=&space;0,20" title="tf_{arya, Document 1} = \frac{1}{5} = 0,20" /></a> (We don't consider a coma as a term)
+- **Document 2**: "Arya is part of the Stark family": <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;2}&space;=&space;\frac{1}{7}&space;\approx&space;0,14" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;2}&space;=&space;\frac{1}{7}&space;\approx&space;0,14" title="tf_{arya, Document 2} = \frac{1}{7} \approx 0,14" /></a>
+- **Document 3**: "The Stark family really has no chance...": <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;3}&space;=&space;\frac{0}{7}&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;3}&space;=&space;\frac{0}{7}&space;=&space;0" title="tf_{arya, Document 3} = \frac{0}{7} = 0" /></a>
 
 From now, we can even calculate the **TF/IDF** for each document, as the **TF/IDF** is simply the following:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{i,d}&space;=&space;tf_{i,d}&space;\cdot&space;idf_{i}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{i,d}&space;=&space;tf_{i,d}&space;\cdot&space;idf_{i}" title="tfidf_{i,d} = tf_{i,d} \cdot idf_{i}" /></a>
 
-- **Document 1**: "Hello, my name is Arya" : <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;1}&space;=&space;0,20&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,04" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;1}&space;=&space;0,20&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,04" title="tfidf_{Arya,Document 1} = 0,20 \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) \approx 0,04" /></a>
-- **Document 2**: "Arya is part of the Stark family" : <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;2}&space;=&space;\frac{1}{7}&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,03" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;2}&space;=&space;\frac{1}{7}&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,03" title="tfidf_{Arya,Document 2} = \frac{1}{7} \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) \approx 0,03" /></a>
-- **Document 3**: "The Stark family really has no chance..." : <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;3}&space;=&space;0&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;3}&space;=&space;0&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;=&space;0" title="tfidf_{Arya,Document 3} = 0 \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) = 0" /></a>
+- **Document 1**: "Hello, my name is Arya": <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;1}&space;=&space;0,20&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,04" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;1}&space;=&space;0,20&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,04" title="tfidf_{Arya,Document 1} = 0,20 \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) \approx 0,04" /></a>
+- **Document 2**: "Arya is part of the Stark family": <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;2}&space;=&space;\frac{1}{7}&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,03" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;2}&space;=&space;\frac{1}{7}&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,03" title="tfidf_{Arya,Document 2} = \frac{1}{7} \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) \approx 0,03" /></a>
+- **Document 3**: "The Stark family really has no chance...": <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;3}&space;=&space;0&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;3}&space;=&space;0&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;=&space;0" title="tfidf_{Arya,Document 3} = 0 \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) = 0" /></a>
 
 #### Document Boost
 
@@ -618,18 +616,18 @@ our query would be **"Arya Stark family"**. Also, we consider each term has a we
 
 Without the **coordination factor**, the weight scores would be:
 
-- **Document 1**: "Hello, my name is Arya" : Weight Score = 1
-- **Document 2**: "Arya is part of the Stark family" : Weight Score = 3
-- **Document 3**: "The Stark family really has no chance..." : Weight Score = 2
+- **Document 1**: "Hello, my name is Arya": Weight Score = 1
+- **Document 2**: "Arya is part of the Stark family": Weight Score = 3
+- **Document 3**: "The Stark family really has no chance...": Weight Score = 2
 
 As you can see, the weight score is just the addition of the score of each term of the query that is present in the
 document.
 
 Now, with the **coordination factor**:
 
-- **Document 1**: "Hello, my name is Arya" : Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=1&space;*&space;\frac{1}{3}&space;=&space;\frac{1}{3}&space;\approx&space;0,33" target="_blank"><img src="https://latex.codecogs.com/gif.latex?1&space;*&space;\frac{1}{3}&space;=&space;\frac{1}{3}&space;\approx&space;0,33" title="1 * \frac{1}{3} = \frac{1}{3} \approx 0,33" /></a>
-- **Document 2**: "Arya is part of the Stark family" : Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=3&space;*&space;\frac{3}{3}&space;=&space;3" target="_blank"><img src="https://latex.codecogs.com/gif.latex?3&space;*&space;\frac{3}{3}&space;=&space;3" title="3 * \frac{3}{3} = 3" /></a>
-- **Document 3**: "The Stark family really has no chance..." : Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=2&space;*&space;\frac{2}{3}&space;=&space;\approx&space;1,33" target="_blank"><img src="https://latex.codecogs.com/gif.latex?2&space;*&space;\frac{2}{3}&space;=&space;\approx&space;1,33" title="2 * \frac{2}{3} = \approx 1,33" /></a>
+- **Document 1**: "Hello, my name is Arya": Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=1&space;*&space;\frac{1}{3}&space;=&space;\frac{1}{3}&space;\approx&space;0,33" target="_blank"><img src="https://latex.codecogs.com/gif.latex?1&space;*&space;\frac{1}{3}&space;=&space;\frac{1}{3}&space;\approx&space;0,33" title="1 * \frac{1}{3} = \frac{1}{3} \approx 0,33" /></a>
+- **Document 2**: "Arya is part of the Stark family": Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=3&space;*&space;\frac{3}{3}&space;=&space;3" target="_blank"><img src="https://latex.codecogs.com/gif.latex?3&space;*&space;\frac{3}{3}&space;=&space;3" title="3 * \frac{3}{3} = 3" /></a>
+- **Document 3**: "The Stark family really has no chance...": Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=2&space;*&space;\frac{2}{3}&space;=&space;\approx&space;1,33" target="_blank"><img src="https://latex.codecogs.com/gif.latex?2&space;*&space;\frac{2}{3}&space;=&space;\approx&space;1,33" title="2 * \frac{2}{3} = \approx 1,33" /></a>
 
 As you can see, the evolution of the score is not linear anymore. Indeed, the **Document 2** has a score of *3*, while
 the **Document 1** has a score of around 0,33.
@@ -662,9 +660,9 @@ As you can see, the calculation doesn't depend on the term, but on the document 
 
 Let's calculate the **field-length norm** for our 3 documents:
 
-- **Document 1**: "Hello, my name is Arya" : <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;1}&space;=&space;\frac{1}{\sqrt{5}}&space;\approx&space;0,45" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;1}&space;=&space;\frac{1}{\sqrt{5}}&space;\approx&space;0,45" title="norm_{Document 1} = \frac{1}{\sqrt{5}} \approx 0,45" /></a>
-- **Document 2**: "Arya is part of the Stark family" : <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" title="norm_{Document 2} = \frac{1}{\sqrt{7}} \approx 0,38" /></a>
-- **Document 3**: "The Stark family really has no chance..." : <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" title="norm_{Document 2} = \frac{1}{\sqrt{7}} \approx 0,38" /></a>
+- **Document 1**: "Hello, my name is Arya": <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;1}&space;=&space;\frac{1}{\sqrt{5}}&space;\approx&space;0,45" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;1}&space;=&space;\frac{1}{\sqrt{5}}&space;\approx&space;0,45" title="norm_{Document 1} = \frac{1}{\sqrt{5}} \approx 0,45" /></a>
+- **Document 2**: "Arya is part of the Stark family": <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" title="norm_{Document 2} = \frac{1}{\sqrt{7}} \approx 0,38" /></a>
+- **Document 3**: "The Stark family really has no chance...": <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" title="norm_{Document 2} = \frac{1}{\sqrt{7}} \approx 0,38" /></a>
 
 As you can notice, the more term in the document, the lower the **field-norm length**.
 
@@ -686,7 +684,7 @@ search.
 I would like to introduce you the **compound queries**. In the previous article, we went through some basic queries
 available in Elasticsearch, such as the *term query* or the *match query*.
 
-But what if we want to connect multiply queries between them, to perform more precise search ?
+But what if we want to connect multiply queries between them, to perform more precise search?
 
 ### The boolean query
 
@@ -992,7 +990,7 @@ When talking about data warehouse, or more commonly databases, security is a pri
 a lot of security concerns, as it allows to perform some operations that are off the control of Elasticsearch.
 
 What if you were using a language that contains a huge security breach, and that anybody could easily take control
-over your cluster ?
+over your cluster?
 
 That's why Elasticsearch scripting feature is only working with sandboxed languages. Sandbox environment is a special
 environment used to run untrusted scripts, so that there scope is limited.
