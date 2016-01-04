@@ -18,7 +18,6 @@ image:
 - Charlotte review
 - Re-check queries (execute them in term)
 - check //TODOS
-- Complete introduction with blabla about the github repository containing the docker cluster (v3)
 - Correct reviews
 
 # OUR IS ELASTICSEARCH
@@ -33,6 +32,10 @@ If you don't remember well about these notions, I recommend you to read the prev
 
 - [Elasticsearch Is Coming](http://reputationvip.io/elasticsearch-is-coming/)
 - [Elasticsearch Always Pays Its Debts](http://reputationvip.io/elasticsearch-always-pays-its-debts/)
+
+Also, I would like to remember you that a Github repository is available for this article. It contains every single
+query used here, along with a turnkey Elasticsearch cluster running under Docker. It is available here:
+[https://github.com/quentinfayet/elasticsearch/tree/3.0](https://github.com/quentinfayet/elasticsearch/tree/3.0)
 
 ## ROADMAP
 
