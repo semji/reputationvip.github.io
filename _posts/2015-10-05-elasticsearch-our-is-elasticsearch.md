@@ -877,7 +877,7 @@ Let's have a look to the structure:
 }
 {% endhighlight %}
 
-**be careeful though, the result of the script is not going to be the final score of the document by default. If you wish
+**be careful though, the result of the script is not going to be the final score of the document by default. If you wish
 this score to be the final score, you'll have to set the `boost_mode` to "replace".**
 
 Let's take an example: I want the *final score* of my query to be the age of my *character* divided by two. Quite simple.
@@ -960,3 +960,190 @@ $>curl -XPOST 'http://localhost:9200/game_of_thrones/_search?pretty' -d @queries
 {% endhighlight %}
 
 As you can notice, the score of the document is equal to half of the age of the corresponding document.
+
+## Scripting
+
+For the last part of this article, I decided to talk about scripting. Indeed, Elasticsearch comes with a very interesting
+scripting feature that allow you to return custom values, or to perform some operations such as custom scoring.
+
+If you remember well, we already talked about scripting in the previous article, where I introduced a way to perform
+dynamic calculation of a virtual field.
+
+Until Elasticsearch 1.3, the used scripting language was MVEL (an expression language for the Java Platform), but now,
+Groovy is used. Yet, some other languages can be used, such as Mustach, Javascript or Python (the two last ones require
+plugins to work).
+
+If you are working under the docker cluster I provided, the scripting functions already are enabled in the `elasticsearch.yml`
+file. Otherwise, you will have to enable them with the following configuration line:
+
+`script.engine.groovy.inline.search: on`.
+
+There is three ways to load a script in an Elasticsearch query:
+
+- Using **inline** script by inserting the script line directly into the query
+- Using **a file** that contains the script, and indicating its name to the query
+- Using **a special index** named `.scripts` 
+
+As I already introduced the first way to perform scripting, I will now have a quick tour of the second method.
+
+### The sandboxed environment
+
+When talking about data warehouse, or more commonly databases, security is a primordial point. Yet, scripting introduce
+a lot of security concerns, as it allows to perform some operations that are off the control of Elasticsearch.
+
+What if you were using a language that contains a huge security breach, and that anybody could easily take control
+over your cluster ?
+
+That's why Elasticsearch scripting feature is only working with sandboxed languages. Sandbox environment is a special
+environment used to run untrusted scripts, so that there scope is limited.
+
+### Scripting with file
+
+When your needs are to use the same script at different point of your application, on different Elasticsearch queries,
+it might be useful to have your script stored in one unique file.
+
+Script files have to be stored in a specific folder: `config/scripts` in the Elasticsearch directory.
+
+I will use a very simple example. We just took a look over custom scoring functions, and especially the `function_score`
+query. We used an inline script under the `script_score` field. Yet, we can use a file instead of this inline script.
+
+The script has to be written in a file (we will name it as `score.groovy`) located in `config/scripts` directory:
+
+```groovy
+doc['age'].value / 2
+```
+
+Then, we can run our query by indicating the `script_file` field (simply filled with the script filename):
+
+//TODO TESTER
+{% highlight json %}
+{
+  "query": {
+    "function_score": {
+        "query": {
+            "match": {
+                "house": "Lannister"
+            }
+        },
+        "functions": [
+            {
+                "script_score": {
+                    "script_file": "score"
+                }
+            }
+        ],
+        "boost_mode": "replace"
+    }
+  }
+}
+{% endhighlight %}
+
+Also, if you are using other languages than Groovy, you can indicate the name of this language under the `lang` field
+under the `script_score` field. If you need to introduce some params, the `params` field can contain an object of which
+each field is a param name, and the corresponding value is the param value.
+
+### Scripting with index
+
+As I said, you can store scripts directly into a dedicated index named `.scripts`. Yet, there is a special REST endpoint
+to manage the scripts, which is `_scripts`. A script is identified by its ID, and stored under a specific `lang`:
+
+<div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">/_scripts/lang/ID</span></code></pre></div>
+
+For example, I want to store the previous script. The language I used is Groovy, and I will give it the ID `score`.
+
+The request to index the script is the following:
+
+//TODO Revoir & tester (.scripts index is missing)
+{% highlight sh %}
+$>curl -XPOST http://localhost:9200/_scripts/groovy/score -d '"script": "doc['age'].value / 2"'
+{% endhighlight %}
+
+Once the script indexed in the cluster, we can run the previous query by using `script_id` instead of `script_file`, and
+by providing the ID we gave to the script (*score*). We should also provide the `lang` field with the corresponding language
+of our script (*groovy*).
+
+//TODO TESTER
+{% highlight json %}
+{
+  "query": {
+    "function_score": {
+        "query": {
+            "match": {
+                "house": "Lannister"
+            }
+        },
+        "functions": [
+            {
+                "script_score": {
+                    "script_id": "score",
+                    "lang": "groovy"
+                }
+            }
+        ],
+        "boost_mode": "replace"
+    }
+  }
+}
+{% endhighlight %}
+
+### Scripting security
+
+Scripting is a powerful feature of Elasticsearch. But with great power comes great responsibility. Indeed, scripting
+is powerful, but even sandboxed environment cannot stop all attempts to attack a cluster.
+
+If you are concerned with security in Elasticsearch (which is **primordial** if you are willing to run Elasticsearch in
+a production state), a good start is [this article](https://www.elastic.co/blog/scripting-security) on the Elastic's blog.
+
+On the other hand, if your interest is more about security research, a good start would be to look at some pull requests
+done on the Metasploit framework, like [this one](https://github.com/rapid7/metasploit-framework/pull/4907).
+
+As I also have interest into security concerns, let's have a bit of fun by trying to make this exploit by ourselves.
+
+First of all, as described in the pull request, this security breach on Elasticsearch has a **CVE (Common Vulnerabilities
+and Exposures)** code, which is *CVE-2015-1427*.
+
+CVE has a website on which we can read the complete description of this breach: [here](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-1427).
+
+The description is as follow:
+
+> The Groovy scripting engine in Elasticsearch before 1.3.8 and 1.4.x before 1.4.3 allows remote attackers to bypass
+the sandbox protection mechanism and execute arbitrary shell commands via a crafted script.
+
+Well, the good point for us, as Elasticsearch user, is that this breach seems to be solved, as the concerned Elasticsearch
+versions are the ones bellow 1.4.3.
+
+As you can also see, the vulnerability has been recognized by Elasticsearch, and can be found on the list on the official
+website, [here](https://www.elastic.co/community/security/).
+
+This security breach is a good example that sandboxed environment doesn't protect your cluster from everything. As any
+software or application, sandboxed environment may contain security breach.
+
+This breach is related to the Groovy script sandboxed environment, which contains a vulnerability that allows an attacker
+to execute shell commands on your cluster. Even if the shell commands are executed with the same user running Elasticsearch,
+an attacker may use other exploit to perform a privilege escalation and get the root privileges.
+
+The [related topic on PacketstormSecurity](https://packetstormsecurity.com/files/130784/ElasticSearch-Unauthenticated-Remote-Code-Execution.html) 
+shows a Python script that runs the famous script:
+
+{% highlight json %}
+{
+    "size":1,
+    "script_fields": {
+        "lupin": {
+            "script": "java.lang.Math.class.forName(\\"java.lang.Runtime\\").getRuntime().exec(\\"ls -l\\").getText()"
+        }
+    }
+}
+{% endhighlight %}
+
+As you can see, this is a simple request, coming along with a `script_fields` that describe a field named `lupin`. The
+content of this field is the malicious code:
+
+`java.lang.Math.class.forName("java.lang.Runtime").getRuntime().exec("ls -l").getText()`
+
+The principle is simple (even if it may change a bit according to the host operating system: The script (written in Java)
+gets the runtime instance of the JVM, and perform a simple `exec()` on it, which executes shell commands on the host.
+
+I simply put a `ls -l`, which lists the content of the current directory, but you can imagine more complex operations,
+such as downloading a script from a remote server, script that would perform a privilege escalation, or open a backdoor
+on the host system.
