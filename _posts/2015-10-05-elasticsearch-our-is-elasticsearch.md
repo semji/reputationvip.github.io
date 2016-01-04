@@ -1016,7 +1016,6 @@ doc['age'].value / 2
 
 Then, we can run our query by indicating the `script_file` field (simply filled with the script filename):
 
-//TODO TESTER
 {% highlight json %}
 {
   "query": {
@@ -1038,6 +1037,14 @@ Then, we can run our query by indicating the `script_file` field (simply filled 
   }
 }
 {% endhighlight %}
+
+The query is available at `queries/DSL/compound_query_score_scripting_file.json`, let's run it:
+
+{% highlight sh %}
+$>curl -XPOST 'http://localhost:9200/game_of_thrones/_search?pretty' -d @queries/DSL/compound_query_score_scripting_file.json.json
+{% endhighlight %}
+
+The result is the same as the one above, when we executed the query with the inline script.
 
 Also, if you are using other languages than Groovy, you can indicate the name of this language under the `lang` field
 under the `script_score` field. If you need to introduce some params, the `params` field can contain an object of which
