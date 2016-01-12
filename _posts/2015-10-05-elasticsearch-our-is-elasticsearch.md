@@ -19,6 +19,7 @@ image:
 - Re-check queries (execute them in term)
 - check //TODOS
 - Correct reviews
+- review formulas
 
 # OUR IS ELASTICSEARCH
 
@@ -1057,20 +1058,57 @@ to manage the scripts, which is `_scripts`. A script is identified by its ID, an
 
 <div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">/_scripts/lang/ID</span></code></pre></div>
 
+If you remember well, we disabled automatic index creation in our `elasticsearch.yml` file. The point is that the special
+`.scripts` index then cannot be created, we need to do it manually:
+
+{% highlight sh %}
+$>curl -XPUT http://localhost:9200/.scripts
+{% endhighlight %}
+
+The previous line creates the `.scripts` index used by Elasticsearch to index scripts. We can now work with indexed scripts.
+
 For example, I want to store the previous script. The language I used is Groovy, and I will give it the ID `score`.
+
+I stored the script in a file name `script.json` available at `queries/DSL/script.json`.
 
 The request to index the script is the following:
 
-//TODO Revoir & tester (.scripts index is missing)
 {% highlight sh %}
-$>curl -XPOST http://localhost:9200/_scripts/groovy/score -d '"script": "doc['age'].value / 2"'
+$>curl -XPOST http://localhost:9200/_scripts/groovy/score -d @queries/DSL/script.json
 {% endhighlight %}
+
+The response returned by the cluster is the same as if we were indexing a lambda document:
+
+{% highlight json %}
+{
+    "_id":"score",
+    "_version":1,
+    "created":true
+}
+{% endhighlight %}
+
+A simple GET request will return our script:
+
+{% highlight sh %}
+$>curl -XGET http://localhost:9200/_scripts/groovy/score
+{% endhighlight %}
+
+{% highlight json %}
+{
+  "lang" : "groovy",
+  "_id" : "score",
+  "found" : true,
+  "_version" : 1,
+  "script" : "doc[age].value / 2"
+}
+{% endhighlight %}
+
+Additional information are present, such as the language in which the script is written.
 
 Once the script indexed in the cluster, we can run the previous query by using `script_id` instead of `script_file`, and
 by providing the ID we gave to the script (*score*). We should also provide the `lang` field with the corresponding language
 of our script (*groovy*).
 
-//TODO TESTER
 {% highlight json %}
 {
   "query": {
@@ -1155,3 +1193,11 @@ gets the runtime instance of the JVM, and perform a simple `exec()` on it, which
 I simply put a `ls -l`, which lists the content of the current directory, but you can imagine more complex operations,
 such as downloading a script from a remote server, script that would perform a privilege escalation, or open a backdoor
 on the host system.
+
+## Conclusion
+
+Routing, Relationships, Scoring theory, compound queries and scripting are some advanced features of Elasticsearch.
+All fo them demonstrate the pliability of Elasticsearch, and its capacity to respond to a lot of different use cases.
+
+Still, it remains an important Elasticsearch feature that I haven't covered yet: Facets, that has been replaced with
+aggregations from Elasticsearch 2.
