@@ -14,19 +14,15 @@ image:
 
 #TODOS
 
-- Write conclusion
 - Charlotte review
 - Re-check queries (execute them in term)
-- check //TODOS
-- Correct reviews
-- review formulas
 
 # OUR IS ELASTICSEARCH
 
-Welcome back! This article, the third one over my set of articles about Elasticsearch, will introduce you some more advanced concepts
+Welcome back! This article, the third one of my set of articles about Elasticsearch, will introduce some more advanced concepts
 about Elasticsearch.
 
-In the two last articles, I guided you through the basic configuration of an Elasticsearch cluster, how to configure it, how to do mapping,
+In the two last articles, I guided you through the basic configuration of an Elasticsearch cluste, how to do mapping,
 how to perform CRUD operations, and finally, how to execute simple full-text search queries.
 
 If you don't remember well about these notions, I recommend you to read the previous articles:
@@ -34,8 +30,8 @@ If you don't remember well about these notions, I recommend you to read the prev
 - [Elasticsearch Is Coming](http://reputationvip.io/elasticsearch-is-coming/)
 - [Elasticsearch Always Pays Its Debts](http://reputationvip.io/elasticsearch-always-pays-its-debts/)
 
-Also, I would like to remember you that a Github repository is available for this article. It contains every single
-query used here, along with a turnkey Elasticsearch cluster running under Docker. It is available here:
+Also, I would like to remember you that a Github repository is available for this set of articles. It contains every single
+query I use, along with a turnkey Elasticsearch cluster running under Docker. It is available here:
 [https://github.com/quentinfayet/elasticsearch/tree/3.0](https://github.com/quentinfayet/elasticsearch/tree/3.0)
 
 ## ROADMAP
@@ -47,7 +43,7 @@ the way your data are spread among the cluster.
 - **Parent-child relationships** and **nested objects** will be my second subject. Indeed, we haven't go through every Elasticsearch data types yet.
 - **Scoring** will be my third theoretical subject. I will detail you how much the choice of a scoring function is important.
 - **Compound Queries** allow you to combine multiple queries, or to alter the result of other queries.
-- **Scripting** will be at the end of this article... And honestly, I can't wait to talk about it!
+- **Scripting** allows you to perform great operations during your queries.
 
 Ok, Elasticsearch fans, get ready to dive even deeper in the fabulous world of Elasticsearch!
 
@@ -63,7 +59,7 @@ In a "classical" normal configuration, Elasticsearch would evenly **dispatch the
 an **index**.
 
 > You can notice that I used "all shards that compose your **index**", and not "**cluster**". Indeed, each node of the cluster
-**may** represents a shard for a given index, but an index may not be "sharded" on each nodes.
+**may** represents a shard for a given index, but an index may not be "sharded" on every nodes.
 
 With this configuration, **documents are spread on all shards**, and **each time you query an index**, then the cluster has to **query all the shards
 that compose it**, which may not be the desired behavior. Imagine now that we could **tell the cluster, for each index, where to store the data**,
@@ -71,7 +67,7 @@ according the **routing value** we give it. The **performances** of an index usi
 
 This mechanism - to chose where to store documents - is called **routing**.
 
-Well, you may ask yourself how Elasticsearch decides where to store a document. By default, Elasticsearch calculates the **hash value of each
+Well, you may wonder how Elasticsearch decides where to store a document. By default, Elasticsearch calculates the **hash value of each
 document's ID**, and on the basis of this hash, it will decide on which **primary shard** the document will be stored. Then, the shard redistributes
 the document **over the replicas**.
 
@@ -89,17 +85,17 @@ shard to index a document (and thus, which shard to query).
 
 Defining a routing value makes you indicate this value **each time you are querying the index**.
 
-To index a document by providing its routing value, the request would looks like this:
+To index a document by providing its routing value, the request would look like this:
 
 The query type is `PUT`
 
 <div class="highlight"><pre><code>http://localhost:9200<span style="color: chartreuse">/index/type/ID?routing=routingValue</span></code></pre></div>
 
 In the query above, of course, `index`, `type`, and `ID` should be replaced with the document's index, type and ID. What's interesting is the
-`routing` parameter. Here, `routingValue` stands as its value, and should be replaced by the value of your choice. Note that this value could
+`routing` parameter. Here, `routingValue` stands as its value, and should be replaced by the value of your choice. Note that this value can
 either be digits (integer, long, float, ...) or a string
 
-Using this method, you will also need to **provide the routing value**, under a HTTP GET parameter, on **each query you are making** to the cluster.
+Using this method, you will also be required to **provide the routing value**, under a HTTP GET parameter, on **each query you are making** to the cluster.
 
 Elasticsearch may store documents that have **different routing values on the same shard**. As a result, if you don't provide the routing value
 each time you query Elasticsearch, you may have **results that come from totally different shards**.
@@ -112,18 +108,18 @@ Routing stands to **group the documents that have something in common**. For exa
 characters. I could use their house as a routing value. That would result in documents that have the same `house` value to be stored on the same
 shard.
 
-Semi-automated routing value is about that: **find a common ground** (a common field for each document that should be stored together, that would
+Semi-automated routing value is all about this: **find a common ground** (a common field for each document that should be stored together, that would
 have the same value).
 
 And using this field that documents have in common, we can **indicate the cluster to use it as a routing value**.
 
-Indicating it to the cluster is done when defining the **mapping**. I've talked about mapping in the previous article ([Elasticsearch Always Pays Its Debts - Mapping](http://reputationvip.io/elasticsearch-always-pays-its-debts/#mapping).
+To indicate which field to be used as the routing value is done when defining the **mapping**. I've talked about mapping in the previous article ([Elasticsearch Always Pays Its Debts - Mapping](http://reputationvip.io/elasticsearch-always-pays-its-debts/#mapping).
 
 When defining the mapping for a given type, you can add the `_routing` value, which is a JSON object that describes your routing rule. This JSON object
-is composed of two fields: the `path` field contains **the name of the document's field** containing what should be used as the routing value. The
+is composed of two fields: the `path` field contains **the name of the document's field** containing what should be used as the routing value; the
 `required` field that says whether or not the routing value is **required when performing index operation**.
 
-For example, considering the `elasticsearch` index with `character` type, I could have add this to my JSON mapping object:
+For example, considering the `game_of_thrones` index with `character` type, I could have add this to my JSON mapping object:
 
 {% highlight json %}
 {
@@ -163,25 +159,25 @@ how to perform CRUD operations on them, and finally, how to use basic full-text 
 However, a question might have come to your mind: **How to manage relations between documents?**
 
 In this chapter, I will go through the main principles of indexing more complex documents, and how to define the relations that bind them
-together. Also, I will introduce you with the **nested types** of Elasticsearch, and how to index non-flat data.
+together. Also, I will introduce you to the **nested types** of Elasticsearch, and how to index non-flat data.
 
 ## Nested types
 
 The definition of the *nested type* is quite simple: It is an **array of objects** that lives inside a document.
 
-As you know, Elasticsearch works on top of Apache Lucene. Yet, Apache Lucene doesn't know anything about inner
-objects, so that the job of Elasticsearch is to flatten them.
+As you know, Elasticsearch works on top of Apache Lucene. Yet, Apache Lucene doesn't know anything about objects that
+live in other objects, so that the job of Elasticsearch is to flatten them.
 
 In other words, if you try to index a document that contains an array of objects, by default, each field of each object
 of the array will be inserted in a field in your top document that contains an array of each value that correspond to
 this field's name in the objects of the array. Is that clear? I think it is not. Let me give you an example:
 
-Let's assume that our *character* type documents have a field, named `weapons` that contains an array of objects,
+Let's assume that our `character` type documents have a field, named `weapons` that contains an array of objects,
 each of them would be a weapon, as following:
 
 {% highlight json %}
 {
-    "_id": "Arya Stark"
+    "_id": "Arya Stark",
     "house": "Stark",
     "gender": "female",
     "age":17,
@@ -202,14 +198,14 @@ each of them would be a weapon, as following:
 
 As you can see, the document `Arya Stark` has a field named `weapons`, that contains two objects. The first one is a
 sword (the famous sword named "Needle"), and the second one is an axe named "My beloved Axe" (thanks to my imagination
-for this name).
+for this - very original - name).
 
-If you index this document in the cluster, without precising in the mapping that the field `weapons` is *nested* type,
+If you index this document in the cluster, without specifying in the mapping that the field `weapons` is of *nested* type,
 then the indexed document will look like this:
 
 {% highlight json %}
 {
-    "_id": "Arya Stark"
+    "_id": "Arya Stark",
     "house": "Stark",
     "gender": "female",
     "age":17,
@@ -225,9 +221,9 @@ which field's name is composed of the array object's field name. The two field n
 for example, result into a new field named `weapons.type`, which is an array of the former values contained in the
 `type` field of the `weapons` array.
 
-Here, we lost any relation between the fields, because the objects have been flatten.
+**Here, we lost any relation between the fields, because the objects have been flatten.**
 
-The solution to this problem is, in the mapping, to define the field `weapon` as a *nested* type field:
+The solution to this problem is, in the mapping, to define the field `weapon` as a field of *nested* type:
 
 {% highlight json %}
 {
@@ -243,27 +239,27 @@ The solution to this problem is, in the mapping, to define the field `weapon` as
 }
 {% endhighlight %}
 
-And, with this mapping, the nested object will not be altered.
+And, with this mapping, the nested object will not be altered in any way.
 
 ## Parent-child relationships
 
-As we just saw, *nested* type is a way for a document to embed one or more "sub-documents". But with nested documents,
-each sub-document lives in its parents. In other words, you cannot change one of the sub-documents without reindexing
-the parent. Also, if you have a large amount of sub-documents, it might become tricky to add documents, update them
+As we just saw, *nested* type is **a way for a document to embed one or more "sub-documents"**. But with nested documents,
+each sub-document lives in its parents. In other words, **you cannot change one of the sub-documents without reindexing
+the parent.** Also, if you have a large amount of sub-documents, it might become tricky to add documents, update them
 or delete them.
 
-Here comes the parent-child relationship. With this relationship, a document is bound to another, but it still remains
-a single entity.
+Here comes the parent-child relationship. With this relationship, a document is bound to another, but it **still remains
+a single entity.**
 
-Pay attention though, if the parent document has a routing defined in its mapping, the child has to follow the same routing.
-Indeed, Elasticsearch maintains a map of parent-child relationships to make search faster, but it implies for the
-parents and the children to be indexed on the same shard. What it means is that if you try to index a orphan child
+Pay attention though, **if the parent document has a routing defined in its mapping, the child has to follow the same routing.**
+Indeed, Elasticsearch maintains a map of parent-child relationships to make search faster, but **it implies for the
+parents and the children to be indexed on the same shard.** What it means is that if you try to index a orphan child
 document, Elasticsearch will require you to precise the routing value.
 
 ### Define the mapping
 
-First thing to do when we want to introduce a parent-child relationship is to write the mapping of both the parent
-and the child. In our case, the parent (which is `character` type)is already defined, so that we just have to define
+First thing to do when we want to introduce a parent-child relationship is to **write the mapping of both the parent
+and the child.** In our case, the parent (which is `character` type) is already defined, so that we just have to define
 the child's mapping.
 
 For example, let's say that we want to store the animals that company our characters. We would store them in the same
@@ -305,8 +301,8 @@ The `animal` type will carry two fields:
 
 ### Index a child
 
-Well, know that the mappings are defined, let's index some children. For my example, I will talk about two famous
-animals in Game of Thrones: Nymeria, which is Arya's direwolf, and Ghost which is Robb's direwolf.
+Well, now that the mappings are defined, let's index some children. For my example, I will talk about two famous
+animals in Game of Thrones: Nymeria, which is Arya's direwolf, and Ghost, Robb's direwolf.
 
 To index a child and build the relationship with its parents, you need to specify its parent's ID in the `POST`
 request:
@@ -320,8 +316,8 @@ The `parent` parameter specifies the parent's ID.
 #### The tricky case of routing
 
 Previously, we activated routing on our `game_of_throne` `character` type, by using `house` as the routing value. And,
-maybe you remember, I told you that when it comes to parent-child relationships and routing, the things might get
-delicate. Indeed, both parents and children have to be stored on the same shard. When default routing is used, everything
+you may remember that I told you that when it comes to parent-child relationships and routing, the things might get
+delicate. Indeed, **both parents and children have to be stored on the same shard.** When default routing is used, everything
 is simple, because Elasticsearch uses a hash of the parent's ID to build the routing value, resulting into the children
 and the parents to be stored on the same shard.
 
@@ -338,7 +334,7 @@ $>curl -XPOST 'http://localhost:9200/game_of_thrones/animal/?routing=Stark&paren
 $>curl -XPOST 'http://localhost:9200/game_of_thrones/animal/?routing=Stark&parent=Jon%20Snow' -d '{"type":"direwolf", "name":"Ghost"}'
 {% endhighlight %}
 
-You may have notive that I've used `%20` in the URL. That's because the IDs of my parent documents are the character's
+You may have noticed that I've used `%20` in the URL. That's because the IDs of the parent documents are the character's
 names. Thus, there is a space between the first and last name, which is represented by `%20` in the URL.
 
 ### Query a document with children
@@ -351,10 +347,10 @@ give you the parent document, `has_parent` will give you the child document.
 
 Let's start by retrieving the parent document, with the `has_child` filter.
 
-As a single type of parent document can have several types of children documents, the `has_child` query has to know
-the type of child you are interested searching data into.
+As a single type of parent document can have several types of children documents, the `has_child` **query has to know
+the type of child you are interested searching data into.**
 
-For example, let's say that we want to get the character which animal is Nymeria (so, we are looking for Arya Stark).
+For example, let's say that we want to get the character which `animal`'s name is Nymeria (so, we are looking for Arya Stark).
 
 Our query will be the following:
 
@@ -373,7 +369,7 @@ Our query will be the following:
 }
 {% endhighlight %}
 
-It is a simple query, with the `has_child` filter on a `term` query based on the `name` field of the `animal` type.
+It is a simple query, with the `has_child` filter applied on a `term` query based on the `name` field of the `animal` type.
 
 The query is available at `queries/DSL/query_has_child.json`, let's run it:
 
@@ -429,7 +425,7 @@ As you can see, we successfully retrieved `Arya Stark` from her direwolf, `Nymer
 
 #### Retrieve the child document
 
-On the other hand, we can retrieve the children documents by querying the parent's data. For example, let's say
+On the other hand, we can **retrieve the children documents by querying the parent's data.** For example, let's say
 that we want to retrieve every `animal` that is a child of a `character` document which `house` field is "Stark".
 
 {% highlight json %}
@@ -496,8 +492,8 @@ Great. With everything we talked about, I think you are ready to start using Ela
 in its basics features might not be enough.
 
 That's why I am going to talk a bit about the scoring. Remember, we already talked about it in the very first article,
-and also in the second one. Scoring is the way Elasticsearch (and thus Apache Lucene) determines the relevance of a document
-against a given query.
+and also in the second one. **Scoring is the way Elasticsearch (and thus Apache Lucene) determines the relevance of a document
+against a given query.**
 
 If your goal is to use Elasticsearch at the very best of its capabilities, then you should know about scoring. I am now
 going to talk about the Apache Lucene scoring mechanism and the TF/IDF algorithm (though we already did talk about it).
@@ -506,37 +502,37 @@ going to talk about the Apache Lucene scoring mechanism and the TF/IDF algorithm
 
 So the question is simple: How does Elasticsearch (Apache Lucene) calculate the score of a document against a query?
 
-Well, there is a lot of factor that has a influence on the final score. The score depends on the documents, but also on
-the query (and so, comparing scores of documents on different queries doesn't make much sense).
+Well, there is **a lot of factor that influence on the final score.** The score **depends on the documents, but also on
+the query** (and so, comparing scores of documents on different queries doesn't make much sense).
 
 Before I talk about the factors, I want you to know that I have never talked about much of the things that I am going to
 talk about now in my previous articles.
 
 Last warning, this part will be a bit mathematical and theoretical ; however, it is totally fine that you don't perfectly
-understand what I will go through now. For me, it took a bit of time to understand it.
+understand what I will go through now. For me, it took a bit of time to understand it well.
 
 #### Inverse Document Frequency
 
 **Inverse Document Frequency** first. Maybe you remember that I've already talked about it in the first article. The
-**inverse document frequency**, IDF in the short way, is a formula, based on terms, that give a factor about how rare
-a term is. The higher the IDF is, the rarer is the term in the document.
+**inverse document frequency**, IDF in the short way, is a formula, based on terms, that give a factor about **how rare
+a term is. The higher the IDF is, the rarer the term is in the document.**
 
-Let's have a look to the formula.
+Let's have a look at the formula.
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=idf_{i}&space;=&space;log(\frac{\left&space;|&space;D&space;\right&space;|}{\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?idf_{i}&space;=&space;log(\frac{\left&space;|&space;D&space;\right&space;|}{\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|})" title="idf_{i} = log(\frac{\left | D \right |}{\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right |})" /></a>
 
 With <a href="https://www.codecogs.com/eqnedit.php?latex=i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?i" title="i" /></a> the term.
 
 Here, <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;D&space;\right&space;|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;D&space;\right&space;|" title="\left | D \right |" /></a>
-represents the total number of documents for a given type *type*
+represents the **total number of documents for a given type *type***
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|" title="\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right |" /></a>
-simply is a complicated way to represent the number of documents in which the term appears.
+simply is a complicated way to **represent the number of documents in which the term appears.**
 
 But this is only the *theoretical* formula. In practice, this formula has a weakness: What if <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;=&space;0" title="\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right | = 0" /></a>?
-In other words, what if the term doesn't appear in any document? It would result in dividing by zero, and this is simply... Not possible.
+In other words, what if the term doesn't appear in any document? **It would result in dividing by zero, and this is simply... Not possible.**
 
-So in practice, we add 1 to this value. The final formula is:
+So **in practice, we add 1 to this value.** The final formula is:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=idf_{i}&space;=&space;log(\frac{\left&space;|&space;D&space;\right&space;|}{\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;&plus;&space;1})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?idf_{i}&space;=&space;log(\frac{\left&space;|&space;D&space;\right&space;|}{\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|&space;&plus;&space;1})" title="idf_{i} = log(\frac{\left | D \right |}{\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right | + 1})" /></a>
 
@@ -545,8 +541,8 @@ Oh... I see you! You'd like an example! Well, I'm in a good mood today, so let's
 Let's consider the 3 following documents:
 
 - **Document 1**: "Hello, my name is Arya"
-- **Document 2**: "Arya is part of the Stark family"
-- **Document 3**: "The Stark family really has no chance..."
+- **Document 2**: "Robb was part of the Stark family"
+- **Document 3**: "The Stark family is not really lucky..."
 
 Also, we will consider that a *term* is a word. For example, "Hello" is a term. We want to calculate the IDF value of
 the term **"Arya"** against the 3 documents.
@@ -555,16 +551,16 @@ In this case, <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&
 is 3 (indeed, we have 3 documents).
 
 Also, <a href="https://www.codecogs.com/eqnedit.php?latex=\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left&space;|&space;\left&space;\{&space;d_{j}&space;:&space;t_{i}&space;\in&space;d_{j}&space;\right&space;\}&space;\right&space;|" title="\left | \left \{ d_{j} : t_{i} \in d_{j} \right \} \right |" /></a>
-is equal to 2, because the term **"Arya"** can be find in 2 documents (**Document 1** and **Document 2**).
+is equal to 1, because the term **"Arya"** can be find in 1 documents (**Document 1** and **Document 2**).
 
-So, the IDF value for the term **"Arya"** against these documents is <a href="https://www.codecogs.com/eqnedit.php?latex=idf_{arya}&space;=&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?idf_{arya}&space;=&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})" title="idf_{arya} = log(\frac{\left | 3 \right |}{\left | 2 \right |})" /></a>
+So, the IDF value for the term **"Arya"** against these documents is <a href="https://www.codecogs.com/eqnedit.php?latex=idf_{arya}&space;=&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;1&space;\right&space;|&space;&plus;&space;1})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?idf_{arya}&space;=&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;1&space;\right&space;|&space;&plus;&space;1})" title="idf_{arya} = log(\frac{\left | 3 \right |}{\left | 1 \right | + 1})" /></a>
 
-And that's it! Quite simple, isn't it?!
+And that's it! Quite simple, isn't it?
 
 #### Term Frequency
 
 The IDF by itself is not enough. Indeed, IDF gives a score for a term against **all** documents, so the score is not relevant
-without a moderation. Here comes the **term frequency** (TF). That's why we are talking of **TF/IDF**, and not only of
+without a moderation. Here comes the **term frequency** (TF). That's why we are talking of **TF/IDF**, and not only
 **TF** or **IDF**.
 
 The **term frequency** of a term, as it name suggests, is the frequency of the term in a given document. Some scientists
@@ -572,7 +568,7 @@ invented a complicated formula to describe it, which is:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{i,d}&space;=&space;\frac{n_{i,d}}{\sum&space;_{k}&space;n_{k,d}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{i,d}&space;=&space;\frac{n_{i,d}}{\sum&space;_{k}&space;n_{k,d}}" title="tf_{i,d} = \frac{n_{i,d}}{\sum _{k} n_{k,d}}" /></a>
 
-Behind this *complicated* formula, it is simply a frequency calculation: The number of times the term appears in the document,
+Behind this *complicated* formula, it is simply a **frequency calculation**: The number of times the term appears in the document,
 divided by the total number of terms in the document.
 
 With <a href="https://www.codecogs.com/eqnedit.php?latex=i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?i" title="i" /></a> the term,
@@ -580,25 +576,25 @@ With <a href="https://www.codecogs.com/eqnedit.php?latex=i" target="_blank"><img
 
 So, <a href="https://www.codecogs.com/eqnedit.php?latex=n_{i,d}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?n_{i,d}" title="n_{i,d}" /></a> is
 the number of times the term appears in the document, and <a href="https://www.codecogs.com/eqnedit.php?latex=\sum&space;_{k}&space;n_{k,d}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sum&space;_{k}&space;n_{k,d}" title="\sum _{k} n_{k,d}" /></a>
-is the sum of occurrences of each single term in the document (thus, the total number of terms in the document).
+is the **sum of occurrences of each single term in the document** (thus, the total number of terms in the document).
 
 Let's resume with the 3 documents we used to calculate IDF. Our query still is **"Arya"**.
 
 - **Document 1**: "Hello, my name is Arya": <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;1}&space;=&space;\frac{1}{5}&space;=&space;0,20" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;1}&space;=&space;\frac{1}{5}&space;=&space;0,20" title="tf_{arya, Document 1} = \frac{1}{5} = 0,20" /></a> (We don't consider a coma as a term)
-- **Document 2**: "Arya is part of the Stark family": <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;2}&space;=&space;\frac{1}{7}&space;\approx&space;0,14" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;2}&space;=&space;\frac{1}{7}&space;\approx&space;0,14" title="tf_{arya, Document 2} = \frac{1}{7} \approx 0,14" /></a>
-- **Document 3**: "The Stark family really has no chance...": <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;3}&space;=&space;\frac{0}{7}&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;3}&space;=&space;\frac{0}{7}&space;=&space;0" title="tf_{arya, Document 3} = \frac{0}{7} = 0" /></a>
+- **Document 2**: "Robb is part of the Stark family": <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;2}&space;=&space;\frac{0}{7}&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;2}&space;=&space;\frac{0}{7}&space;=&space;0" title="tf_{arya, Document 2} = \frac{0}{7} = 0" /></a>
+- **Document 3**: "The Stark family is not really lucky...": <a href="https://www.codecogs.com/eqnedit.php?latex=tf_{arya,&space;Document&space;3}&space;=&space;\frac{0}{7}&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tf_{arya,&space;Document&space;3}&space;=&space;\frac{0}{7}&space;=&space;0" title="tf_{arya, Document 3} = \frac{0}{7} = 0" /></a>
 
-From now, we can even calculate the **TF/IDF** for each document, as the **TF/IDF** is simply the following:
+From now, we can calculate the **TF/IDF** for each document, as the **TF/IDF** is simply the following:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{i,d}&space;=&space;tf_{i,d}&space;\cdot&space;idf_{i}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{i,d}&space;=&space;tf_{i,d}&space;\cdot&space;idf_{i}" title="tfidf_{i,d} = tf_{i,d} \cdot idf_{i}" /></a>
 
 - **Document 1**: "Hello, my name is Arya": <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;1}&space;=&space;0,20&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,04" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;1}&space;=&space;0,20&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,04" title="tfidf_{Arya,Document 1} = 0,20 \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) \approx 0,04" /></a>
-- **Document 2**: "Arya is part of the Stark family": <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;2}&space;=&space;\frac{1}{7}&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,03" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;2}&space;=&space;\frac{1}{7}&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;\approx&space;0,03" title="tfidf_{Arya,Document 2} = \frac{1}{7} \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) \approx 0,03" /></a>
-- **Document 3**: "The Stark family really has no chance...": <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;3}&space;=&space;0&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;3}&space;=&space;0&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;=&space;0" title="tfidf_{Arya,Document 3} = 0 \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) = 0" /></a>
+- **Document 2**: "Robb is part of the Stark family": <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;2}&space;=&space;0&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;2}&space;=&space;0&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;=&space;0" title="tfidf_{Arya,Document 2} = 0 \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) = 0" /></a>
+- **Document 3**: "The Stark family is not really lucky...": <a href="https://www.codecogs.com/eqnedit.php?latex=tfidf_{Arya,Document&space;3}&space;=&space;0&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?tfidf_{Arya,Document&space;3}&space;=&space;0&space;\cdot&space;log(\frac{\left&space;|&space;3&space;\right&space;|}{\left&space;|&space;2&space;\right&space;|})&space;=&space;0" title="tfidf_{Arya,Document 3} = 0 \cdot log(\frac{\left | 3 \right |}{\left | 2 \right |}) = 0" /></a>
 
 #### Document Boost
 
-**Document Boost** is something that I never talked about. This is an artificial way to influence the scoring value for
+**Document Boost** is something that I have never talked about. This is an artificial way to influence the scoring value for
 a document. The **Document Boost** is simply a boost value that can be given to a document during indexing.
 
 #### Field Boost
@@ -610,19 +606,19 @@ during indexing.
 
 The **coordination factor** is quite simple: The more searched terms the document contains, the higher the **coordination
 factor** is. Without the **coordination factor**, the combined weight value of the matching terms in a document
-would evolve in a linear way. With the **coordination factor**, the weight value is being multiplied by the number of matching
+would evolve in a linear way. Using the **coordination factor**, the weight value is being multiplied by the number of matching
 terms in the document, and then divided by the number of terms in the query. Let's reconsider our documents. Let's imagine that
 our query would be **"Arya Stark family"**. Also, we consider each term has a weight of 1.
 
 - **Document 1**: "Hello, my name is Arya"
-- **Document 2**: "Arya is part of the Stark family"
-- **Document 3**: "The Stark family really has no chance..."
+- **Document 2**: "Robb is part of the Stark family"
+- **Document 3**: "The Stark family is not really lucky..."
 
 Without the **coordination factor**, the weight scores would be:
 
 - **Document 1**: "Hello, my name is Arya": Weight Score = 1
-- **Document 2**: "Arya is part of the Stark family": Weight Score = 3
-- **Document 3**: "The Stark family really has no chance...": Weight Score = 2
+- **Document 2**: "Robb is part of the Stark family": Weight Score = 2
+- **Document 3**: "The Stark family is not really lucky...": Weight Score = 2
 
 As you can see, the weight score is just the addition of the score of each term of the query that is present in the
 document.
@@ -630,11 +626,11 @@ document.
 Now, with the **coordination factor**:
 
 - **Document 1**: "Hello, my name is Arya": Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=1&space;*&space;\frac{1}{3}&space;=&space;\frac{1}{3}&space;\approx&space;0,33" target="_blank"><img src="https://latex.codecogs.com/gif.latex?1&space;*&space;\frac{1}{3}&space;=&space;\frac{1}{3}&space;\approx&space;0,33" title="1 * \frac{1}{3} = \frac{1}{3} \approx 0,33" /></a>
-- **Document 2**: "Arya is part of the Stark family": Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=3&space;*&space;\frac{3}{3}&space;=&space;3" target="_blank"><img src="https://latex.codecogs.com/gif.latex?3&space;*&space;\frac{3}{3}&space;=&space;3" title="3 * \frac{3}{3} = 3" /></a>
-- **Document 3**: "The Stark family really has no chance...": Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=2&space;*&space;\frac{2}{3}&space;=&space;\approx&space;1,33" target="_blank"><img src="https://latex.codecogs.com/gif.latex?2&space;*&space;\frac{2}{3}&space;=&space;\approx&space;1,33" title="2 * \frac{2}{3} = \approx 1,33" /></a>
+- **Document 2**: "Robb is part of the Stark family": Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=2&space;*&space;\frac{2}{3}&space;\approx&space;1,33" target="_blank"><img src="https://latex.codecogs.com/gif.latex?2&space;*&space;\frac{2}{3}&space;\approx&space;1,33" title="2 * \frac{2}{3} \approx 1,33" /></a>
+- **Document 3**: "The Stark family is not really lucky...": Weight Score = <a href="https://www.codecogs.com/eqnedit.php?latex=2&space;*&space;\frac{2}{3}&space;=&space;\approx&space;1,33" target="_blank"><img src="https://latex.codecogs.com/gif.latex?2&space;*&space;\frac{2}{3}&space;=&space;\approx&space;1,33" title="2 * \frac{2}{3} = \approx 1,33" /></a>
 
-As you can see, the evolution of the score is not linear anymore. Indeed, the **Document 2** has a score of *3*, while
-the **Document 1** has a score of around 0,33.
+As you can see, the evolution of the score is not linear anymore. Indeed, the **Document 2** has a score of *1.33* because it containes 2 of the 3 terms of the query, while
+the **Document 1** has a score of around 0,33 because it contains only one term of the query.
 
 #### Query Normalization Factor
 
@@ -652,23 +648,23 @@ As it is not really important, I won't talk about it here.
 #### Field-length norm
 
 Basically, it is the length of the field we are searching in. The shorter the field, the higher the weight. In other words,
-a term found in a little field will be given more weight than the same term found in a longer field.
+a term found in a field with small length will be given more weight than the same term found in a longer field.
 
 The calculation is quite simple:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{d}&space;=&space;\frac{1}{\sqrt{\sum&space;_{k}&space;n_{k,d}}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{d}&space;=&space;\frac{1}{\sqrt{\sum&space;_{k}&space;n_{k,d}}}" title="norm_{d} = \frac{1}{\sqrt{\sum _{k} n_{k,d}}}" /></a>
 
-With <a href="https://www.codecogs.com/eqnedit.php?latex=d" target="_blank"><img src="https://latex.codecogs.com/gif.latex?d" title="d" /></a> the document.
+With <a href="https://www.codecogs.com/eqnedit.php?latex=d" target="_blank"><img src="https://latex.codecogs.com/gif.latex?d" title="d" /></a> the document, and <a href="https://www.codecogs.com/eqnedit.php?latex=\sum&space;_{k}&space;n_{k,d}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sum&space;_{k}&space;n_{k,d}" title="\sum _{k} n_{k,d}" /></a> the sum of terms in the document.
 
 As you can see, the calculation doesn't depend on the term, but on the document (on the field, actually).
 
 Let's calculate the **field-length norm** for our 3 documents:
 
 - **Document 1**: "Hello, my name is Arya": <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;1}&space;=&space;\frac{1}{\sqrt{5}}&space;\approx&space;0,45" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;1}&space;=&space;\frac{1}{\sqrt{5}}&space;\approx&space;0,45" title="norm_{Document 1} = \frac{1}{\sqrt{5}} \approx 0,45" /></a>
-- **Document 2**: "Arya is part of the Stark family": <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" title="norm_{Document 2} = \frac{1}{\sqrt{7}} \approx 0,38" /></a>
-- **Document 3**: "The Stark family really has no chance...": <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" title="norm_{Document 2} = \frac{1}{\sqrt{7}} \approx 0,38" /></a>
+- **Document 2**: "Robb is part of the Stark family": <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" title="norm_{Document 2} = \frac{1}{\sqrt{7}} \approx 0,38" /></a>
+- **Document 3**: "The Stark family is not really lucky...": <a href="https://www.codecogs.com/eqnedit.php?latex=norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" target="_blank"><img src="https://latex.codecogs.com/gif.latex?norm_{Document&space;2}&space;=&space;\frac{1}{\sqrt{7}}&space;\approx&space;0,38" title="norm_{Document 2} = \frac{1}{\sqrt{7}} \approx 0,38" /></a>
 
-As you can notice, the more term in the document, the lower the **field-norm length**.
+As you can notice, the more terms in the document, the lower the **field-norm length**.
 
 ### The final scoring function
 
@@ -692,7 +688,7 @@ But what if we want to connect multiply queries between them, to perform more pr
 
 ### The boolean query
 
-The first compound query I want to introduce you is the **boolean query**. The boolean query allows you to **connect
+The first compound query I want to introduc is the **boolean query**. The boolean query allows you to **connect
 multiple queries to get a boolean value**.
 
 With three keywords that are *should*, *must* et *must_not*, you will be able to define some inbound rules
@@ -794,7 +790,7 @@ And, the result of the query, once executed, is the following:
 }
 {% endhighlight %}
 
-I got 6 results. Well you can notice that the result doesn't include the character "Robb Stark", as its age in our dataset
+I got 6 results. You can notice that the result doesn't include the character "Robb Stark", as its age in our dataset
 is defined to 22 (so it doesn't satisfy the *must_not* clause).
 
 ### The Function Score Query
@@ -807,7 +803,7 @@ As we saw right before, the relevance scoring function of Elasticsearch is a mix
 But, what if the default relevance scoring function is not relevant to you? What if you'd like to define your own relevance
 scoring function? Well, that is possible!
 
-The compound query **Function Score Query** is one of the most complex query of Elasticsearch, as it is really complete,
+The compound query **Function Score Query** is one of the most complex query in Elasticsearch, as it is really complete,
 and allows you to manipulate the score in a lot of different ways.
 
 To perfectly understand how it works, we should first take a look at the query's structure:
@@ -836,15 +832,15 @@ So, several points to be discussed:
 
 - the `query` field is the place where you define your query.
 - the `boost` field is the place where you define a boost value that will be applied to the whole query.
-- the `functions` field is the place where you will define the functions that calculates the score. As you may have
-noticed, this field is an array, meaning that you can define one or more relevance scoring functions.
+- the `functions` field is the place where you will define the functions that calculate the score. As you may have
+noticed, this field is an array, which means that you can define one or more relevance scoring functions.
 - the `boost_mode` field defines the type of boost mode (multiply, replace, ...) that you will use.
 - the `max_boost` is an optional field, and as it name suggests, it allows you to define a maximum score.
 - the `score_mode` is an optional field that allows you to define the score mode (max, multiply, ...).
 - the `min_score` is an optional field that allows you to define the minimal score.
 
-As I told you, several relevance scoring functions can be defined, and you can choose which one to apply according
-the match to a given filter.
+As I told you, several relevance scoring functions can be defined, and you can choose which one to apply accordingly
+to a given filter.
 
 #### The possible scoring functions
 
@@ -856,7 +852,7 @@ them, which is the `script_score` function.
 The first scoring function I am introducing is the *script_score* function. It allows you to manipulate the score with
 scripting.
 
-If you don't remember well about scripting, I did talk a bit about it in the second article.
+If you don't remember well about scripting, I did talk a bit about it in the second article, [here](http://reputationvip.io/elasticsearch-always-pays-its-debts/#scripting)
 
 When defining a **script_score** function, different variables will be available to you:
 
@@ -883,7 +879,7 @@ Let's have a look to the structure:
 this score to be the final score, you'll have to set the `boost_mode` to "replace".**
 
 Let's take an example: I want the *final score* of my query to be the age of my *character* divided by two. Quite simple.
-My query will be a *term* query on the `house field, to "Lannister".
+My query will be a *term* query on the `house` field, to "Lannister".
 
 The query would then be the following:
 
@@ -910,7 +906,7 @@ The query would then be the following:
 {% endhighlight %}
 
 Well you can see it is quite simple. Under the `query` field, I defined a *match* query on the `house` field of the document.
-Then, under the `functions` array, I added an object that contains my `script_score` script. This script takes the value of
+Then, inside the `functions` array, I added an object that contains my `script_score` script. This script takes the value of
 the field `age` of the document, and divides it by two. Finally, I set the `boost_mode` to "replace", so that the final
 score is the score calculated by my script.
 
@@ -961,18 +957,18 @@ $>curl -XPOST 'http://localhost:9200/game_of_thrones/_search?pretty' -d @queries
 }
 {% endhighlight %}
 
-As you can notice, the score of the document is equal to half of the age of the corresponding document.
+As you can notice, the score of the document is equal to half the age of the corresponding document.
 
 ## Scripting
 
 For the last part of this article, I decided to talk about scripting. Indeed, Elasticsearch comes with a very interesting
-scripting feature that allow you to return custom values, or to perform some operations such as custom scoring.
+scripting feature that allows you to return custom values, or to perform some operations such as custom scoring.
 
 If you remember well, we already talked about scripting in the previous article, where I introduced a way to perform
 dynamic calculation of a virtual field.
 
 Until Elasticsearch 1.3, the used scripting language was MVEL (an expression language for the Java Platform), but now,
-Groovy is used. Yet, some other languages can be used, such as Mustach, Javascript or Python (the two last ones require
+*Groovy* is used. Yet, some other languages can be used, such as Mustach, Javascript or Python (the two last ones require
 plugins to work).
 
 If you are working under the docker cluster I provided, the scripting functions already are enabled in the `elasticsearch.yml`
@@ -980,7 +976,7 @@ file. Otherwise, you will have to enable them with the following configuration l
 
 `script.engine.groovy.inline.search: on`.
 
-There is three ways to load a script in an Elasticsearch query:
+There are three ways to load a script in an Elasticsearch query:
 
 - Using **inline** script by inserting the script line directly into the query
 - Using **a file** that contains the script, and indicating its name to the query
@@ -993,7 +989,7 @@ As I already introduced the first way to perform scripting, I will now have a qu
 When talking about data warehouse, or more commonly databases, security is a primordial point. Yet, scripting introduce
 a lot of security concerns, as it allows to perform some operations that are off the control of Elasticsearch.
 
-What if you were using a language that contains a huge security breach, and that anybody could easily take control
+What if you are using a language that contains a huge security breach, and that anybody could easily take control
 over your cluster?
 
 That's why Elasticsearch scripting feature is only working with sandboxed languages. Sandbox environment is a special
@@ -1053,7 +1049,7 @@ each field is a param name, and the corresponding value is the param value.
 
 ### Scripting with index
 
-As I said, you can store scripts directly into a dedicated index named `.scripts`. Yet, there is a special REST endpoint
+As I said, you can store scripts directly into a dedicated index named `.scripts`. Thus, there is a special REST endpoint
 to manage the scripts, which is `_scripts`. A script is identified by its ID, and stored under a specific `lang`:
 
 <div class="highlight"><pre><code>http://localhost:9200<span style="color: orange">/_scripts/lang/ID</span></code></pre></div>
@@ -1087,7 +1083,7 @@ The response returned by the cluster is the same as if we were indexing a lambda
 }
 {% endhighlight %}
 
-A simple GET request will return our script:
+A simple `GET` request will return our script:
 
 {% highlight sh %}
 $>curl -XGET http://localhost:9200/_scripts/groovy/score
@@ -1135,7 +1131,7 @@ of our script (*groovy*).
 ### Scripting security
 
 Scripting is a powerful feature of Elasticsearch. But with great power comes great responsibility. Indeed, scripting
-is powerful, but even sandboxed environment cannot stop all attempts to attack a cluster.
+is powerful, but **even sandboxed environment cannot stop all attempts to attack a cluster.**
 
 If you are concerned with security in Elasticsearch (which is **primordial** if you are willing to run Elasticsearch in
 a production state), a good start is [this article](https://www.elastic.co/blog/scripting-security) on the Elastic's blog.
@@ -1143,7 +1139,7 @@ a production state), a good start is [this article](https://www.elastic.co/blog/
 On the other hand, if your interest is more about security research, a good start would be to look at some pull requests
 done on the Metasploit framework, like [this one](https://github.com/rapid7/metasploit-framework/pull/4907).
 
-As I also have interest into security concerns, let's have a bit of fun by trying to make this exploit by ourselves.
+As I also have interest into security concerns, let's have a bit of fun by having a look at how one of these exploits works.
 
 First of all, as described in the pull request, this security breach on Elasticsearch has a **CVE (Common Vulnerabilities
 and Exposures)** code, which is *CVE-2015-1427*.
@@ -1196,8 +1192,5 @@ on the host system.
 
 ## Conclusion
 
-Routing, Relationships, Scoring theory, compound queries and scripting are some advanced features of Elasticsearch.
+Routing, relationships, scoring theory, compound queries and scripting are some advanced features of Elasticsearch.
 All fo them demonstrate the pliability of Elasticsearch, and its capacity to respond to a lot of different use cases.
-
-Still, it remains an important Elasticsearch feature that I haven't covered yet: Facets, that has been replaced with
-aggregations from Elasticsearch 2.
