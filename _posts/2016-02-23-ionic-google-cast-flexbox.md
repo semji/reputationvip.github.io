@@ -14,7 +14,7 @@ It's the ideal moment for us to grow our skills and to share them across our ent
 In January, 2016, we had two great presentations:
 
 - A demo combining Ionic Framework and Google Cast by [Thomas](https://twitter.com/tomalelievre)
-- An introduction to Flexbox by [Snapeuh](https://twitter.com/snapeuh)
+- An introduction to Flexbox by [snapeuh](https://twitter.com/snapeuh)
 
 You can see the great Thomas' Ionic / Google Cast slides here:
 
