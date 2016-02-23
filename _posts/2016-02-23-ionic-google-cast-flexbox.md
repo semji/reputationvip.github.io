@@ -3,7 +3,7 @@ layout: post
 title: "Internal workshops: Google Cast + Ionic & Flexbox"
 author: olivier_balais
 modified: 2016-02-23
-excerpt: "These are the slides used as support by Thomas in our last technical workshop at Reputation VIP."
+excerpt: "These are the slides used as support by Thomas & Romain in our last technical workshop at Reputation VIP."
 tags: [flexbox, css, ionic, ionic framework, angular, google, google cast, mobile]
 comments: true
 ---
