@@ -9,13 +9,13 @@ url:              http://reputationvip.io
 
 permalink:   /:categories/:title/
 markdown:    kramdown
-highlighter: pygments
+#highlighter: pygments
 sass:
   sass_dir: _sass
   style: compressed
 gems:
-  - jekyll-sitemap
-  - jekyll-redirect-from
+  #- jekyll-sitemap
+  #- jekyll-redirect-from
 
 kramdown:
   auto_ids: true
@@ -44,7 +44,7 @@ owner:
   bing-verify:
   github: ReputationVIP
   stackoverflow: #http://stackoverflow.com/users/123456/username
-  linkedin: reputation-vip
+  linkedin-corporate: reputation-vip
   instagram: #username
   lastfm: #username
   tumblr: #username
