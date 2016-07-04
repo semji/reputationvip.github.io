@@ -3,7 +3,7 @@ layout: post
 author: quentin_fayet
 title: "Our is the Elasticsearch"
 excerpt: "This third article about Elasticsearch will go through routing, relationships, scoring methods and scripting."
-modified: 2015-10-05
+modified: 2016-07-04
 tags: [elasticsearch, fullt-text research, apache, lucene, routing, relationships, scoring, scripting]
 comments: true
 image:
