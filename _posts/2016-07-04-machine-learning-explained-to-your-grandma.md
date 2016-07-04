@@ -6,6 +6,10 @@ modified: 2016-07-04
 excerpt: "These are the slides used in our first Machine Learning Workshop at ReputationVIP."
 tags: [machine learning, deep learning]
 comments: true
+image:
+  feature: machine-learning-1-explained-grandma.jpg
+  credit: Quentin Fayet
+  creditlink: http://reputationvip.io
 ---
 
 At Reputation VIP, we absolutly love trending technologies. Among them, one of
