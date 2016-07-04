@@ -7,8 +7,8 @@ modified: 2015-10-05
 tags: [elasticsearch, fullt-text research, apache, lucene, routing, relationships, scoring, scripting]
 comments: true
 image:
-  feature: elastic-always-pays-its-debts-ban.jpg
-  credit: Alban Pommeret
+  feature: our-is-elasticsearch.jpg
+  credit: Quentin Fayet
   creditlink: http://reputationvip.io
 ---
 
@@ -980,7 +980,7 @@ There are three ways to load a script in an Elasticsearch query:
 
 - Using **inline** script by inserting the script line directly into the query
 - Using **a file** that contains the script, and indicating its name to the query
-- Using **a special index** named `.scripts` 
+- Using **a special index** named `.scripts`
 
 As I already introduced the first way to perform scripting, I will now have a quick tour of the second method.
 
@@ -1164,7 +1164,7 @@ This breach is related to the Groovy script sandboxed environment, which contain
 to execute shell commands on your cluster. Even if the shell commands are executed with the same user running Elasticsearch,
 an attacker may use other exploit to perform a privilege escalation and get the root privileges.
 
-The [related topic on PacketstormSecurity](https://packetstormsecurity.com/files/130784/ElasticSearch-Unauthenticated-Remote-Code-Execution.html) 
+The [related topic on PacketstormSecurity](https://packetstormsecurity.com/files/130784/ElasticSearch-Unauthenticated-Remote-Code-Execution.html)
 shows a Python script that runs the famous script:
 
 {% highlight json %}
