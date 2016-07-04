@@ -12,11 +12,6 @@ image:
   creditlink: http://reputationvip.io
 ---
 
-#TODOS
-
-- Charlotte review
-- Re-check queries (execute them in term)
-
 # OUR IS ELASTICSEARCH
 
 Welcome back! This article, the third one of my set of articles about Elasticsearch, will introduce some more advanced concepts
@@ -30,17 +25,17 @@ If you don't remember well about these notions, I recommend you to read the prev
 - [Elasticsearch Is Coming](http://reputationvip.io/elasticsearch-is-coming/)
 - [Elasticsearch Always Pays Its Debts](http://reputationvip.io/elasticsearch-always-pays-its-debts/)
 
-Also, I would like to remember you that a Github repository is available for this set of articles. It contains every single
+Also, I would like to remind you that a Github repository is available for this set of articles. It contains every single
 query I use, along with a turnkey Elasticsearch cluster running under Docker. It is available here:
 [https://github.com/quentinfayet/elasticsearch/tree/3.0](https://github.com/quentinfayet/elasticsearch/tree/3.0)
 
 ## ROADMAP
 
-As I just said, this article adds itself to the two previous ones. Without no more waiting, let's take a look at the menu.
+As I just said, this article adds itself to the two previous ones. No more waiting, let's take a look at the menu.
 
-- **Routing** will be the first subject I will talk about in this article. I will detail you why and how your can configure
+- **Routing** will be the first subject I will talk about in this article. I will give you detail on why and how you can configure
 the way your data are spread among the cluster.
-- **Parent-child relationships** and **nested objects** will be my second subject. Indeed, we haven't go through every Elasticsearch data types yet.
+- **Parent-child relationships** and **nested objects** will be my second subject. Indeed, we haven't gone through every Elasticsearch data types yet.
 - **Scoring** will be my third theoretical subject. I will detail you how much the choice of a scoring function is important.
 - **Compound Queries** allow you to combine multiple queries, or to alter the result of other queries.
 - **Scripting** allows you to perform great operations during your queries.
@@ -59,11 +54,11 @@ In a "classical" normal configuration, Elasticsearch would evenly **dispatch the
 an **index**.
 
 > You can notice that I used "all shards that compose your **index**", and not "**cluster**". Indeed, each node of the cluster
-**may** represents a shard for a given index, but an index may not be "sharded" on every nodes.
+**may** represent a shard for a given index, but an index may not be "sharded" on every nodes.
 
 With this configuration, **documents are spread on all shards**, and **each time you query an index**, then the cluster has to **query all the shards
 that compose it**, which may not be the desired behavior. Imagine now that we could **tell the cluster, for each index, where to store the data**,
-according the **routing value** we give it. The **performances** of an index using this configuration may be higher.
+according the **routing value** we give it. The **performance** of an index using this configuration may be higher.
 
 This mechanism - to chose where to store documents - is called **routing**.
 
@@ -113,7 +108,7 @@ have the same value).
 
 And using this field that documents have in common, we can **indicate the cluster to use it as a routing value**.
 
-To indicate which field to be used as the routing value is done when defining the **mapping**. I've talked about mapping in the previous article ([Elasticsearch Always Pays Its Debts - Mapping](http://reputationvip.io/elasticsearch-always-pays-its-debts/#mapping).
+To indicate which field to be used as the routing value is done when defining the **mapping**, I talked about mapping in the previous article ([Elasticsearch Always Pays Its Debts - Mapping](http://reputationvip.io/elasticsearch-always-pays-its-debts/#mapping).
 
 When defining the mapping for a given type, you can add the `_routing` value, which is a JSON object that describes your routing rule. This JSON object
 is composed of two fields: the `path` field contains **the name of the document's field** containing what should be used as the routing value; the
@@ -141,13 +136,13 @@ The above JSON object tells Elasticsearch to use the `house` field of my `charac
 Well, maybe the title is a little exaggerated. There are no real "limits" to the routing features, just some facts that you should
 take care about.
 
-The most important among them, is called **hotspot**. A **hotspot** is a shard that **handles way more documents than other shards**. Using the classical
+The most important amongst them, is called **hotspot**. A **hotspot** is a shard that **handles way more documents than other shards**. Using the classical
 routing, Elasticsearch will distribute the documents evenly among the shards, so hotspots won't show up easily. But when using manual or semi-automated
-routing, then the documents **may not be spread evenly** among the shards. That could result in some shards to handle a lot of documents.
+routing, the documents **may not be spread evenly** among the shards. That could result in some shards to handle a lot of documents.
 
 Unfortunately, there are **no ways to automatically handle** these hotspots.
 
-The solution stands on the client side. Indeed, your application (or whatever indexes documents on your index) has to identify routing values
+The solution stands on the client's side. Indeed, your application (or whatever indexes documents on your index) has to identify routing values
 that will support too much documents. A solution may be to create a special index for these documents, and then using aliases to make it transparent
 to your application.
 
@@ -221,7 +216,7 @@ which field's name is composed of the array object's field name. The two field n
 for example, result into a new field named `weapons.type`, which is an array of the former values contained in the
 `type` field of the `weapons` array.
 
-**Here, we lost any relation between the fields, because the objects have been flatten.**
+**Here, we lost any relation between the fields, because the objects have been flattened.**
 
 The solution to this problem is, in the mapping, to define the field `weapon` as a field of *nested* type:
 
@@ -502,7 +497,7 @@ going to talk about the Apache Lucene scoring mechanism and the TF/IDF algorithm
 
 So the question is simple: How does Elasticsearch (Apache Lucene) calculate the score of a document against a query?
 
-Well, there is **a lot of factor that influence on the final score.** The score **depends on the documents, but also on
+Well, there are **a lot of factor that influence on the final score.** The score **depends on the documents, but also on
 the query** (and so, comparing scores of documents on different queries doesn't make much sense).
 
 Before I talk about the factors, I want you to know that I have never talked about much of the things that I am going to
@@ -634,7 +629,7 @@ the **Document 1** has a score of around 0,33 because it contains only one term 
 
 #### Query Normalization Factor
 
-As I said, it is a non-sense to compare the scoring value of a document against a given query to the scoring value
+As I said, it is non-sense to compare the scoring value of a document against a given query to the scoring value
 of the same document against another query.
 
 But, the **query normalization factor** is an attempt from Elasticsearch to "normalize" a query, so that the score of a
@@ -643,7 +638,7 @@ given document can be compared against different queries.
 Careful though, the **query normalization factor** is not really relevant, and still, you have to be really careful when
 comparing the score of a document against different queries.
 
-As it is not really important, I won't talk about it here.
+As it is not very important, I won't talk about it here.
 
 #### Field-length norm
 
@@ -681,14 +676,14 @@ used with a combination (multiplication) of each scoring factors specific to ter
 Well, after this little theoretical part, it is time for us to be back in the essence of Elasticsearch: the full-text
 search.
 
-I would like to introduce you the **compound queries**. In the previous article, we went through some basic queries
+I would like to introduce to you the **compound queries**. In the previous article, we went through some basic queries
 available in Elasticsearch, such as the *term query* or the *match query*.
 
 But what if we want to connect multiply queries between them, to perform more precise search?
 
 ### The boolean query
 
-The first compound query I want to introduc is the **boolean query**. The boolean query allows you to **connect
+The first compound query I want to introduce is the **boolean query**. The boolean query allows you to **connect
 multiple queries to get a boolean value**.
 
 With three keywords that are *should*, *must* et *must_not*, you will be able to define some inbound rules
@@ -725,7 +720,7 @@ Let's take a look at the request:
 {% endhighlight %}
 
 As you can see, I indicated the "bool" type for the query, followed by as much boolean clauses as I want. My first clause
-is the *match query* I talked before, matching the term "Stark" on the `biography` field. Then, I indicated a *must_not*
+is the *match query* I talked about before, matching the term "Stark" on the `biography` field. Then, I indicated a *must_not*
 clause, and I used a very new query type: the *range* query, that allows us to specify a range to match (the range can
 be performed on integer or date fields, but also on string fields).
 
@@ -795,7 +790,7 @@ is defined to 22 (so it doesn't satisfy the *must_not* clause).
 
 ### The Function Score Query
 
-The **Function Score Query** is one of the most powerful compound query in Elasticsearch. Basically, it allows you to
+The **Function Score Query** is one of the most powerful compound queries in Elasticsearch. Basically, it allows you to
 define a new scoring function! Isn't it amazing?
 
 As we saw right before, the relevance scoring function of Elasticsearch is a mix between a lot of mathematical coefficients.
@@ -1139,7 +1134,7 @@ a production state), a good start is [this article](https://www.elastic.co/blog/
 On the other hand, if your interest is more about security research, a good start would be to look at some pull requests
 done on the Metasploit framework, like [this one](https://github.com/rapid7/metasploit-framework/pull/4907).
 
-As I also have interest into security concerns, let's have a bit of fun by having a look at how one of these exploits works.
+As I also have interest into security concerns, let's have a bit of fun by having a look at how one of these exploits work.
 
 First of all, as described in the pull request, this security breach on Elasticsearch has a **CVE (Common Vulnerabilities
 and Exposures)** code, which is *CVE-2015-1427*.
@@ -1158,7 +1153,7 @@ As you can also see, the vulnerability has been recognized by Elasticsearch, and
 website, [here](https://www.elastic.co/community/security/).
 
 This security breach is a good example that sandboxed environment doesn't protect your cluster from everything. As any
-software or application, sandboxed environment may contain security breach.
+software or application, sandboxed environment may contain a security breach.
 
 This breach is related to the Groovy script sandboxed environment, which contains a vulnerability that allows an attacker
 to execute shell commands on your cluster. Even if the shell commands are executed with the same user running Elasticsearch,
@@ -1193,4 +1188,4 @@ on the host system.
 ## Conclusion
 
 Routing, relationships, scoring theory, compound queries and scripting are some advanced features of Elasticsearch.
-All fo them demonstrate the pliability of Elasticsearch, and its capacity to respond to a lot of different use cases.
+All of them demonstrate the pliability of Elasticsearch, and its capacity to respond to a lot of different use cases.
