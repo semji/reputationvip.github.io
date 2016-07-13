@@ -27,6 +27,6 @@ just a bit of culture about Machine Learning.
 
 <iframe src="//slides.com/quentinfayet/machine-learning-explained-to-your-grandma/embed?token=Eid3HHqJ" width="576" height="420" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-In the second set of slides, I am going through the simplier model of Machine Learning : Regressions, and specifically linear models.
+In the second set of slides, I am going through the simplest model of Machine Learning : Regressions, and specifically linear models.
 
 <iframe src="//slides.com/quentinfayet/deck-3/embed" width="576" height="420" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
