@@ -28,11 +28,6 @@ guilhem_bourgoin:
   github: guilhemVB
   email: contact@guilhembourgoin.com
 
-laurent_aubertin:
-  name: Laurent Aubertin
-  avatar: avatars/no-name.jpg
-  github: LaurentAubertin
-
 thomas_lelievre:
   name: Thomas Lelievre
   avatar: avatars/thomas-lelievre.png
@@ -96,13 +91,6 @@ cedric_moretti:
   twitter: cedricmoretti
   linkedin: cedricmoretti
 
-zoe_thivet:
-  name: Zoé Thivet
-  avatar: avatars/zoe-thivet.jpg
-  bio: "Zoé Thivet is one of our software testers. She automates our test cases and when we're sleepy she sings us lullabies in selenese."
-  twitter: Zoe_Thivet
-  linkedin: zo%C3%A9-thivet-45796083
-
 nicolas_couet:
   name: Nicolas Couet
   bio: "Nicolas Couet is one of our software engineer. He loves Star Wars, Lego bricks and Star Wars Lego bricks."
@@ -117,7 +105,6 @@ nicolas_viennot:
   twitter: nico_69003
   github: nicolasviennot
   linkedin: viennotnicolas
-
 
 david_dragesco:
   name: David Dragesco
@@ -143,7 +130,3 @@ autonin_duroy:
   email: antonin.duroy@reputationvip.com
   github: aduroy
   linkedin: antoninduroy
-
-dimitra_politaki:
-  name: Dimitra Politaki
-  avatar: avatars/no-name.jpg
