@@ -16,8 +16,10 @@ alban_pommeret:
 
 amine_bsila:
   name: Amine Bsila
-  avatar: avatars/no-name.jpg
+  bio: Learning lover
+  avatar: avatars/amine-bsila.jpg
   github: absila
+  linkedin: aminebsila
 
 guilhem_bourgoin:
   name: Guilhem Bourgoin
