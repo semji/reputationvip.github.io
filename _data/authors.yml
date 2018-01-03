@@ -50,7 +50,7 @@ cyril_perraud:
 
 quentin_fayet:
   name: Quentin Fayet
-  bio: "Quentin Fayet is one of our full-stack web developer. He doesn't like coffee, but he's very interested in planes"
+  bio: "Software engineer, passionate about Machine Learning and analytics."
   web: http://www.quentinfayet.com/
   avatar: avatars/quentinfayet.jpeg
   github: quentinfayet
@@ -125,3 +125,8 @@ aymen_loukil:
   twitter: LoukilAymen
   github: AymenLoukil
   linkedin: aymenloukil
+
+alexandre_alberti:
+  name: Alexandre Alberti
+  avatar: avatars/alexandre-alberti.jpeg
+  bio: "Rocking junior sys' admin !"
